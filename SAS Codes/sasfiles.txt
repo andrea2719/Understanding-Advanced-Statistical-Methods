@@ -1,0 +1,5452 @@
+/* Codes for figures in Understanding Advanced Statistical Methods, by Westfall and Henning. */
+
+/*  These codes run in SAS 9.2 and/or SAS 9.3 */
+
+
+
+/* Figure 1.1 */
+  ods rtf;
+data;
+   do x = 0 to 400 by 1;
+      y = x/100;
+	  output;
+   end;
+run;
+
+proc sgplot;
+   series y = y x = x;
+   yaxis values = (0 to 5 by 1) label = "Time (hrs)" offsetmin = 0;
+   xaxis values = (0 to 500 by 100) label = "Distance (km)" offsetmin = 0;
+run;
+ods rtf close;
+
+
+/* Figure 1.4 */
+  ods rtf;
+data n;
+   do t = 3.0 to 3.2 by .0005;
+   p = pdf('normal', t,3.1, .03);
+   output; 
+   end;
+   do i = 1 to 30;
+      y = 3.10 + .03*rannor(14305);
+	  v = 0;
+	  output;
+	end;
+run;
+
+proc sgplot noautolegend;
+   series y = p x = t;
+   scatter y = v x = y;
+   xaxis label = "Hours Taken to Drive 310 Kilometers, y";
+   yaxis label = "p(y)";
+run;
+ods rtf close;
+
+
+/* Figure 1.5 */
+  ods rtf;
+data n;
+   input Color $ prob;
+   cards;
+   Red   0.35
+   Gray  0.40
+   Green 0.25
+;
+proc sgplot;
+   needle y = prob x = color;
+   yaxis label = "p(y)" offsetmin = 0 offsetmax = .10;
+   xaxis label = "Color, y" offsetmin = .10 offsetmax = .10;
+run;
+ods rtf close;
+
+
+
+/* Figure 1.6 */
+  ods rtf;
+data n;
+   input Color $ prob;
+   cards;
+   Red   0.50
+   Gray  0.20
+   Green 0.30
+;
+proc sgplot;
+   needle y = prob x = color;
+   yaxis label = "p(y|X=20)" offsetmin = 0 offsetmax = .10;
+   xaxis label = "Color, y" offsetmin = .10 offsetmax = .10;
+run;
+ods rtf close;
+
+
+
+/* Figure 1.7 */
+  ods rtf;
+data n;
+   input Color $ prob;
+   cards;
+   Red   0.20
+   Gray  0.40
+   Green 0.40
+;
+proc sgplot;
+   needle y = prob x = color;
+   yaxis label = "p(y|X=60)" offsetmin = 0 offsetmax = .10;
+   xaxis label = "Color, y" offsetmin = .10 offsetmax = .10;
+run;
+ods rtf close;
+
+
+
+/* Figure 1.18 */
+  ods rtf;
+data sim;
+   do Potential_Future = 1 to 10000;
+   P0 = 23.32;
+      do day = 1 to 250;
+         return = rand('normal',0.001, .03);   
+         Price = P0*(1+return);
+         output;
+         P0=Price;
+       end; 
+   end;
+run;
+title "Hypothetical Future Prices";
+symbol1 c=BLUE ci=BLUE v=SQUARE height=1 cells interpol=JOIN l=1 w=1;
+proc gplot data=sim(where=(Potential_Future<5));
+   plot  Price * day;
+   by Potential_Future;
+run; symbol1;  
+data action; 
+   set sim;
+   by Potential_Future;
+   if first.Potential_Future then do;    
+      init_price = 23.32;
+      action = "hold  ";  
+      retain action; 
+   end;	  
+   else do;
+      if day>3 and (action = "hold  ") and (lag(return)>0) and
+       (lag2(return)>0) and(lag3(return)>0) then do;  
+          action = "nohold"; retain action; end;
+   if day>3 and (action = "nohold") and 
+   (lag(return)<0) and (lag2(return)<0) and(lag3(return)<0) then do;
+    action = "hold  "; retain action; end; 
+  end;
+run;
+data profit;
+   set action;
+   profit1 = price-p0;
+   profit2 = price-p0;
+   if action = "nohold" then profit2=0;
+run;
+
+proc sql;
+   create table prof1 as select sum(profit1) as profit1, sum(profit2)  
+    as profit2 , sum(profit1-profit2) as diff_1minus2 from profit  
+    group by Potential_Future;
+quit;
+title "Comparison of Strategies over Potential Futures"; 
+/*
+proc univariate data=prof1;
+   var profit1 profit2 diff_1minus2;
+   histogram profit1 profit2 diff_1minus2;
+   run; 
+quit; title; */
+
+ods rtf;
+title; 
+proc sgplot;
+    histogram diff_1minus2;
+	xaxis label = "(Earnings, Buy and Hold) minus (Earnings, Trading)";
+run;
+ods rtf close;
+
+
+/* Figure 1.19 */
+  ods rtf;
+data; 
+do i = 1 to 10000;
+    S1 = ((54+ 2*rannor(0))< 50)*9;
+    S2 = ((58+ 2*rannor(0))< 50)*3;
+    S3 = ((56+ 2*rannor(0))< 50)*10;
+    S4 = ((57+ 2*rannor(0))< 50)*6;
+    S5 = ((43+ 2*rannor(0))< 50)*55;
+    S6 = ((49+ 2*rannor(0))< 50)*9;
+    S7 = ((42+ 2*rannor(0))< 50)*7;
+    S8 = ((40+ 2*rannor(0))< 50)*3;
+    S9 = ((46+ 2*rannor(0))< 50)*3;
+    S10 = ((48+ 2*rannor(0))< 50)*27;
+    S11 = ((54+ 2*rannor(0))< 50)*15;
+    S12 = ((43+ 2*rannor(0))< 50)*4;
+    S13 = ((59+ 2*rannor(0))< 50)*4;
+    S14 = ((45+ 2*rannor(0))< 50)*21;
+    S15 = ((54+ 2*rannor(0))< 50)*11;
+    S16 = ((49+ 2*rannor(0))< 50)*7;
+    S17 = ((56+ 2*rannor(0))< 50)*6;
+    S18 = ((45+ 2*rannor(0))< 50)*8;
+    S19 = ((41+ 2*rannor(0))< 50)*9;
+    S20 = ((48+ 2*rannor(0))< 50)*4;
+    S21 = ((41+ 2*rannor(0))< 50)*10;
+    S22 = ((34+ 2*rannor(0))< 50)*12;
+    S23 = ((47+ 2*rannor(0))< 50)*17;
+    S24 = ((44+ 2*rannor(0))< 50)*10;
+    S25 = ((52+ 2*rannor(0))< 50)*6;
+    S26 = ((50+ 2*rannor(0))< 50)*11;
+    S27 = ((52+ 2*rannor(0))< 50)*3;
+    S28 = ((54+ 2*rannor(0))< 50)*5;
+    S29 = ((48+ 2*rannor(0))< 50)*5;
+    S30 = ((50+ 2*rannor(0))< 50)*4;
+    S31 = ((44+ 2*rannor(0))< 50)*15;
+    S32 = ((44+ 2*rannor(0))< 50)*5;
+    S33 = ((41+ 2*rannor(0))< 50)*31;
+    S34 = ((46+ 2*rannor(0))< 50)*15;
+    S35 = ((53+ 2*rannor(0))< 50)*3;
+    S36 = ((50+ 2*rannor(0))< 50)*20;
+    S37 = ((47+ 2*rannor(0))< 50)*7;
+    S38 = ((46+ 2*rannor(0))< 50)*7;
+    S39 = ((48+ 2*rannor(0))< 50)*21;
+    S40 = ((33+ 2*rannor(0))< 50)*4;
+    S41 = ((53+ 2*rannor(0))< 50)*8;
+    S42 = ((52+ 2*rannor(0))< 50)*3;
+    S43 = ((51+ 2*rannor(0))< 50)*11;
+    S44 = ((58+ 2*rannor(0))< 50)*34;
+    S45 = ((61+ 2*rannor(0))< 50)*5;
+    S46 = ((49+ 2*rannor(0))< 50)*3;
+    S47 = ((51+ 2*rannor(0))< 50)*13;
+    S48 = ((46+ 2*rannor(0))< 50)*11;
+    S49 = ((42+ 2*rannor(0))< 50)*5;
+    S50 = ((48+ 2*rannor(0))< 50)*10;
+    S51 = ((60+ 2*rannor(0))< 50)*3;
+total = sum(of s1-s51);
+output;
+end;
+run;
+
+
+proc sgplot;
+  histogram total;
+  refline 270 / axis = x ;
+  xaxis label = "Electoral Total" values = (240 to 500 by 30);
+  run;
+ods rtf close;
+
+
+/* End of Chapter 1 files */
+
+
+/* Chapter 2 files */
+
+ 
+/* Figure 2.1 */
+
+  ods rtf;
+data disc;
+    Continuous = 0; Discrete1 = -1;
+    do x = 0 to 10 by .1; x1 = x;
+	output; end;
+	 Discrete2 = -2;
+	 do x2 = 0 to 10 by 1;
+	output;
+	end;
+run;
+
+proc sgplot;
+   series y = Continuous x = x / name = "Continuous";
+   scatter y = Discrete1 x = x1 / markerattrs = (symbol = circle size = 4) name = "Nearly Continuous";
+   scatter y = Discrete2 x = x2 / markerattrs = (symbol = square size = 6) name = "Discrete";
+   yaxis display= none offsetmin = .2 offsetmax = .2;
+   xaxis values = (0 to 10 by 2) label = "Y" offsetmin=.08 offsetmax=.08;
+run;
+ods rtf close;
+
+
+/* Figure 2.2 */
+  ods rtf;
+data weight; 
+   inc = 1;
+   do kg =40 to 130 by inc;
+         prob = cdf('chisquare',(kg-39+inc/2)/5,7) - cdf('chisquare', (kg-39-inc/2)/5,7); 
+      if kg < 86 then do; x2 = kg; y2 = 0; output; end;
+	  if kg = 86 then do;  x2 = 86.7 - .000001; y2 = 0; output; x2 = 86.7; 
+         y2 = cdf('chisquare',(86.7-39+inc/2)/5,7) - cdf('chisquare', (86.7-39-inc/2)/5,7); output;end;      
+      if kg > 86 then do; x2 = kg; y2 = prob; output; end; 
+   end; 
+run;
+
+proc sgplot data=weight noautolegend;
+   needle y = prob x=kg;
+   band x = x2 upper = y2 lower = 0 / transparency = .5;
+   yaxis values = (0 to .04 by .01) label= "p(y)" offsetmin=0;
+   xaxis values = (40 to 130 by 10) label = "Weight (in kg), y";
+run;
+ods rtf close;
+
+
+
+/* Figure 2.3 */
+  ods rtf;
+data weight; 
+   inc = 1;
+   do kg =40 to 130 by inc;
+         prob = cdf('chisquare',(kg-39+inc/2)/5,7) - cdf('chisquare', (kg-39-inc/2)/5,7);  
+   output; end;
+run;
+
+proc sgplot data=weight  (where=(kg>84 & kg<91)) ;
+   needle y = prob x=kg;
+   yaxis  values = (0 to .02 by .004) label= "p(y)";
+   xaxis  values = (85 to 90 by 1) label = "Weight (in kg), y"  offsetmin=.1 offsetmax=.1;
+run;
+ods rtf close;
+
+
+
+/* Figure 2.4 */
+  ods rtf;
+data weight;  
+   inc = 1;
+   do kg =40 to 130 by inc;
+   prob = cdf('chisquare',(kg-39+inc/2)/5,7) - cdf('chisquare', (kg-39-inc/2)/5,7);
+      do; w = kg - inc/2; p=0; output;  w = kg - inc/2; p=prob/inc; output;
+          w= kg+inc/2; p=prob/inc; output; w= kg+inc/2; p=0; output; end;
+   end;
+run;
+
+proc sgplot data=weight   (where=(w>84 & w<91)) ;
+   series y = p x=w;
+   yaxis  values = (0 to .02 by .004) label= "p(y)";
+   xaxis  values = (85 to 90 by 1) label = "Weight (in kg), y"  offsetmin=.1 offsetmax=.1;
+run;
+ods rtf close;
+
+
+/* Figure 2.5 */
+  ods rtf;
+data weight;  
+   inc = .1;
+   do kg =40 to 130 by inc;
+   prob = cdf('chisquare',(kg-39+inc/2)/5,7) - cdf('chisquare', (kg-39-inc/2)/5,7);output;
+   end; 
+run;
+
+proc sgplot data=weight   (where=(kg>=85.299999 & kg<=86.7)) ;
+   needle y = prob x=kg;
+   yaxis  values = (0 to .002 by .0004) label= "p(y)";
+   xaxis  values = (85.4 to 86.6 by .1) label = "Weight (in kg), y"  offsetmin=.02 offsetmax=.02;
+run;
+ods rtf close;
+
+
+/* Figure 2.6 */
+  ods rtf;
+data weight;  
+   inc = .1;
+   do kg =40 to 130 by inc;
+   prob = cdf('chisquare',(kg-39+inc/2)/5,7) - cdf('chisquare', (kg-39-inc/2)/5,7);
+      do; w = kg - inc/2; p=0; output;  w = kg - inc/2; p=prob; output;
+          w= kg+inc/2; p=prob; output; w= kg+inc/2; p=0; output; end;
+   end;
+run;
+
+proc sgplot data=weight   (where=(w>85.29999 & w<86.70001)) ;
+   series y = p x=w;
+   yaxis  values = (0 to .002 by .0004) label= "not p(y)";
+   xaxis  values = (85.4 to 86.4 by .1) label = "Weight (in kg), y"  offsetmin=.05 offsetmax=.05;
+run;
+ods rtf close;
+
+
+/* Figure 2.7 */
+  ods rtf;
+data weight;  
+   inc = 1;
+   do kg =40 to 130 by inc;
+   prob = cdf('chisquare',(kg-39+inc/2)/5,7) - cdf('chisquare', (kg-39-inc/2)/5,7);
+      do; w = kg - inc/2; p=0; output;  w = kg - inc/2; p=prob/inc; output;
+          w= kg+inc/2; p=prob/inc; output; w= kg+inc/2; p=0; output; end;
+   end;
+
+   inc1 = .1;
+   do kg1 =40 to 130 by inc1;
+   prob1 = cdf('chisquare',(kg1-39+inc1/2)/5,7) - cdf('chisquare', (kg1-39-inc1/2)/5,7);
+      do; w1 = kg1 - inc1/2; p1=0; output;  w1 = kg1 - inc1/2; p1=prob1/inc1; output;
+          w1= kg1+inc1/2; p1=prob1/inc1; output; w1= kg1+inc1/2; p1=0; output; end;
+   end;
+
+run;
+
+data weight;
+   set weight;
+   if (w>84)*(w<91) + (w1>84)*(w1<91);
+run;
+
+proc sgplot data=weight noautolegend ;
+   series y = p x=w/LINEATTRS= (color= black pattern=solid thickness = 2);
+   series y = p1 x=w1/LINEATTRS= (color= black pattern=solid thickness=.2);
+   yaxis  values = (0 to .02 by .004) label= "p(y)";
+   xaxis  values = (85 to 90 by 1) label = "Weight (in kg), y"  offsetmin=.1 offsetmax=.1 ;
+run;
+ods rtf close;
+
+
+
+/* Figure 2.8 */
+  ods rtf;
+data weight;  
+   inc = .1;
+   do kg =40 to 130 by inc;
+   prob = pdf('chisquare',(kg-39)/5,7)/5 ;
+   output;
+   end;
+   x1 = 40; y1 =  pdf('chisquare',(80-39)/5,7)/5 ; output;
+   x1 = 80; y1 =  pdf('chisquare',(80-39)/5,7)/5 ; output;
+   x2 = 79.99; y2 = 0; output;
+   x2 = 80.01; y2  =  pdf('chisquare',(80-39)/5,7)/5 ; output;
+run;
+
+proc sgplot data=weight noautolegend;
+   series y = prob x=kg;
+   series y = y1 x = x1 / LINEATTRS= (color= black pattern=dot);
+   series y = y2 x = x2/LINEATTRS= (color= black pattern=dot);
+   yaxis  values = (0 .01 .017 .03 .04) label= "p(y)";
+   xaxis  values = (40 to 130 by 20) label = "Weight (in kg), y"  offsetmin=.02 offsetmax=.02;
+run;
+ods rtf close;
+
+
+/* Figure 2.9 */  
+ods rtf;
+data weight;  
+   inc = .1;
+   do kg1 =40 to 130 by inc;
+   kg = kg1/1000;
+   prob = pdf('chisquare',(kg1-39)/5,7)*1000/5 ;
+   output;
+   end;
+   x1 = .040; y1 =  pdf('chisquare',(80-39)/5,7)*1000/5 ; output;
+   x1 = .080; y1 =  pdf('chisquare',(80-39)/5,7)*1000/5 ; output;
+   x2 = .080; y2 = 0; output;
+   x2 = .080; y2  =  pdf('chisquare',(80-39)/5,7)*1000/5 ; output;
+run;
+
+proc sgplot data=weight noautolegend;
+   series y = prob x=kg;
+   series y = y1 x = x1 / LINEATTRS= (color= black pattern=dot);
+   series y = y2 x = x2/LINEATTRS= (color= black pattern=dot);
+   yaxis  values = (0 10 17 30 40)  label= "p(y)";
+   xaxis  values = (.040 to .130 by .020) label = "Weight (in metric tons), y"  offsetmin=.02 offsetmax=.02;
+run;
+ods rtf close;
+
+
+/* Figure 2.10 */
+  ods rtf ;
+data weight;  
+   inc = .1;
+   do kg1 =40 to 130 by inc;
+   kg = kg1/1000;
+   prob = pdf('chisquare',(kg1-39)/5,7)*1000/5 ;
+   output; end;
+   do;  kg2 =  0.075-.0001; prob2 = 0; output; 
+     kg2 = 0.075-.0001; prob2 = pdf('chisquare',(1000*.080-39)/5,7)*1000/5 ; output;
+	 kg2 = 0.085; output;
+	 kg2 = 0.085; prob2=0; output;
+   end;
+   do kgd =75 to 85 by inc;
+   kg3 = kgd/1000;
+   prob3 = pdf('chisquare',(kgd-39)/5,7)*1000/5 ;
+   output; end;
+
+run;
+
+proc sgplot data=weight noautolegend;
+   series y = prob x=kg/LINEATTRS= (color = black pattern=solid);
+   band x = kg3 upper = prob3 lower=0/transparency = .3;
+   series y = prob2 x=kg2/LINEATTRS= (color= black pattern=solid);
+   yaxis  values = (0 10 17 30 40)  label= "p(y)";
+   xaxis  values = (.040 to .130 by .020) label = "Weight (in metric tons), y"  
+         offsetmin=.02 offsetmax=.02;
+run;
+
+ods rtf close;
+
+/* Figure 2.11 */
+  ods rtf ;
+data weight;  
+   inc = .1;
+   do kg =40 to 130 by inc;
+   prob = pdf('chisquare',(kg-39)/5,7)/5 ;
+   output;
+   end;
+
+      inc = .1;
+   do kg1 =40 to 130 by inc;
+   prob1 = pdf('normal',kg1,74, 18.71) ;
+   output;
+   end;
+run;
+
+proc sgplot data=weight noautolegend;
+   series y = prob x=kg;
+   series y = prob1 x = kg1 ;
+   yaxis   values = (0 to .04 by .01)  label= "p(y)";
+   xaxis  values = (40 to 120 by 20) label = "Weight (in kg), y"  offsetmin=.02 offsetmax=.02;
+run;
+ods rtf close;
+
+
+/* Figure 2.13 */
+  ods rtf;
+data f;  
+   inc = .01;
+   do x =0 to 5 by inc;
+      f = 2 + x**2 - exp(.65*x);
+      output;
+   end;
+   do x1 = 0 to 5 by inc;
+      l = 2.15309674101385 + 0.676852641836075*x1;
+      output;
+   end;
+   x2 = 3.5; y2 = 0; output; x2 = 3.5; y2 =  2 + x2**2 - exp(.65*x2); output;
+run;
+
+proc sgplot data=f noautolegend;
+   series y = f x=x;
+   series y = l x=x1;
+   series y = y2 x = x2;
+   yaxis values = (0 to 7 by 1) label= "f(x)" offsetmin=0 offsetmax=0;
+   xaxis values = (0 to 5 by .5) label = "x" offsetmin=0 offsetmax=0;
+run;  
+ods rtf close;
+
+
+/* Figure 2.14 */
+  ods rtf;
+data f;  
+   inc = .01;
+   do x1 = 0 to 5 by inc;
+   d = 2*x1 - .65*exp(.65*x1);
+   output;
+   end;
+   x2 = 0 ; y2 = .6768; output; x2 = 3.5; y2 = .6768; output; x2 = 3.5; y2 = -6; output;
+run;
+
+proc sgplot data=f noautolegend;
+   series y = d x=x1;
+   series y = y2 x = x2;
+    yaxis   values = ( -6 -4 -2 0 .68 2 4 6 ) label= "f ' (x)" offsetmin=0 offsetmax=0;
+    xaxis  values = (0 to 5 by .5) label = "x" offsetmin=0 offsetmax=0;
+    refline 0 / axis = y;
+run;  
+ 
+ods rtf close;
+
+
+/* Figure 2.15 */
+  ods rtf;
+data f;  
+   inc = .01;
+   do x =0 to 5 by inc;
+   f = 2 + x**2 - exp(.65*x);
+   output;
+   end;
+   do x1 = 0 to 5 by 1;
+   l = 2.15309674101385 + 0.676852641836075*x1;
+   output;
+   end;
+   x_1 = 3.5; x_2 = 2.5; y_1 = 2 + x_1**2 - exp(.65*x_1);
+                         y_2 = 2 + x_2**2 - exp(.65*x_2);
+						 b = (y_2 - y_1)/(x_2 - x_1);
+						 a = y_1 - b*x_1;
+   do x2 = 0 to 5 by 1;
+   l2 = a + b*x2;
+   output;
+   end;
+      x_1 = 3.5; x_2 = 3.4; y_1 = 2 + x_1**2 - exp(.65*x_1);
+                         y_2 = 2 + x_2**2 - exp(.65*x_2);
+						 b = (y_2 - y_1)/(x_2 - x_1);
+						 a = y_1 - b*x_1;
+   do x3 = 0 to 5 by 1;
+   l3 = a + b*x3;
+   output;
+   end;
+   x4 = 2.5; y4 = 0; output;
+   x4 = 2.5; y4 =2 + x4**2 - exp(.65*x4) ; output;
+   x5 = 3.5; y5 = 2 + x5**2 - exp(.65*x5); output;
+   x5 = 3.5; y5 = 0; output;
+run;
+
+proc sgplot data=f noautolegend;
+   series y = f x=x/LINEATTRS= (pattern=solid);
+   series y = l x=x1/LINEATTRS= (pattern=solid);
+   series y = l2 x=x2/LINEATTRS= (pattern=dot);
+   series y = y4 x = x4 / LINEATTRS= (pattern=dash);
+   series y = y5 x = x5 / LINEATTRS= (pattern=dash);
+*      series y = l3 x=x3/LINEATTRS= (color= black pattern=dot);
+    yaxis   values = (0 to 7 by 1) label= "f(x)" offsetmin=0 offsetmax=0;
+    xaxis  values = (0 to 5 by .5) label = "x"  offsetmin=0 offsetmax=0;
+run;  
+ 
+ods rtf close;
+
+
+/* Figure 2.16 */
+  ods rtf;
+data f;  
+   inc = .01;
+   do x =0 to 5 by inc;
+   f = 2 + x**2 - exp(.65*x);
+   output;
+   end;
+   do x1 = 0 to 5 by 1;
+   l = 2.15309674101385 + 0.676852641836075*x1;
+   output;
+   end;
+   x_1 = 3.5; x_2 = 2.5; y_1 = 2 + x_1**2 - exp(.65*x_1);
+                         y_2 = 2 + x_2**2 - exp(.65*x_2);
+						 b = (y_2 - y_1)/(x_2 - x_1);
+						 a = y_1 - b*x_1;
+   do x2 = 0 to 5 by 1;
+   l2 = a + b*x2;
+   output;
+   end;
+      x_1 = 3.5; x_2 = 3.4; y_1 = 2 + x_1**2 - exp(.65*x_1);
+                         y_2 = 2 + x_2**2 - exp(.65*x_2);
+						 b = (y_2 - y_1)/(x_2 - x_1);
+						 a = y_1 - b*x_1;
+   do x3 = 0 to 5 by 1;
+   l3 = a + b*x3;
+   output;
+   end;
+   x4 = 2.5; y4 = 0; output;
+   x4 = 2.5; y4 =2 + x4**2 - exp(.65*x4) ; output;
+   x5 = 3.5; y5 = 2 + x5**2 - exp(.65*x5); output;
+   x5 = 3.5; y5 = 0; output;
+   x6 = 3.4; y6 = 0; output;
+   x6 = 3.4; y6 =2 + x6**2 - exp(.65*x6) ; output;
+
+
+run;
+
+proc sgplot data=f noautolegend;
+   series y = f x=x/LINEATTRS= (pattern=solid);
+   series y = l x=x1/LINEATTRS= (pattern=solid);
+   series y = l2 x=x2/LINEATTRS= (pattern=dot);
+   series y = y4 x = x4 / LINEATTRS= (pattern=dash);
+   series y = y5 x = x5 / LINEATTRS= (pattern=dash);
+   series y = y6 x = x6 / LINEATTRS= (pattern=dash);
+      series y = l3 x=x3/LINEATTRS= (color= black pattern=dot);
+    yaxis   values = (3.0 to 5.0 by 0.5) label= "f(x)" offsetmin=0 offsetmax=0;
+    xaxis  values = (2.5 to 3.5 by .1) label = "x"  offsetmin=.05 offsetmax=.1;
+run;  
+ 
+ods rtf close;
+
+/* Figure 2.17 */
+  ods rtf ;
+data dot;
+  h = 0;
+  input y @@;
+cards; 
+3.2 5.6 1.0 1.5
+;
+
+proc sgplot data=dot;
+   scatter y = h x = y;
+   yaxis display=none;
+   refline 0 / axis = y;
+   xaxis values = (0 to 6 by 1);
+run;
+ods rtf close;
+
+
+/* Figure 2.18 */
+  ods rtf;
+data f;  
+   inc = .1;
+   do x =0 to 6 by inc;
+   f = (3.2- x)**2 + (5.6 -x)**2 +(1.0- x)**2 +(1.5-x)**2 ;
+   output;
+   end;
+run;
+
+proc sgplot data=f ;
+   series y = f x=x/LINEATTRS= (color= black pattern=solid);
+    yaxis   values = (0 to 40 by 5) label= "sum of squares f(x)";
+    xaxis  values = (1 to 5 by .5) label = "x"  offsetmin=.02 offsetmax=.02;
+run;  
+
+ods rtf close;
+
+/* Figure 2.19 */
+  ods rtf;
+data weight;  
+   inc = .1;
+   do kg =40 to 130 by inc;
+   prob = cdf('chisquare',(kg-39)/5,7) ;
+   output;
+   end;
+run;
+
+proc sgplot data=weight ;
+   series y = prob x=kg;
+   yaxis label= "P(y), the cdf" offsetmin=0 offsetmax=0;
+   xaxis  values = (40 to 120 by 20) label = "Weight (in kg), y"  offsetmin=.02 offsetmax=.02;
+run;
+
+ods rtf close;
+
+/* Figure 2.20 */
+  ods rtf ;
+data weight;  
+   inc = .1;
+   do kg =40 to 130 by inc;
+   prob = cdf('chisquare',(kg-39)/5,7) ;
+   output;
+   end;
+run;
+
+proc sgplot data=weight ;
+   series y = prob x=kg;
+   yaxis  values = (0 to 1 by .2)  label= "P(y), the cdf" offsetmin=0 offsetmax=0;
+   xaxis  values = (75 to 85 by 1) label = "Weight (in kg), y"  offsetmin=.02 offsetmax=.02;
+run;
+ods rtf close;
+
+/* Figure 2.21 */
+  ods rtf ;
+data weight;  
+   inc = .1;
+   do kg1 =40 to 130 by inc;
+   prob = pdf('chisquare',(kg1-39)/5,7)/5 ;  output; end;
+   do;  kg2 =  79-.01; prob2 = 0; output; 
+     kg2 = 79-.01; prob2 = pdf('chisquare',(80-39)/5,7)/5; output;
+	 kg2 = 80; output;
+	 kg2 = 80; prob2=0; output;
+   end;
+
+   do kgd =79 to 80 by inc;
+   kg3 = kgd;
+   prob3 = pdf('chisquare',(kgd-39)/5,7)/5;
+   output; end;
+run;
+
+proc sgplot data=weight noautolegend;
+   series y = prob x=kg1/LINEATTRS= (color = black pattern=solid);
+   band x = kg3 upper = prob3 lower=0/transparency = .3;
+   series y = prob2 x=kg2/LINEATTRS= (color= black pattern=solid);
+   yaxis  values = (0 to .04 by .01) label= "p(y)" offsetmin=0;
+   xaxis  values = (75 to 85 by 1) label = "Weight (in kg), y"  offsetmin=.02 offsetmax=.02;
+run;
+
+ods rtf close;
+
+/* Figure 2.22 */
+  ods rtf;
+data tr;
+   do y= 0 to 100 by .1;
+      p = .0002*y;
+      output;
+   end;
+   x1 = 100; y1 = 0; output; x1 = 100; y1 = .02; output;
+run;
+
+proc sgplot data=tr noautolegend;
+   series y = p x = y;
+   series y = y1 x = x1 / LINEATTRS= (pattern=dot thickness = .5);
+   xaxis label = "y" offsetmin=.05 offsetmax=.05 values = (0 to 120 by 20);
+   yaxis label = "p(y)" offsetmin=0.02 offsetmax=0.02;
+   refline 0 / axis=y;
+
+run;
+ods rtf close;
+
+/* Figure 2.23 */
+  ods rtf;
+data p;  
+   inc = .1;
+   do y =0 to 10 by inc;
+   prob = .5*exp(-.5*y);  output; end;
+
+run;
+
+proc sgplot data=p noautolegend;
+   series y = prob x=y/LINEATTRS= (color = black pattern=solid);
+   yaxis  label= "p(y)" offsetmin=0;
+   xaxis  values = (0 to 10 by 1) label = "y"  offsetmin=0 offsetmax=.02;
+run;
+ods rtf close;
+
+
+/* Exercise 11 */ 
+ods rtf;
+data new;
+   input y p; p_y = p/36;
+cards;
+2 1
+3 2
+4 3
+5 4
+6 5
+7 6
+8 5
+9 4
+10 3
+11 2
+12 1
+;
+proc sgplot;
+   needle y = p_y x = y;
+   yaxis values = (0 to .20 by .05) label="p(y)";
+  xaxis values = (2 to 12 by 1)  offsetmin =.03  offsetmax =.03 ;
+run;
+
+ data new;
+   y = exp(1); p_y = .5; output;
+   y = exp(1)/2; p_y = .48; output;
+   y = 2*exp(1); p_y = .02; output;
+proc sgplot;
+   needle y = p_y x = y / lineattrs = (thickness=2);
+   yaxis values = (0 to .6 by .1) label = "p(y)";
+   xaxis values = (0 to 8.154845485 by 1.359140914)  logbase=e logstyle=logexpand;
+run;
+ 
+
+data; do y = 0 to 1 by .01;
+   p_y = pdf('beta',y, 10,10);
+   output;
+end;
+proc sgplot;
+   series y = p_y x=y; 
+   yaxis label = "p(y)";
+run;
+ 
+data; do y = 100 to 200 by .1;
+   p_y = pdf('normal',y, 135,10);
+   output;
+end;
+proc sgplot;
+   series y = p_y x=y;
+   yaxis label = "p(y)";
+run;
+
+ods rtf close;
+
+
+/* End of Chapter 2 files */
+
+
+/* Chapter 3 files */
+
+/* Figure 3.1 */
+   ods rtf;
+data tri;  
+   inc = .1;
+   do y =0 to 110 by inc;
+   if y< 100 then do; prob = .0001*y**2;output; end; else do; prob = 1; output; end;
+   end; 
+   p0 = .731; y0=0; output; y0 = sqrt(10000*.731); output;
+   p0=0; output;
+   x0 =0; 
+   u = 0.731; output; u= 0.382; output; u=0.101; output;
+   u =0.596; output; u=0.899; output; u=0.885; output; u=0.958; output; u=0.014; output;
+   u =0.407; output; u =0.863; output;
+   u = 0; x0 = 85.5; output; x0 = 61.8; output; x0 = 31.8; output; x0 = 77.2; output; 
+x0 = 94.8; output; x0 = 94.1; output; x0 = 97.9; output; x0 = 11.8; output; x0 = 63.8; output; x0 =  92.9; output; 
+run;
+
+proc sgplot data=tri  noautolegend;
+   series y = prob x=y / LINEATTRS= (color = black pattern=solid);
+   series y=p0 x=y0/ LINEATTRS= (color = black pattern=solid);
+   scatter y = u x =x0;
+   yaxis  values = (0 .5 .731 1) label= "p = P(y)";
+   xaxis  values = (0 50  85.5 100) label = "y" offsetmax=.05;
+run;
+ods rtf close;
+
+
+/* Figure 3.2 */
+    ods rtf;
+data u;
+   x0 = 0; y0 = 0; output;
+   x0 = 0; y0 = 1; output;
+   x1 = .35; y1 = 0; output;
+   x1 = .35; y1 = 1; output;
+   x2 = .75; y2 = 0; output;
+   x2 = .75; y2 = 1; output;
+   x3 = 1; y3 = 0; output;
+   x3 = 1; y3 = 1; output;
+   x4 = .18; y4 = .5; c = "Red  "; output; 
+   x4 = .53; y4 = .5; c = "Gray "; output; 
+   x4 = .88; y4 = .5; c = "Green"; output; 
+   do x = 0 to 1 by .1;
+      y = 1;
+	  output;
+   end;
+      y4 =.005; 
+	  c = "x"; output; 
+   x4 = 0.731; output; x4= 0.382; output; x4=0.101; output;
+   x4 =0.596; output; x4=0.899; output; x4=0.885; output; x4=0.958; output; x4=0.014; output;
+   x4 =0.407; output; x4 =0.863; output;
+   run;
+
+proc sgplot noautolegend;
+   series y = y x = x;
+   series y = y0 x = x0 / lineattrs = (pattern=dot);
+   series y = y1 x = x1/ lineattrs = (pattern=dot);
+   series y = y2 x = x2/ lineattrs = (pattern=dot);
+   series y = y3 x = x3/ lineattrs = (pattern=dot);
+   scatter y = y4 x = x4 / markerchar =c markercharattrs = (size = 17);
+   refline 0 / axis = y;
+   xaxis label = "Uniform (0,1) Random Number" offsetmin = .1 values = (0  .35 .5 .75 1)	;
+   yaxis label = "Uniform (0,1) pdf"; 
+run;
+ods rtf close;
+
+
+/* End of Chapter 3 files */
+
+
+/* Chapter 4 files */
+
+/* Figure 4.2 */
+ods rtf ;
+data stoplight;  
+   inc = .1;
+   do time =0 to 2 by inc;
+   prob = 1/2;
+   output;
+   end;
+run;
+
+proc sgplot data=stoplight ;
+   series y = prob x=time;
+   yaxis   values = (0 to .6 by .1)  label= "p(y)";
+   xaxis  values = (0 to 2 by .5) label = "Time light stays green, y"  offsetmin=.02 offsetmax=.02;
+run;
+ods rtf close;
+
+
+/* Figure 4.3 */
+  ods rtf;
+data time;
+   inc = .01;
+   do time =0 to 5 by inc;
+   p1 = pdf("gamma", time, 1,1);
+   p2 = pdf("gamma", time, 1.2,1);
+   p3 = pdf("gamma", time, 1,.7);
+   p4 = pdf("gamma", time, 1.7,1.6);
+   output;
+   end;
+   p0=0; y = .3; output; y=2.3; output; y= 1.0; output; y= 0.1; output;
+   y=3.9; output; y=.8; output;
+
+run;
+
+proc sgplot data=time noautolegend;
+   series y = p1 x=time;
+   series y = p2 x=time;
+   series y = p3 x=time;
+   series y = p4 x=time;
+   scatter y=p0 x=y;
+   yaxis  label= "p(y)";
+   xaxis  values = (0 to 5 by .5) label = "Time waiting for answer, y"  offsetmin=.02 offsetmax=.02;
+run;
+
+ods rtf close;
+
+/* Figure 4.4 */
+  ods rtf;
+data time;
+   inc = .01;
+   do time =0 to 20 by inc;
+   p1 = pdf("normal", time, 10,2);
+   p2 = pdf("normal", time, 12,1.4);
+   p3 = pdf("normal", time, 8,.7);
+   p4 = pdf("chisquare", time, 10);
+   output;
+   end;
+   p0=0; y = .3; output; y=2.3; output; y= 1.0; output; y= 0.1; output;
+   y=3.9; output; y=.8; output;
+
+run;
+
+proc sgplot data=time noautolegend;
+   series y = p1 x=time;
+   series y = p2 x=time;
+   series y = p3 x=time;
+   series y = p4 x=time;
+   scatter y=p0 x=y;
+   yaxis     label= "p(y)";
+   xaxis   values = (0 to 20 by 5) label = "Time waiting for answer, y"  offsetmin=.02 offsetmax=.02;
+run;
+
+ods rtf close;
+
+
+/* Figure 4.5 */
+  ods rtf;
+data hist;
+  input y p;
+cards;
+0 0
+0 .667
+.5 .667
+.5 .333
+1 .333
+1 .333
+1.5 .333
+1.5 0
+2   0
+2 .333
+2.5 .333
+2.5 0
+3   0
+3.5  0
+3.5 .333
+4.  .333
+4 0
+;
+
+data hist;
+ set hist;
+  p1 = 0; y1 =0.3; output; y1 = 2.3; output; y1 = 1.0; output; y1 = 0.1; output; y1 = 3.9; output;
+   y1 = 0.8; output;
+run;
+ 
+proc sgplot noautolegend;
+  series y=p x=y;
+  scatter y = p1 x = y1;
+     yaxis   values = (0 to .8 by .2)  label= "Estimated p(y)";
+xaxis values= (0 to 4 by .5)  offsetmin=.02 offsetmax=.1 label = "y";
+run; 
+ods rtf close;
+
+
+/* Figure 4.7 */
+  ods rtf;
+data time;
+   do i=1 to 1000;
+   time = 1.2*rangam(121211,1);
+   output;
+   end;
+run;
+
+proc sgplot data=time ;
+   histogram time;
+   xaxis  label = "Wait Time";
+run;
+
+proc univariate data =time;
+   histogram time / endpoints = 0 to 10 by .5 ;
+run;
+
+ods rtf close;
+
+
+/* Figure 4.8 */
+  ods rtf;
+proc univariate data=isqs5347.djia1;
+   var return;
+   histogram return /normal(mu=est sigma=est); 
+run;
+ods rtf close;
+
+  
+
+
+/* Figure 4.9 */
+ods rtf;
+proc sort data = isqs5347.djia1 out=new;
+   by return;
+run;
+
+data new;   
+   set new; 
+   n = quantile('normal', (_n_ -.5)/18834,  0.00020019,  0.01118705);
+run;
+
+proc sgplot data = new noautolegend;
+   series y = n x = n;
+   scatter y = return x = n ;
+   xaxis label = "Normal Distribution Quantile";
+   yaxis label = "Return Quantile";
+run;
+ods rtf close;
+
+
+  
+/* Figure 4.10 */
+ods rtf;
+data q;
+   input x y;
+cards;
+-0.605341484	0.1
+0.421989862	0.3
+1.094878828	0.8
+1.705121172	1
+2.378010138	2.3
+3.405341484	3.9
+;
+proc sgplot data=q noautolegend;
+   scatter y=y x=x;
+   series y=x x=x;
+   yaxis label="Data Quantile";
+   xaxis label="Theoretical Normal Quantile";
+run;
+ods rtf close;
+
+
+
+
+/* Figure 4.11 */
+  ods rtf ;
+proc sort data = isqs5347.djia1 out=new;
+   by return;
+run;
+
+data new;   
+   call streaminit(123456);
+   set new; 
+   ret1 = rand('normal', 0.00020019 , 0.01118705);
+run;
+
+proc sort data =new;
+   by ret1;
+run;
+
+data new;
+   set new;
+   n = quantile('normal', (_n_ -.5)/18834,  0.00020019,  0.01118705);
+run;
+
+proc sgplot data = new noautolegend;
+   series y = n x = n;
+   scatter y = ret1 x = n ;
+   xaxis label = "Normal Distribution Quantile";
+   yaxis label = "Simulated Return Quantile";
+run;
+ods rtf close;
+
+
+/* Figure 4.12 */
+  ods rtf;
+proc sort data = isqs5347.djia1 out=new;
+   by return;
+run;
+
+data new;   
+   call streaminit(654321);
+   set new; 
+   ret1 = rand('normal', 0.00020019,  0.01118705);
+run;
+
+proc sort data =new;
+   by ret1;
+run;
+
+data new;
+   set new;
+   n = quantile('normal', (_n_ -.5)/18834,  0.00020019,  0.01118705);
+run;
+
+proc sgplot data = new noautolegend;
+   series y = n x = n;
+   scatter y = ret1 x = n ;
+   xaxis label = "Normal Distribution Quantile";
+   yaxis label = "Simulated Return Quantile";
+run;
+ods rtf close;
+
+
+
+
+/* End of Chapter 4 files */
+
+
+/* Chapter 5 files */
+ 
+/* Figure 5.1 */
+
+ods rtf;
+ data new;
+  input prob Color $ Age;
+cards;
+0.505003331 Red	20 
+0.200530233	Gray 20
+0.294466436 Green 20
+0.340112918	Red 40
+0.299968561	Gray 40
+0.359918521 Green 40
+0.204940675	Red 60
+0.401465077	Gray 60
+0.393594247 Green 60
+;
+proc sgpanel;
+   panelby age/columns = 3;
+   vbar color/response=prob;
+   rowaxis label ="p(y)" values = (0 to 1.0 by .2);
+   colaxis offsetmin =.3 offsetmax = .3;
+run;
+ods rtf close;
+
+
+/* Figure 5.2 */
+
+  ods rtf;
+data new;
+   input Y $ f x;
+   cards;
+Red 5000 20
+Gray 2000 20
+Green 3000 20
+Red 3500 40
+Gray 3000 40
+Green 3500 40
+Red 2000 60
+Gray 4000 60
+Green 4000 60
+;
+proc logistic;
+    class Y;
+    freq f;
+   model Y = x/link=glogit;
+run;
+
+data probs;
+  input Age Red Gray Green;
+  cards;
+20	0.505003331	0.200530233	0.294466436
+21	0.496527565	0.205190538	0.298281897
+22	0.488047641	0.20989618	0.30205618
+23	0.479568432	0.214645236	0.305786333
+24	0.471094818	0.21943573	0.309469452
+25	0.462631675	0.224265635	0.31310269
+26	0.45418386	0.229132879	0.31668326
+27	0.445756204	0.234035351	0.320208445
+28	0.437353498	0.2389709	0.323675602
+29	0.428980482	0.243937348	0.32708217
+30	0.42064184	0.24893249	0.330425671
+31	0.41234218	0.253954099	0.333703721
+32	0.404086032	0.258999934	0.336914034
+33	0.395877836	0.264067742	0.340054422
+34	0.387721931	0.269155266	0.343122803
+35	0.379622547	0.274260247	0.346117206
+36	0.371583799	0.279380432	0.349035769
+37	0.363609675	0.284513576	0.351876749
+38	0.355704032	0.289657449	0.354638519
+39	0.347870589	0.29480984	0.357319571
+40	0.340112918	0.299968561	0.359918521
+41	0.332434443	0.305131453	0.362434104
+42	0.324838431	0.310296386	0.364865183
+43	0.317327991	0.315461268	0.367210741
+44	0.309906067	0.320624046	0.369469887
+45	0.302575438	0.32578271	0.371641852
+46	0.295338714	0.330935297	0.373725989
+47	0.288198335	0.336079892	0.375721773
+48	0.281156569	0.341214632	0.377628799
+49	0.274215513	0.34633771	0.379446777
+50	0.267377091	0.351447376	0.381175533
+51	0.260643055	0.356541936	0.382815009
+52	0.254014988	0.361619761	0.384365251
+53	0.247494304	0.36667928	0.385826416
+54	0.24108225	0.371718988	0.387198763
+55	0.234779907	0.376737444	0.38848265
+56	0.228588198	0.381733271	0.389678531
+57	0.222507885	0.386705159	0.390786955
+58	0.216539579	0.391651864	0.391808556
+59	0.210683738	0.396572208	0.392744054
+60	0.204940675	0.401465077	0.393594247
+;
+proc sgplot data=probs noautolegend;
+   series y = red x= age ;
+   series y = gray x= age ;
+   series y = green x= age ;
+   yaxis values = (0 to 1 by .1) label="p(y| Age = x)"; 
+   refline 20 40 60  / axis = x;
+   xaxis offsetmin = .05 offsetmax = .05 label = "Age, or x";
+run;
+ods rtf close;
+
+
+/* Figure 5.3 */
+
+  ods rtf;
+data try;
+   do y100 = 0 to 40 by .1;
+      Income100 = pdf('lognormal', y100, log(.15*100),.4);
+output; end;    
+   do y110 = 0 to 40 by .1;
+      Income110 = pdf('lognormal', y110, log(.15*110),.4);
+output; end; 
+ do y120 = 0 to 40 by .1;
+      Income120 = pdf('lognormal', y120, log(.15*120),.4);
+output; end; 
+run; 
+
+proc sgplot ;
+   series y= Income100 x=y100; 
+      series y= Income110 x=y110; 
+   series y= Income120 x=y120; 
+   yaxis label = "p(y|x)";
+   xaxis label = "Annual Housing Expense, y";
+run;
+ods rtf close;
+
+
+/* Figure 5.4 */
+
+  ods rtf;
+data try;
+call streaminit(12345);
+    do i = 1 to 1000;
+	   Income = rand('normal', 80, 15);
+       House_Expense = exp(rand('normal',  log(.18*Income),.4));
+	   If Income <= 60 then do; Group = "Income <= 60"; output; end;
+	   else do; if Income  >= 80 then Group = "Income >= 80"; output; end;
+    end; 
+run; 
+
+proc sgpanel;
+   panelby Group / novarname rows = 2 columns=1 noborder spacing=20;
+   histogram House_expense;
+   rowaxis values = (0 to 40 by 10);
+   colaxis label = "House Expense"; 
+run;
+
+ods rtf close;
+
+
+/* Figure 5.5 */
+  
+ods rtf;
+data dow_lag;
+   set isqs5347.djia1; 
+   l_ret = lag(return); 
+   Return =return;
+   if l_ret <=0 then Yesterday = "Down"; 
+   else Yesterday = "Up"; 
+run; 
+
+proc sgpanel;
+   panelby Yesterday /  rows = 2 columns=1 noborder spacing=20;
+   histogram Return;
+   colaxis values = (-.1 to .1 by .05) label = "Today's Return";
+run;
+ods rtf close;
+
+
+/* Figure 5.6 */
+
+  ods rtf;
+data dow_lag;
+   set isqs5347.djia1; 
+   l_ret = lag(return); 
+   Return =return;
+   l_ret = lag(return);
+   if l_ret <=-.01 then Yesterday = "WayDown";
+   else if l_ret >=  .01 then Yesterday = "WayUp";
+   else delete;
+run; 
+proc sgpanel;
+   panelby Yesterday /  rows = 2 columns=1 noborder spacing=20;
+   histogram Return;
+   colaxis values = (-.1 to .1 by .05) label = "Today's Return" ;
+run;
+ods rtf close;
+
+
+/* Figure 5.7 */
+
+  ods rtf;
+data new;
+   set isqs5347.Surv1;
+   George =  GeorgeHWBush;
+   Barbara = BarbBush;
+run;
+
+proc sgpanel data=new;
+   panelby  George / columns=1 rows=5 noborder spacing=25;
+   vbar Barbara;
+run; title;
+ods rtf close;
+
+
+/* Figure 5.8 */
+  
+ods rtf ;
+data sim;
+   call streaminit(12345);
+   do i = 1 to 33;
+      George  = rand('table', .18, .09, .21, .36, .16);
+	  Barbara = rand('table', .18, .15, .21, .30, .16);
+    output; end;
+run;
+proc sgpanel data=sim;
+   panelby  George / columns=1 rows=5 noborder spacing=25;
+   vbar Barbara;
+run; title;
+ods rtf close;
+
+
+/* End of Chapter 5 files */
+
+
+/* Chapter 6 files */
+ 
+/* Figure 6.1 */
+    
+ods rtf;
+data h;
+do Income = 30 to 120 by 1;
+     do House_Expense = 0 to 36 by .5; 
+      p_xy = pdf('lognormal', House_Expense, log(.15*Income),.4) 
+           * pdf('normal', Income, 80, 15);
+  *    if Income <81 then p_xy=0;
+     output;  end; end;
+run; 
+
+data h;
+   set h;
+   label p_xy = 'p(x,y)';
+   label House_Expense = 'House Expense';
+run;
+
+proc g3d data=h;
+   plot House_Expense*Income=p_xy ;
+run;
+quit;
+ods rtf close;
+
+
+/* Figure 6.2 */
+
+  ods rtf;
+data h;
+do Income = 30 to 120 by 1;
+     do House_Expense = 0 to 36 by .5; 
+      p_xy = pdf('lognormal', House_Expense, log(.15*Income),.4) 
+           * pdf('normal', Income, 80, 15);
+      if Income <61 then p_xy=0;
+     output;  end; end;
+run; 
+
+data h;
+   set h;
+   label p_xy = 'p(x,y)';
+   label House_Expense = 'House Expense';
+run;
+
+proc g3d data=h;
+   plot House_Expense*Income=p_xy ;
+run;
+quit;
+ods rtf close;
+
+
+
+/* Figure 6.3 */
+  ods rtf ;
+data h;
+do Income = 30 to 120 by 1;
+     do House_Expense = 0 to 36 by .5; 
+      p_xy = pdf('lognormal', House_Expense, log(.15*Income),.4) 
+           * pdf('normal', Income, 80, 15);
+      if Income <81 then p_xy=0;
+     output;  end; end;
+run; 
+
+data h;
+   set h;
+   label p_xy = 'p(x,y)';
+   label House_Expense = 'House Expense';
+run;
+
+proc g3d data=h;
+   plot House_Expense*Income=p_xy ;
+run;
+quit;
+ods rtf close;
+
+
+
+/* Figure 6.4 */
+   ods rtf;
+data try;
+   do Income = 30 to 120 by .5;
+      p_x = pdf('normal', Income, 80, 15);
+     output;  end; 
+	 Income1 = 60; p_x1 = pdf('normal', Income1, 80, 15); output;
+	 	 Income1 = 80; p_x1 = pdf('normal', Income1, 80, 15); output;
+
+run; 
+title;
+proc sgplot noautolegend;
+   series y = p_x x = Income ;
+   scatter y = p_x1 x = Income1;
+   yaxis label = "p(x)" offsetmin=0;
+   xaxis label = "Income, x";
+run;
+ods rtf close;
+
+
+
+/* Figure 6.5 */ 
+ods rtf ;
+data;
+   input Income House_Expense;
+   label House_Expense = 'Housing Expense';
+cards;
+78.1	21.4
+63.1	15.8
+112.0	25.0
+80.0	18.5
+56.1	12.3
+;
+
+proc sgplot;
+   scatter y = House_Expense x=Income;
+   refline 60 70 80 90 100 110 / axis = x;
+   refline 12.5 15 17.5 20 22.5 25 27.5 30 /axis= y;
+   xaxis offsetmin=.05 offsetmax=.05;
+   yaxis offsetmin=.05 offsetmax=.05;
+run; 
+ods rtf close;
+  ods rtf;
+data try;
+     call streaminit(12345);
+     do i = 1 to 1500;
+	 Income = rand('normal', 80,15); 
+	 House_Expense = exp(rand('normal', log(.15*Income), .4)); 
+     output;  end; 
+run; 
+
+proc sgplot;
+   refline 30 40 50 60 70 80 90 100 110 120 130 140 / axis = x;
+   refline 2.5 5 7.5 10 12.5 15 17.5 20 22.5 25 27.5 30 32.5 35 37.5 40 
+           42.5 45 47.5 50 /axis= y;
+   scatter y = House_Expense x = Income;
+   yaxis offsetmin =0 label = "Housing Expense";
+run;
+
+ods rtf close;
+
+
+
+/* Figure 6.6 */
+  ods rtf ;
+data try;
+     call streaminit(12345);
+     do i = 1 to 1500;
+	 Income = rand('normal', 80,15); 
+	 House_Expense = exp(rand('normal', log(.15*Income), .4)); 
+     output;  end; 
+run; 
+
+data try ; set try;
+   label House_Expense = 'Housing Expense';
+run;
+
+ods graphics on;
+proc kde data = try; 
+   bivar House_Expense Income /plots = histogram ; 
+run;
+ods graphics off;
+ods rtf close;
+
+  
+/* Figure 6.7 */
+ods rtf ;
+data try;
+   do Income = 40 to 120 by .5;
+      p_x = pdf('normal', 60, .3*income, .04*income)*(1/80);
+     output;  end; 
+run; 
+
+proc sgplot data = try noautolegend;
+   series y = p_x x = Income ;
+   yaxis label = "Proportional to p(x | Y = 60)";
+   xaxis label = "Income, x";
+run;
+ods rtf close;
+
+  
+/* Figure 6.8 */
+ods rtf;
+data st;
+   do y = 20 to 100 by .1;
+      p_g = pdf('normal', y, 75, 10);
+	  p_b = pdf('normal', y, 60, 10);
+	  output;
+   end;
+   y1 = 55; p1 = pdf('normal', y1, 75, 10); output;
+   y1 = 55; p1 = pdf('normal', y1, 60, 10); output;
+run;
+
+proc sgplot data = st noautolegend;
+   series y = p_g x = y;
+   series y = p_b x = y;
+   scatter y = p1 x = y1;
+   refline 55 / axis = x label = "55" labelpos = min;
+   yaxis label = "p(y | Stealing Behavior)" offsetmin=0;
+   xaxis label = "Employee Fitness, y" ;
+run;
+ods rtf close;
+
+
+/* Figure 6.9 */
+  ods rtf ;
+data logn;
+   do Income = 10 to 200;
+      No_Click = pdf('lognormal', Income, 4,.5);
+	  Click = pdf('lognormal', Income, 4.5,.5);
+	  output;
+	end;
+run;
+
+proc sgplot noautolegend data=logn;
+   series y = No_Click x = income;
+   series y = Click x = income;
+   refline 100 /axis = x;
+   refline .002 .004 .006 .008 .010 .012 .014 .016/ axis = y;
+   xaxis label = "Income, y";
+   yaxis label = "p(y)" values = (0 to .016 by .002) offsetmin = 0 offsetmax = .04;
+  run;
+ods rtf close;
+
+
+
+/* End of Chapter 6 files */
+
+
+/* Chapter 7 files */
+ 
+/* Figure 7.7 */
+  ods rtf;
+data list;
+   do y = 1 to 999;
+   output;
+   end;
+run;
+
+proc means; run;
+
+proc surveyselect data = list method = SRS rep = 2000 
+                         sampsize = 100 seed = 12345 out = list1;
+  id _all_;
+run;
+
+proc sql;
+   create table list2 as select mean(y) as y_average from list1 group by replicate;
+quit;
+
+proc sgplot;
+   histogram y_average;
+  xaxis values= (0 to 1000 by 50) label = "Average of n=100 Randomly Selected Items";
+  yaxis values= (0 to 20 by 5) ;
+  refline 500 / axis=x  LINEATTRS=(thickness=2);
+run;
+
+proc univariate; var y_average; run;
+ods rtf close;
+
+
+ 
+/* Figure 7.8 */  
+ods rtf;
+data probs;
+  input Value Electronics Furniture;
+  cards;
+ 321.20 0 1
+ 322.00 1 0 
+ 322.34 0 1  
+
+proc sgplot data=probs;
+   series y = electronics x= value ;
+   series y = furniture x= value ;
+   yaxis values = (0 to 1 by .2) label="p(y| Value)"; 
+run;
+ods rtf close;
+
+ 
+/* Figure 7.9 */
+  ods rtf ;
+data probs;
+  input Value Electronics Furniture;
+  cards;
+ 321.20 .34 .66
+ 322.00 .33 .67 
+ 322.34 .323 .677  
+
+proc sgplot data=probs;
+   series y = electronics x= value ;
+   series y = furniture x= value ;
+   yaxis values = (0 to 1 by .2) label="p(y| Value)"; 
+run;
+ods rtf close;
+
+
+ 
+/* Figure 7.11 */
+  ods rtf ;
+data list;
+   do y1 = 1 to 999;
+   y = y1 + rannor(12345)*50 + 50;
+   output;
+   end;
+run;
+
+proc means; run;
+
+proc surveyselect data = list method = SRS rep = 2000 
+                         sampsize = 100 seed = 12345 out = list1;
+  id _all_;
+run;
+
+proc sql;
+   create table list2 as select mean(y) as y_average from list1 group by replicate;
+quit;
+
+proc sgplot;
+   histogram y_average;
+  xaxis values= (0 to 1000 by 50) label = "Average of n=100 Randomly Selected Items";
+  yaxis values= (0 to 20 by 5) ;
+  refline 500 / axis=x  LINEATTRS=(thickness=2);
+run;
+
+proc univariate; var y_average; run;
+ods rtf close;
+
+
+ 
+/* Figure 7.12 */
+  ods rtf ;
+data list;
+   do y1 = 1 to 10000;
+   n = ranbin(12345, 5000, .10);
+   y = ranbin(12345, n, .5)/n;
+   output;
+   end;
+run;
+
+proc sgplot;
+   histogram y;
+  xaxis values= (0 to 1 by .2) label = "Proportion in Sample Who Live in an Apartment";
+  refline .4 / axis=x  LINEATTRS=(thickness=2);
+run;
+
+ods rtf close;
+
+ 
+/* Figure 7.13 */
+  ods rtf;
+data dice;
+   do t = 2 to 12;
+      p_t = (t -1)/36;
+	     if t > 7 then p_t = (13 -t)/36;
+		output;
+		end;
+run;
+
+proc sgplot;
+   needle y = p_t x = t;
+   xaxis values = (2 to 12 by 1) label = "Total of Two Dice, y" offsetmin = .02
+           offsetmax = 0.02;
+   yaxis label = "p(y)" values = (0 to .20 by .05);  
+run;
+ods rtf close;
+
+ 
+/* Figure 7.14 */
+  ods rtf;
+data dice;
+   do t = 2 to 12;
+      p_t = 1/6;
+	     if t < 7 then p_t = 0;
+		output;
+		end;
+run;
+
+proc sgplot;
+   needle y = p_t x = t;
+   xaxis values = (2 to 12 by 1) label = "Total of Two Dice, y" offsetmin = .02
+           offsetmax = 0.02;
+   yaxis label = "p(y)" values = (0 to .20 by .05);  
+run;
+ods rtf close;
+
+ 
+/* Figure 7.15 */
+  ods rtf ;
+data;
+   input Housing $ 1-9 time $  f;
+   cards;
+Apartment Time1 60
+House     Time1 40
+Apartment Time2 50
+House     Time2 50 
+Apartment Time3 30
+House     Time3 60 
+;
+
+proc sgpanel;
+   panelby  time / columns=1 rows=3 spacing =20 novarname;
+   vbar Housing/ freq =f;
+   rowaxis label = "Percent" values = (0 to 100 by 25) ;
+run; title;
+
+
+ 
+/* Figure 7.16 */
+ods rtf close;
+  ods rtf ;
+data c;
+call streaminit(12345);
+Observation = 0;
+   do cluster = 1 to 25;
+      ncluster = ranpoi(0,4);
+	  m = rand("normal", 70, 10);
+	  do j = 1 to ncluster;
+	      Observation +1;
+	      Y = m + rand('normal', 0, 1);
+	   output; end; end;
+run;
+
+proc sgplot data=c;
+   scatter y = y x = Observation;
+run;
+ods rtf close;
+
+  
+ 
+/* Figure 7.17 */
+ods rtf; 
+proc sgplot data = djia2011 noautolegend;
+   scatter y = DJI x = Date;
+   series y = DJI x = Date;
+   yaxis label = "Dow Jones Closing Index";
+run;
+ods rtf close;
+  
+
+ 
+/* Figure 7.18 */
+ods rtf ; 
+
+proc sort data=djia2011 out=dow;
+   by date;
+run;
+
+data dow1;
+   set dow;
+   Yesterday_Close = lag(dji);
+run;
+
+proc sgplot data = dow1;
+   scatter y = dji x = Yesterday_Close;
+   xaxis label = "Yesterday's Closing Index";
+   yaxis label = "Today's Closing Index";
+run;
+ods rtf close;
+
+
+ 
+/* Figure 7.19 */
+  ods rtf ;
+data dow_lag;
+set research.djia2011; 
+l_ret = lag(dji); 
+Index =dji;
+if l_ret <=11750 then Yesterday = "Low "; 
+else Yesterday = "High"; 
+run; 
+
+proc sgpanel;
+   panelby Yesterday /  rows = 2 columns=1 noborder spacing=20;
+   histogram Index;
+run;
+ods rtf close;
+
+
+ 
+/* Figure 7.20 - 7.23*/
+  ods rtf ;
+data new;
+    do Observation_Number = 1 to 100;
+       Y = 70 + 10*rannor(123231);
+	   if Observation_Number < 51 then Time = "Early"; else Time = "Late";       
+	   output;
+	   end;
+run;
+
+data new;
+  set new;
+  ylag = lag(Y);
+  if Ylag < 70 then Previous_Y = "Low ";
+      else Previous_Y = "High";
+run;
+
+proc sgpanel data=new;
+   Panelby time/rows=2 noborder spacing=20;
+   Histogram Y;
+run;
+
+proc sgpanel data=new;
+   panelby Previous_Y/rows=2 noborder spacing=20;
+   Histogram Y;
+run;
+
+proc sgplot data=new noautolegend;
+   series  y = Y x = Observation_Number;
+   scatter y = Y x = Observation_Number;
+run;
+
+
+proc sgplot data=new;
+   scatter  y = Y x = Ylag;
+   xaxis label = "Previous Y";
+   yaxis label = "Current Y";
+run;
+
+
+ods rtf close;
+
+
+
+ 
+/* Figure 7.24 */  
+ods rtf ;
+data qc;
+  input width @@;
+  Observation_Number = _n_;
+cards;
+311	304	316	308	312	308	314	307	302	311	308	300	316	304	316	306	314	310	311	309	
+311	306	311	309	311	305	304	303	307	316
+;
+
+proc sgplot data=qc noautolegend;
+   series  y = width x = Observation_Number;
+   scatter y = width x = Observation_Number;
+   xaxis label="Observation Number";
+   yaxis label = "Chip Width";
+run;
+
+ods rtf close;
+
+
+
+/* End of Chapter 7 files */
+
+
+/* Chapter 8 files */
+ 
+/* Figure 8.3 */
+
+  ods rtf;
+data exp;  
+   inc = 2;
+   do T =1 to 11 by inc;
+   prob = .5*exp(-.5*t)*inc;
+      do; W = T - inc/2; p=0; output;  W = T - inc/2; p=prob/inc; output;
+          W= T+inc/2; p=prob/inc; output; W= T+inc/2; p=0; output; end;
+   end;
+
+   inc2 = .1;
+   do T1 =0 to 12 by inc2;
+   prob2 = .5*exp(-.5*t1);
+   output;
+   end;
+
+run;
+
+proc sgplot data=exp noautolegend;
+   series y = p x=w/LINEATTRS= (color= black pattern=solid);
+   series y = prob2 x=t1 /LINEATTRS= (color= black pattern=dash thickness = 2);
+   yaxis  values = (0 to .6 by .1) label= "p(y)" offsetmin =0;
+   xaxis  values = (1 to 11 by 2) label = "Waiting time, y" valueshint offsetmin=0;
+run;
+ods rtf close;
+
+
+/* Figure 8.4 - 8.8 */
+  
+ods rtf;
+%let nsimu = 200000;
+data simu;
+   call streaminit(929045);
+   ybar_n = 0;
+   do n = 1 to &nsimu; true_mean=3.5;
+      y = rand('table', 1/6,1/6,1/6,1/6,1/6,1/6);
+      Ybar_n = ((n-1)/n)*ybar_n + (1/n)*y ; /* running average of the observations */
+   output; end;
+run;
+
+proc sgplot data =simu noautolegend;
+   series x = n y = ybar_n;
+   series x = n y = true_mean / lineattrs= (pattern=dot) ;
+   xaxis type=log logbase=10 label = "n"; 
+   yaxis values = (1 to 6 by 1) label = "Average of First n Dice Rolls";
+run;
+ods rtf close;
+
+ods rtf ;
+%let nsimu = 200000;
+data simu;
+   call streaminit(929045);
+   ybar_n = 0;
+   do n = 1 to &nsimu; true_mean=.3;
+      y = rand('Bernoulli', 0.3);
+      Ybar_n = ((n-1)/n)*ybar_n + (1/n)*y ; /* running average of the observations */
+   output; end;
+run;
+
+proc sgplot data =simu noautolegend;
+   series x = n y = ybar_n;
+   series x = n y = true_mean / lineattrs= (pattern=dot) ;
+   xaxis type=log logbase=10 label = "n"; 
+   yaxis values = (0 to 1 by .1) label = "Average of First n Bernoulli(0.3)";
+run;
+ods rtf close;
+
+ods rtf ;
+%let nsimu = 200000;
+data simu;
+   call streaminit(929045);
+   ybar_n = 0;
+   do n = 1 to &nsimu; true_mean=70;
+      y = rand('normal', 70, 15);
+      Ybar_n = ((n-1)/n)*ybar_n + (1/n)*y ; /* running average of the observations */
+   output; end;
+run;
+
+proc sgplot data =simu noautolegend;
+   series x = n y = ybar_n;
+   series x = n y = true_mean / lineattrs= (pattern=dot) ;
+   xaxis type=log logbase=10 label = "n"; 
+   yaxis values = (50 to 80 by 10) label = "Average of First n N(70,15**2)";
+run;
+ods rtf close;
+
+ods rtf ;
+%let nsimu = 200000;
+data simu;
+   call streaminit(929045);
+   ybar_n = 0;
+   do n = 1 to &nsimu;
+      y = 2*rand('exponential');  true_mean =2;
+      Ybar_n = ((n-1)/n)*ybar_n + (1/n)*y ; /* running average of the observations */
+   output; end;
+run;
+
+proc sgplot data =simu noautolegend;
+   series x = n y = ybar_n;
+   series x = n y = true_mean / lineattrs= (pattern=dot) ;
+   xaxis type=log logbase=10 label = "n"; 
+   yaxis  values = (0 to 6 by 2)  label = "Average of First n Exp(0.5)";
+*   refline 2 /axis = y lineattrs= (pattern=dot thickness=2) ;
+run;
+ods rtf close;
+
+
+ods rtf ;
+%let nsimu = 200000;
+data simu;
+   call streaminit(929045);
+   ybar_n = 0;
+   do n = 1 to &nsimu;
+      y = 2*rand('uniform');  true_mean =1;
+      Ybar_n = ((n-1)/n)*ybar_n + (1/n)*y ; /* running average of the observations */
+   output; end;
+run;
+
+proc sgplot data =simu noautolegend;
+   series x = n y = ybar_n;
+   series x = n y = true_mean / lineattrs= (pattern=dot) ;
+   xaxis type=log logbase=10 label = "n"; 
+   yaxis   values = (0 to 2 by .5)  label = "Average of First n U(0,2)";
+*   refline 2 /axis = y lineattrs= (pattern=dot thickness=2) ;
+run;
+ods rtf close;
+
+
+
+/* Figure 8.9 */
+
+  ods rtf ;
+%let nsimu = 200000;
+data simu;
+   call streaminit(929045);
+   ybar_n = 0;
+   do n = 1 to &nsimu;
+       y = rand('table', 1/6,1/6,1/6,1/6,1/6,1/6) +2; true_mean=7;
+    Ybar_n = ((n-1)/n)*ybar_n + (1/n)*y ; /* running average of the observations */
+   output; end;
+run;
+
+proc sgplot data =simu noautolegend;
+   series x = n y = ybar_n;
+   series x = n y = true_mean / lineattrs= (pattern=dot) ;
+   xaxis type=log logbase=10 label = "n"; 
+   yaxis    values = (2 to 12 by 1)  label = "Average of First n Dependent Dice";
+run;
+ods rtf close;
+
+
+
+
+/* Figure 8.10 - 8.11  */
+
+  ods rtf;
+%let nsimu = 200000;
+data simu;
+   call streaminit(929045);
+   ybar_n = 0;
+   do n = 1 to &nsimu;
+       y = 1/rand('uniform'); ;
+    Ybar_n = ((n-1)/n)*ybar_n + (1/n)*y ; /* running average of the observations */
+   output; end;
+run;
+
+proc sgplot data =simu noautolegend;
+   series x = n y = ybar_n;
+*   series x = n y = true_mean / lineattrs= (pattern=dot) ;
+   xaxis type=log logbase=10 label = "n"; 
+   yaxis   /* values = (2 to 12 by 1) */  label = "Average of First n 2/U(0,2)";
+run;
+ods rtf close;
+
+  ods rtf;
+%let nsimu = 200000;
+data simu;
+   call streaminit(922092);
+   ybar_n = 0;
+   do n = 1 to &nsimu;
+       y = 1/rand('uniform'); ;
+    Ybar_n = ((n-1)/n)*ybar_n + (1/n)*y ; /* running average of the observations */
+   output; end;
+run;
+
+proc sgplot data =simu noautolegend;
+   series x = n y = ybar_n;
+*   series x = n y = true_mean / lineattrs= (pattern=dot) ;
+   xaxis type=log logbase=10 label = "n"; 
+   yaxis   /* values = (2 to 12 by 1) */  label = "Average of First n 2/U(0,2)";
+run;
+ods rtf close;
+
+
+
+/* Figure 8.12 */
+
+  ods rtf;
+data ;
+   do i = 1 to 15;
+      y = 70 + 10*rannor(12321);
+	  phat = 1/15;
+	  output;
+	end;
+   do y1 = 40 to 100 by .1;
+       p_y1 = pdf("normal", y1, 70,10);
+	   output;
+	end;
+run;
+
+proc sgplot noautolegend;
+   needle y = phat x = y;
+   series y = p_y1 x = y1;
+   yaxis label = "p(y), p-hat(y)" values = (0 to .1 by .02)  offsetmin=0;
+run;
+ods rtf close;
+
+
+
+/* End of Chapter 8 files */
+
+
+/* Chapter 9 files */
+ 
+/* Figure 9.1 */
+
+  ods rtf ;
+data plot;
+   input  y @@;
+   if _n_ < 7 then do; p = 1/6; type = "Original   "; output; end;
+   if _n_ = 7 then do; p = 1/6; type = "Transformed"; output; end;
+   if _n_ = 8 then do; p = 1/3; type = "Transformed"; output; end;
+   if _n_ = 9 then do; p = 1/3; type = "Transformed"; output; end;
+   if _n_ = 10 then do; p = 1/6;type = "Transformed"; output; end;
+cards;
+1 2 3 4 5 6
+0 1 4 9
+;
+run;
+
+proc sgpanel;
+  panelby type / spacing=20 novarname;
+  needle y = p x = y /  lineattrs = (thickness = 2);
+  colaxis label = "Random Variable" offsetmin=.05 offsetmax=.05 max=10 values = (0 1 2 3 4 5 6 7 8 9 );
+  rowaxis max=.4  values = (0 0.1667 0.3333 ) offsetmin=0 offsetmax = .10 label = "Probability";
+run;
+ods rtf close;
+
+  /* Figure 9.4 */
+ods rtf;
+data exp;
+   do x = -1.5 to 2.5 by .01;
+      f_x = exp(x);
+      l1_x = exp(1.5) - 1.5*exp(1.5) + exp(1.5)*x; if x<.8 then l1_x = .; if x>2.2 then l1_x = .;
+	  l2_x = exp(-.5) - (-.5)*exp(-.5) + exp(-.5)*x; if x<-1.5 then l2_x = .; if x>.5 then l2_x = .;
+      output;
+      end;
+	  x1 = 1.5; y1 = exp(1.5); output;
+	  x2 = -.5; y2 = exp(-.5); output;
+run;
+
+proc sgplot noautolegend;
+   series y = f_x x = x;
+   series y = l1_x x = x / lineattrs = (pattern = 2);
+   series y = l2_x x = x / lineattrs = (pattern = 2);
+   scatter y = y1 x = x1;
+   scatter y = y2 x = x2;
+   yaxis label = "f(x)";
+   xaxis label = "x";
+run;
+ods rtf close;
+
+
+/* Figure 9.5 */
+
+ods rtf ;
+data sqrt;
+   do x = 0 to 2.5 by .01;
+      f_x = x**.5;
+	  b1 = .5*(.3)**(-.5);
+	  a1 = .3**.5 - b1*.3;
+      l1_x = a1 + b1*x;
+	  b2 = .5*(1.5)**(-.5);
+	  a2 = 1.5**.5 - b2*1.5;
+      l1_x = a1 + b1*x; if x<0 then l1_x = .; if x>.6 then l1_x = .;
+      l2_x = a2 + b2*x;if x<.7 then l2_x = .; if x>2.7 then l2_x = .;
+      output;
+      end;
+	  x1 = .3; y1 = .3**.5; output;
+	  x2 = 1.5; y2 = 1.5**.5; output;
+run;
+
+proc sgplot noautolegend;
+   series y = f_x x = x;
+   series y = l1_x x = x  / lineattrs = (pattern = 2);
+   series y = l2_x x = x  / lineattrs = (pattern = 2);
+   scatter y = y1 x = x1;
+   scatter y = y2 x = x2;
+   yaxis label = "f(x)";
+   xaxis label = "x";
+run;
+ods rtf close;
+
+
+/* Figure 9.6 */
+  ods rtf ;
+
+data exp;
+   do x = -3 to 3 by .01;
+      f_x = exp(-x**2/2);
+	  b1= exp(-.5**2/2)*(.5);
+      a1 = exp(-.5**2/2) - b1*(-.5); 
+      l1_x = a1 + b1*x; 
+	  b2 = exp(-1.5**2/2)*(-1.5);
+	  a2 = exp(-1.5**2/2) - b2*(1.5);
+	  l2_x = a2 + b2*x;
+      output;
+      end;
+	  x1 = -.5; y1 = exp(-x1**2/2); output;
+	  x2 = 1.5; y2 = exp(-x2**2/2); output;
+	  x3 = 1; y3 = exp(-x3**2/2); output;
+	  x4 = -1; y4 = exp(-x4**2/2); output;
+run;
+
+data exp;
+    set exp;
+	  if x> -.05 then l1_x = .;
+      if x<-.95 then  l1_x = .;
+  	  if x < 1.05 then l2_x = .;
+      if x > 1.95 then l2_x = .;
+run;
+proc sgplot data=exp noautolegend;
+   series y = f_x x = x;
+   series y = l1_x x = x/lineattrs = (pattern=2);
+   series y = l2_x x = x/lineattrs = (pattern=2);
+   scatter y = y1 x = x1;
+   scatter y = y2 x = x2;
+   needle y = y1 x = x1 /lineattrs = (pattern=2);
+   needle y = y2 x = x2 /lineattrs = (pattern=2);
+
+   needle y = y3 x = x3;
+   needle y = y4 x = x4;
+   yaxis label = "f(y)" offsetmin = 0;
+   xaxis label = "y" values = (-2 -1 -.5 0 1 1.5 2);
+run;
+
+ods rtf close;
+
+
+/* Figure 9.7 */
+  ods rtf;
+data plot;
+   do y = 1 to 6 by 0.01;
+   t = (y-3)**2;
+   output;
+end;
+   y1 = 1; t1 = 4; output;
+   y1 = 2; t1 = 1; output;
+   y1 = 3; t1 = 0; output;
+   y1 = 4; t1 = 1; output;
+   y1 = 5; t1 = 4; output;
+   y1 = 6; t1 = 9; output;
+run;
+
+proc sgplot noautolegend;
+   scatter y = t1 x = y1;
+   series y = t x = y;
+   xaxis  offsetmax=.05 min = 0 values = (0 1 2 3 4 5 6) label = "y";
+   yaxis offsetmax =.05 values = (0 1 4 9) label = "f(y)";
+   refline  .25 / axis = y label = "f{E(Y)} = 0.25";
+   refline 3.5 /axis = x label = "E(Y)" labelpos=min labelloc = outside ;
+   refline 3.167 / axis = y label = "E{f(Y)} = 3.167";
+run; ods rtf close;
+  
+
+/* Figure 9.8 */
+ods rtf;
+data plot;
+   do y = 1 to 6 by 0.01;
+   t = log(y);
+   output;
+end;
+   y1 = 1; t1 = log(1); output;
+   y1 = 2; t1 = log(2); output;
+   y1 = 3; t1 = log(3); output;
+   y1 = 4; t1 = log(4); output;
+   y1 = 5; t1 = log(5); output;
+   y1 = 6; t1 = log(6); output;
+run;
+
+proc sgplot noautolegend;
+   scatter y = t1 x = y1;
+   series y = t x = y;
+   xaxis  offsetmax=.05 min = 0 values = (0 1 2 3 4 5 6) label = "y";
+   yaxis offsetmax =.05 label = "f(y)";
+   refline  1.097 / axis = y label = "E{f(Y)} = 1.097";
+   refline 3.5 /axis = x label = "E(Y)" labelpos=min labelloc = outside ;
+   refline 1.253 / axis = y label = "f{E(Y)} = 1.253";
+run; ods rtf close;
+
+
+/* Figure 9.9 */
+  ods rtf;
+data;
+   Investment = "Safe ";
+      do y = -6 to 4 by .001;
+       Earnings = 100 + 50*y;
+       p_y  = (.8*pdf('normal', y , .5,1) +.2*pdf('normal',y, -2, 2))/50;
+        output;
+	   end;
+	   	 x1 = 100; p_y1 = (.8*pdf('normal', (x1 -100)/50 , .5,1) +.2*pdf('normal',(x1 - 100)/50 , -2, 2))/50;  output;
+   Investment = "Risky";
+         do y = -6 to 4 by .001;
+	   Earnings = 100 + 200*y;
+	   p_y = (.8*pdf('normal', y , .5,1) +.2*pdf('normal',y, -2, 2))/200;X1 = .; P_Y1 = .;
+        output;   end;
+	 x1 = 100; p_y1 = (.8*pdf('normal', (x1 -100)/200 , .5,1) +.2*pdf('normal',(x1 - 100)/200, -2, 2))/200 - .00001; output;
+run;
+
+proc sgpanel noautolegend;
+   panelby Investment / rows=2 uniscale=column rowheaderpos = both spacing=20;
+      needle y = p_y1 x = x1;
+   series y = p_y x = Earnings;
+   colaxis label = "Earnings, y"; 
+   rowaxis label = "p(y)" offsetmin=0;
+run;
+ods rtf close;
+
+
+/* Figure 9.10 */
+  ods rtf;
+data;
+   Investment = "Risky";
+         do y = -6 to 4 by .001;
+	   Earnings = 100 + 200*y;
+	   p_y = (.8*pdf('normal', y , .5,1) +.2*pdf('normal',y, -2, 2))/200;
+        output;  end;
+
+	   x1 = 100; y1 =(.8*pdf('normal', (x1 -100)/200 , .5,1) +.2*pdf('normal',(x1 -100)/200, -2, 2))/200 +.000008; output;
+	   x2 = -222.5; y2 =(.8*pdf('normal', (x2 -100)/200 , .5,1) +.2*pdf('normal',(x2 -100)/200, -2, 2))/200 +.000002 ; output;
+	   x3 = 422.5; y3 =(.8*pdf('normal', (x3 -100)/200 , .5,1) +.2*pdf('normal',(x3 -100)/200, -2, 2))/200 +.000008; output;
+
+run;
+
+proc sgplot noautolegend;
+   series y = p_y x = Earnings;
+   refline  100   / axis = x label = "E(Y)"       labelpos=min labelloc=inside LINEATTRS = (color=white);
+   refline  422.5 / axis = x label = "E(Y)+322.5" labelpos=min labelloc=inside LINEATTRS = (color=white);
+   refline -222.5 / axis = x label = "E(Y)-322.5" labelpos=min labelloc=inside LINEATTRS = (color=white);
+   yaxis label="p(y)";
+   xaxis label = "Earnings, y";
+   needle y = y1 x = x1 / lineattrs = (pattern = 2);
+   needle y = y2 x = x2 / lineattrs = (pattern = 2);
+   needle y = y3 x = x3 / lineattrs = (pattern = 2);
+run;
+ods rtf close;
+
+
+/* Figure 9.11 */
+  ods rtf ;
+data;
+      do y = 0 to 2 by .01;
+	  p_y = 0.5;
+      output;  end;
+	  x1 = .5; y1 = .5; output;
+	  x2 = 1; y2 = .5; output;
+	  x3 = 1.5; y3 = .5; output;
+run;
+
+proc sgplot noautolegend;
+   series y = p_y x = y;
+   refline 1  / axis = x label = "E(Y)" labelpos=min  labelloc=inside lineattrs = (color=white);
+   refline 1.5  / axis = x label = "E(Y)+MAD" labelpos=min labelloc=inside lineattrs = (color=white);
+   refline .5 / axis = x label = "E(Y)-MAD" labelpos=min  labelloc=inside lineattrs = (color=white);
+   needle y = y1 x = x1 / 	lineattrs = (pattern = 2);
+   needle y = y2 x = x2 / 	lineattrs = (pattern = 2);
+   needle y = y3 x = x3 / 	lineattrs = (pattern = 2);
+   yaxis label="p(y)" values = (0 .5) offsetmax = .1 offsetmin=0;
+   xaxis label = "Time Until Green, y" values = (0 to 2 by .5) offsetmin = 0 offsetmax = 0;
+run;
+
+ods rtf close;
+
+
+/* Figure 9.12 */
+  ods rtf;
+data n;
+   do y = 30 to 110 by .1;
+      p_y = pdf("normal", y , 70 , 10);
+	  output;
+	  y1 = 40; p1 = pdf("normal", y1 , 70 , 10); output;
+	  y2 = 50; p2 = pdf("normal", y2 , 70 , 10); output;
+	  y3 = 60; p3 = pdf("normal", y3 , 70 , 10); output;
+	  y4 = 70; p4 = pdf("normal", y4 , 70 , 10); output;
+	  y5 = 80; p5 = pdf("normal", y5 , 70 , 10); output;
+	  y6 = 90; p6 = pdf("normal", y6 , 70 , 10); output;
+	  y7 =100; p7 = pdf("normal", y7 , 70 , 10); output;
+	  end;
+run;
+
+proc sgplot noautolegend;
+   series y = p_y x=y;
+   needle y = p1 x=y1/LINEATTRS= (color= black pattern=2);
+   needle y = p2 x=y2/LINEATTRS= (color= black pattern=2);
+   needle y = p3 x=y3/LINEATTRS= (color= black pattern=2);
+*   needle y = p4 x=y4/LINEATTRS= (color= black pattern=4);
+   needle y = p5 x=y5/LINEATTRS= (color= black pattern=2);
+   needle y = p6 x=y6/LINEATTRS= (color= black pattern=2);
+   needle y = p7 x=y7/LINEATTRS= (color= black pattern=2);
+   yaxis label = "p(y)" offsetmin=0;
+   xaxis values = (40 to 100 by 10) label = "y" offsetmin= .10 offsetmax = .10;
+run;
+
+ods rtf close;
+
+/* Figure 9.13 */
+  ods rtf;
+data g; 
+   Distribution = "Earnings ";
+      do b = 0 to 20 by 1;
+      p_y = pdf('binomial', b, 18/38,20 );
+      y = -200 + 20*b; 
+      output;
+       end;
+    Distribution = "In Pocket";
+      do b = 0 to 20 by 1;
+      p_y = pdf('binomial',b, 18/38, 20 );
+      y = 20*b; 
+      output;
+       end;
+run;
+
+proc sgpanel;
+   panelby distribution / rows = 2 spacing=20 novarname;
+   needle y = p_y x = y;
+   colaxis label = "Realization of Random Variable ";
+   rowaxis label= "Probability" offsetmin=0 values = (0 to .20 by .05) ;
+run;
+
+ods rtf close;
+
+/* Figure 9.14 */
+  ods rtf ;
+data c9;
+   do y = .1 to 99.9 by .1;
+      v1 = "Left Skew "; v2= "Row 1";
+      x = y/100;
+      p_y = pdf("beta", x, 16,3)/100;
+      output; 
+   end;
+
+   do y = .1 to 99.9 by .1;
+      v1 = "Left Skew "; v2 = "Row 2";
+      x = y/100;
+      p_y = pdf("beta", x, 3,1.5)/100;
+      output; 
+   end;
+   do y = .1 to 99.9 by .1;
+      v1 = "Left Skew "; v2= "Row 3";
+      x = y/100;
+      p_y = pdf("beta", x, 1.5,.8)/100;
+      output; 
+   end;
+   do y = .1 to 99.9 by .1;
+      v1 = "No Skew"; v2 = "Row 1";
+      x = y/100;
+      p_y = pdf("beta", x, 7,7)/100;
+      output; 
+   end;
+
+   do y = .1 to 99.9 by .1;
+      v1 = "No Skew"; v2="Row 2";
+      x = y/100;
+      p_y = pdf("beta", x, 2,2)/100;
+      output; 
+   end;
+   do y = .1 to 99.9 by .1;
+      v1 = "No Skew"; v2 ="Row 3";
+      x = y/100;
+      p_y = pdf("beta", x, .7,.7)/100;
+      output; 
+   end;
+   do y = .1 to 99.9 by .1;
+      v1 = "Right Skew"; v2 ="Row 1";
+      x = y/100;
+      p_y = pdf("beta", x, 3,16)/100;
+      output; 
+   end;
+
+   do y = .1 to 99.9 by .1;
+      v1 = "Right Skew"; v2 = "Row 2";
+      x = y/100;
+      p_y = pdf("beta", x, 1.5,3)/100;
+      output; 
+   end;
+   do y = .1 to 99.9 by .1;
+      v1 = "Right Skew"; v2= "Row 3";
+      x = y/100;
+      p_y = pdf("beta", x, .8,1.5)/100;
+      output; 
+   end;
+
+run;
+proc sgpanel;
+   panelby  v2 v1/ rows=3 columns=3 novarname spacing=15 ;
+   series y = p_y x = y;
+   rowaxis label = "p(y)" display=none;   
+   colaxis display = none;
+run;
+ods rtf close;
+
+/* Figure 9.15 */
+  ods rtf ;
+data;
+   do y = .1 to 99.9 by .1;
+    x = y/100;
+    if x < .4   then Kurtosis_less_than_0 =0;
+	    else if x < .5 then Kurtosis_less_than_0 = (x-.4);
+		else if x <.6 then Kurtosis_less_than_0 = (.6-x);
+	  else Kurtosis_less_than_0 = 0;
+    Kurtosis_equal_0 = pdf("normal", y, 50,10);
+	Kurtosis_greater_than_0 = .8*(1/40)*(abs(y-50)<20) + .2*pdf("t", (x-.5)/.1,4.000 )/10;
+	output;
+	end;
+proc sgplot noautolegend;
+   series y = Kurtosis_less_than_0 x = y;
+   series y = Kurtosis_equal_0 x = y;
+   series y = Kurtosis_greater_than_0 x = y;
+   yaxis label = "p(y)";   
+run;
+
+ods rtf close;
+
+/* Figure 9.16 */
+  ods rtf ;
+data t;
+   do t = 0 to 25 by .01;
+      kl = t -2.5 - .5;  if kl < -2 then kl = -2;
+	  ku = t - 2.5 +.5;
+	  output;
+	  end;
+run;
+
+proc sgplot;
+   band lower = kl upper = ku x = t;
+   yaxis values = (-2 0 5 10 15 20 25) label = "Kurtosis Range";
+   xaxis values = (0 5 10 15 20 25) label =  "Tail Behavior";
+run; 
+ods rtf close;
+
+
+/* End of Chapter 9 files */
+
+
+/* Chapter 10 files */
+ 
+/* Figure 10.1 */
+
+
+  ods rtf ; 
+data try;
+     call streaminit(12345);
+     do i = 1 to 1500;
+	 Income = rand('normal', 80,15); 
+	 House_Expense = rand('normal', .3*Income, .04*Income); 
+     output;  end; 
+run; 
+
+proc sgplot;
+   scatter y = House_Expense x = Income;
+   refline 80  / axis = x;
+   refline  24 /axis= y;
+   yaxis values = (0 to 50 by 10) label = "Housing Expense";
+   inset " Quadrant I" / position = topright;
+   inset " Quadrant II" / position = topleft;
+   inset " Quadrant III" / position = bottomleft;
+   inset " Quadrant IV" / position = bottomright;
+run;
+ods rtf close;
+
+
+/* Figure 10.2 */
+  ods rtf ;
+data try;
+     call streaminit(12345);
+     do i = 1 to 1500;
+	 Income = rand('normal', 80,15); 
+	 Time_Cooking = rand('normal', 40 -.2*Income, .035*80); 
+     output;  end; 
+run; 
+
+proc sgplot;
+   scatter y = Time_Cooking x = Income;
+   refline 80  / axis = x;
+   refline  24 /axis= y;
+   yaxis values = (10 to 40 by 10) label = "Time Spent Cooking" ;
+   inset " Quadrant I" / position = topright;
+   inset " Quadrant II" / position = topleft;
+   inset " Quadrant III" / position = bottomleft;
+   inset " Quadrant IV" / position = bottomright;
+run; ods rtf close; 
+proc corr data=try;
+   var Time_Cooking Income; 
+run;
+
+/* Figure 10.3 */
+  ods rtf ;
+%let n = 10;   
+
+data test_clt;   
+call streaminit(17345);
+   do i = 1 to 1000000;
+   sum=0;      
+      do j = 1 to &n;
+	    die = rand('table', 1/6,1/6,1/6,1/6,1/6,1/6);
+        sum = sum + die; 
+   end; output; end;
+run;
+
+proc univariate;
+   histogram sum/ midpoints = 10 to 60 by 1 normal;
+run;
+ods rtf close;
+
+
+/* Figure 10.4 */ 
+ods rtf;
+  data;
+    do y = 0 to 30 by .01;
+       p_y1 = pdf('gamma', y, 1,2);
+       p_y3 = pdf('gamma', y, 3,2);
+       p_y5 = pdf('gamma', y, 5,2);
+       p_y10 = pdf('gamma', y, 10,2);
+       output;
+      end;
+  run;
+  proc sgplot noautolegend;
+    series y = p_y1 x = y;
+    series y = p_y3 x = y;
+    series y = p_y5 x = y;
+    series y = p_y10 x = y;
+    yaxis label = "p(y)";
+    xaxis label = "sum, y";
+  run;
+ods rtf close;
+
+
+/* Figure 10.5 */
+  ods rtf;
+%let n = 10000;   
+
+data test_clt;   
+call streaminit(17945);
+   do i = 1 to 20000;
+   sum=0;      
+      do j = 1 to &n;
+	    y = 1/rand('uniform');
+        sum = sum + y; 
+   end; output; end;
+run;
+
+proc univariate;
+   qqplot sum / normal (mu = est sigma=est);
+run;
+ods rtf close;
+
+/* Figure 10.6 */
+  ods rtf;
+  data;
+    n = 1;
+    do y = 0 to 4 by .001;	   
+       p_y = pdf('gamma', n*y/2, n,1)*(n/2);
+	       output;
+      end;
+    n = 10;
+    do y = 0 to 4 by .001;	   
+       p_y = pdf('gamma', n*y/2, n,1)*(n/2);
+	       output;
+      end;
+    n = 100;
+    do y = 0 to 4 by .001;	   
+       p_y = pdf('gamma', n*y/2, n,1)*(n/2);
+	       output;
+      end;
+    n = 1000;
+    do y = 0 to 4 by .001;	   
+       p_y = pdf('gamma', n*y/2, n,1)*(n/2);
+	       output;
+      end;
+
+  run;
+  proc sgpanel noautolegend;
+    panelby n / rows = 4 spacing = 20 uniscale = column;
+	series y = p_y x = y;
+	colaxis offsetmin = 0 label = "Sample Average" ;
+	rowaxis offsetmin = 0 label = "Probability Density";
+	refline 2 / axis = x;
+  run;
+ods rtf close;
+
+
+/* Figure 10.7 */
+  ods rtf;
+data;
+  do y = 0 to 10000 by 1;
+     Earnings = -100000 + 20*y;
+     p_y = pdf('binomial', y, 18/38, 10000);
+     output; 
+	end;
+run;
+
+proc sgplot;
+  scatter y = p_y x = Earnings;
+  yaxis label = "p(t)" ;
+  xaxis label = "Total Earnings, t" values = (-10000 to 0 by 500); 
+ 
+run;
+
+ods rtf close;
+
+
+
+
+/* End of Chapter 10 files */
+
+
+/* Chapter 11 files */
+ 
+/* Figure 11.1 */
+
+  ods rtf;
+%let nsimu = 200000;
+data simu;
+   tbar_n = 0;
+   call streaminit(283305);
+   do n = 1 to &nsimu; mu_inv = 0 ;
+      y1 = rand('table', 1/6,1/6,1/6,1/6,1/6,1/6);
+	  y2 = rand('table', 1/6,1/6,1/6,1/6,1/6,1/6);
+      y3 = rand('table', 1/6,1/6,1/6,1/6,1/6,1/6);
+      y4 = rand('table', 1/6,1/6,1/6,1/6,1/6,1/6);
+      y5 = rand('table', 1/6,1/6,1/6,1/6,1/6,1/6);
+	  x1 = rand('table', 1/6,1/6,1/6,1/6,1/6,1/6);
+	  x2 = rand('table', 1/6,1/6,1/6,1/6,1/6,1/6);
+      x3 = rand('table', 1/6,1/6,1/6,1/6,1/6,1/6);
+      x4 = rand('table', 1/6,1/6,1/6,1/6,1/6,1/6);
+      x5 = rand('table', 1/6,1/6,1/6,1/6,1/6,1/6);
+       T = 100*(mean(of y1-y5)/mean(of x1-x5) -1);
+      tbar_n = ((n-1)/n)*tbar_n + (1/n)*t ; /* running average of the observations */
+   output; end;
+
+
+proc sgplot data =simu noautolegend;
+   series x = n y = tbar_n;
+   series x = n y = mu_inv;
+   xaxis type=log logbase=10 ;
+   yaxis  label = "Running Average of theta-hat"; 
+run;
+title;
+
+ods rtf close;
+
+
+
+/* Figure 11.2 */
+  data rat;
+   do xt = 5 to 30 by 1;
+      if xt =5 then px = 1/6**5; 
+      if xt =6 then px = 5/6**5; 
+      if xt =7 then px = 15/6**5; 
+      if xt =8 then px = 35/6**5; 
+      if xt =9 then px = 70/6**5; 
+      if xt =10 then px = 126/6**5; 
+      if xt =11 then px = 205/6**5; 
+      if xt =12 then px = 305/6**5; 
+      if xt =13 then px = 420/6**5; 
+      if xt =14 then px = 540/6**5; 
+      if xt =15 then px = 651/6**5; 
+      if xt =16 then px = 735/6**5; 
+      if xt =17 then px = 780/6**5; 
+      if xt =18 then px = 780/6**5; 
+      if xt =19 then px = 735/6**5; 
+      if xt =20 then px = 651/6**5; 
+      if xt =21 then px = 540/6**5; 
+      if xt =22 then px = 420/6**5; 
+      if xt =23 then px = 305/6**5; 
+      if xt =24 then px = 205/6**5; 
+      if xt =25 then px = 126/6**5; 
+      if xt =26 then px = 70/6**5; 
+      if xt =27 then px = 35/6**5; 
+      if xt =28 then px = 15/6**5; 
+      if xt =29 then px = 5/6**5; 
+      if xt =30 then px = 1/6**5; 
+
+     do yt = 5 to 30 by 1;
+      if yt =5 then py = 1/6**5; 
+      if yt =6 then py = 5/6**5; 
+      if yt =7 then py = 15/6**5; 
+      if yt =8 then py = 35/6**5; 
+      if yt =9 then py = 70/6**5; 
+      if yt =10 then py = 126/6**5; 
+      if yt =11 then py = 205/6**5; 
+      if yt =12 then py = 305/6**5; 
+      if yt =13 then py = 420/6**5; 
+      if yt =14 then py = 540/6**5; 
+      if yt =15 then py = 651/6**5; 
+      if yt =16 then py = 735/6**5; 
+      if yt =17 then py = 780/6**5; 
+      if yt =18 then py = 780/6**5; 
+      if yt =19 then py = 735/6**5; 
+      if yt =20 then py = 651/6**5; 
+      if yt =21 then py = 540/6**5; 
+      if yt =22 then py = 420/6**5; 
+      if yt =23 then py = 305/6**5; 
+      if yt =24 then py = 205/6**5; 
+      if yt =25 then py = 126/6**5; 
+      if yt =26 then py = 70/6**5; 
+      if yt =27 then py = 35/6**5; 
+      if yt =28 then py = 15/6**5; 
+      if yt =29 then py = 5/6**5; 
+      if yt =30 then py = 1/6**5; 
+      pct = round(100*(yt/xt - 1), .000000001);
+	  prob = px*py;
+      output;
+	  end;
+	  end;
+run;
+
+proc sort;
+   by pct;
+run;
+ods output summary=pdf;
+proc means sum;
+   by pct;
+   var prob;
+run;
+
+
+ods rtf;
+proc sgplot data=pdf;
+   scatter y = prob_sum x = pct /  MARKERATTRS = (symbol = circle size = 5) ;
+      refline 0 / axis =x  lineattrs = (pattern = 1) ;
+   refline 5.555 / axis =x lineattrs = (pattern = 2) ;
+   yaxis  label = "p(theta-hat)"  offsetmin =0 values = (0 to 0.08 by .02); 
+   xaxis label = "theta-hat";
+run;
+ods rtf close;
+
+
+
+/* Figure 11.3 */  
+ods rtf;
+data var;
+  input var p;
+  cards;
+0.00	0.1667
+0.25	0.2778
+1.00	0.2222
+2.25	0.1667
+4.00	0.1111
+6.25	0.0556
+;
+ods rtf;
+
+proc sgplot noautolegend;
+   scatter y = p x = var /  MARKERATTRS = (symbol = circle size = 7) ;
+   refline 1.458 / axis = x lineattrs = (pattern = 2);
+   refline 2.917 / axis = x lineattrs = (pattern = 1);
+   xaxis label = "Plug-In Variance Estimate" offsetmin = .02 offsetmax = .02 values = (0.000 1.458 2.917 4.000 6.250);
+   yaxis label = "Probability" values = (0 to .4 by .1) offsetmin=0;
+run;
+ods rtf close;
+
+
+
+/* Figure 11.4 */
+  data age;
+   call streaminit(12345);
+   do i = 1 to 500000;
+      Y1 = round(22.5+ 18*rand('uniform'), 1);
+      Y2 = round(22.5+ 18*rand('uniform'), 1);
+      Y3 = round(22.5+ 18*rand('uniform'), 1);
+      Y4 = round(22.5+ 18*rand('uniform'), 1);
+      Y5 = round(22.5+ 18*rand('uniform'), 1);
+      Y6 = round(22.5+ 18*rand('uniform'), 1);
+      Y7 = round(22.5+ 18*rand('uniform'), 1);
+      Y8 = round(22.5+ 18*rand('uniform'), 1);
+      Y9 = round(22.5+ 18*rand('uniform'), 1);
+      Y10 = round(22.5+ 18*rand('uniform'), 1);
+      Y11 = round(22.5+ 18*rand('uniform'), 1);
+      Y12 = round(22.5+ 18*rand('uniform'), 1);
+      Y13 = round(22.5+ 18*rand('uniform'), 1);
+      Y14 = round(22.5+ 18*rand('uniform'), 1);
+      Y15 = round(22.5+ 18*rand('uniform'), 1);
+      Y16 = round(22.5+ 18*rand('uniform'), 1);
+      ybar = mean(of y1- y16);
+      var_y = var(of y1-y16)*15/16;
+output;
+end;
+
+ods rtf;
+proc sgplot data=age;
+   histogram var_y;
+   refline 26.92/ axis = x label = "+" labelpos=min  labelloc=outside LINEATTRS=(pattern=1 thickness = 2);
+   refline 25.23/ axis = x label = "^" labelpos=min  labelloc=outside LINEATTRS=(pattern=2 thickness = 2);
+yaxis values = (0 to 4 by 1);
+   xaxis label = "Plug-In Estimate of Variance";
+run;
+ods rtf close;
+
+
+
+/* Figure 11.5 */
+  data age;
+   call streaminit(12345);
+   do i = 1 to 500000;
+      Y1 = round(22.5+ 18*rand('uniform'), 1);
+      Y2 = round(22.5+ 18*rand('uniform'), 1);
+      Y3 = round(22.5+ 18*rand('uniform'), 1);
+      Y4 = round(22.5+ 18*rand('uniform'), 1);
+      Y5 = round(22.5+ 18*rand('uniform'), 1);
+      Y6 = round(22.5+ 18*rand('uniform'), 1);
+      Y7 = round(22.5+ 18*rand('uniform'), 1);
+      Y8 = round(22.5+ 18*rand('uniform'), 1);
+      Y9 = round(22.5+ 18*rand('uniform'), 1);
+      Y10 = round(22.5+ 18*rand('uniform'), 1);
+      Y11 = round(22.5+ 18*rand('uniform'), 1);
+      Y12 = round(22.5+ 18*rand('uniform'), 1);
+      Y13 = round(22.5+ 18*rand('uniform'), 1);
+      Y14 = round(22.5+ 18*rand('uniform'), 1);
+      Y15 = round(22.5+ 18*rand('uniform'), 1);
+      Y16 = round(22.5+ 18*rand('uniform'), 1);
+      StdDev = sqrt(var(of y1-y16));
+output;
+end;
+
+ods rtf;
+proc sgplot data=age;
+   histogram StdDev;
+   refline 5.19/ axis = x label = "+" labelpos=min  labelloc=outside LINEATTRS=(pattern=1 thickness = 2);
+   refline 5.15/ axis = x label = ">" labelpos=min  labelloc=outside LINEATTRS=(pattern=2 thickness = 2);
+yaxis values = (0 to 4 by 1);
+   xaxis label = "The (n-1) Standard Deviation Estimate" values = (3 to 7 by 1);
+run;
+ods rtf close;
+
+
+
+/* Figure 11.6 */
+  %let nsimu = 200000;
+data simu;
+   call streaminit(12341);
+   ybar_n = 0;
+   ybar2_n = 0;
+   pdf = "Children           ";
+   do n = 1 to &nsimu; true_std_dev=1.4;
+      y = rand('poisson', 1.4**2);
+      ybar_n = ((n-1)/n)*ybar_n + (1/n)*y ; /* running average of the observations */
+	  ybar2_n = ((n-1)/n)*ybar2_n + (1/n)*y**2 ; 
+	  var_n = ybar2_n - ybar_n**2;
+	  var_nm1 = (n/(n-1))*var_n;
+	  std_dev = sqrt(var_nm1);
+   output; end;
+run;
+
+ods rtf;
+proc sgplot data =simu(where = (n >3)) noautolegend; 
+    series x = n  y = std_dev;
+    series x = n  y = true_std_dev;
+    xaxis type=log logbase=10 ;
+     yaxis label = "Estimated Standard Deviation" values = (1 to 2 by .1) ;
+run;
+ods rtf close;
+
+
+
+/* Figure 11.7 */
+  ods rtf ;
+%let nsimu = 100100;
+data simu;
+   call streaminit(12345);
+   true_mean = 70;
+   do n = 1 to &nsimu; true_std_dev=1.4;
+      y = rand('normal',70,10);
+   output; end;
+run;
+
+proc sgplot data =simu(where = (n>100000)) noautolegend; 
+    series x = n  y = y;
+	yaxis label = "Estimate of mu";
+	refline 70 / axis = y label = "mu = 70";
+run;
+title;
+ods rtf close;
+
+
+
+/* Figure 11.8 */
+  ods rtf ;
+data esd;
+   Type = "Unbiased Estimator";
+   do y = 40 to 100 by .1; 
+      py = pdf('normal',y, 70,10);
+   output; end;
+   Type = "Biased Estimator";
+   do y = 40 to 100 by .1; 
+      py = pdf('normal',y, 71,1);
+   output; end;
+run;
+
+proc sgpanel data =esd noautolegend; 
+    panelby Type/ rows = 2 novarname uniscale =column spacing = 20;
+    series x = y  y = py;
+	colaxis label = "Estimate of theta" values = (40 to 100 by 10);
+	rowaxis offsetmin =0 label = "Probability Density" ;
+	refline 70 / axis = x ;
+run;
+title;
+ods rtf close;
+
+  
+
+/* Example 11.9 */
+data ;
+  do i = 1 to 1000000;
+      u1 = ranuni(0);
+      if u1 < .95 then y1 = 10*rannor(0) + 70;
+	  else y1 = 100*rannor(0) + 70;
+      u2 = ranuni(0);
+      if u2 < .95 then y2 = 10*rannor(0) + 70;
+	  else y2 = 100*rannor(0) + 70;
+      u3 = ranuni(0);
+      if u3 < .95 then y3 = 10*rannor(0) + 70;
+	  else y3 = 100*rannor(0) + 70;
+      u4 = ranuni(0);
+      if u4 < .95 then y4 = 10*rannor(0) + 70;
+	  else y4 = 100*rannor(0) + 70;
+      u5 = ranuni(0);
+      if u5 < .95 then y5 = 10*rannor(0) + 70;
+	  else y5 = 100*rannor(0) + 70;
+      u6 = ranuni(0);
+      if u6 < .95 then y6 = 10*rannor(0) + 70;
+	  else y6 = 100*rannor(0) + 70;
+      u7 = ranuni(0);
+      if u7 < .95 then y7 = 10*rannor(0) + 70;
+	  else y7 = 100*rannor(0) + 70;
+      u8 = ranuni(0);
+      if u8 < .95 then y8 = 10*rannor(0) + 70;
+	  else y8 = 100*rannor(0) + 70;
+      u9 = ranuni(0);
+      if u9 < .95 then y9 = 10*rannor(0) + 70;
+	  else y9 = 100*rannor(0) + 70;
+      u10 = ranuni(0);
+      if u10 < .95 then y10 = 10*rannor(0) + 70;
+	  else y10 = 100*rannor(0) + 70;
+
+      d1 = (mean(of y1-y10) - 70)**2;
+      d2 = (median(of y1-y10) - 70)**2;
+	output;
+	end;
+
+proc means;
+run;
+
+
+
+/* Figure 11.9 */
+  data c;
+   call streaminit(72345);
+   do i = 1 to 20; 
+   c = rand('Poisson', 15);
+   if i = 13 then c = 24;
+   output;
+   end;
+run;
+ods rtf;
+proc sgplot noautolegend;
+   scatter y = c x = i;
+   series y = c x = i;
+   yaxis label = "Number of Defects" values = (0 to 25 by 5); 
+   xaxis label = "Subgroup Number" values = ( 1 5 10 15 20) offsetmin=.13 offsetmax = .03; 
+   refline 1.7 / axis = y label = "LCL = 1.7" labelpos=min labelloc = inside ;
+   refline 22.7 / axis = y label = "UCL = 22.7" labelpos=min labelloc = inside ;
+   refline 12.2 / axis = y label = "Avg = 12.2" labelpos=min labelloc = inside ;
+run;
+ods rtf close;
+
+
+
+/* Table 11.3 */
+  data;
+   do i = 1 to 1000000;
+   y1 = rand("Poisson",2);
+   y2 = rand("Poisson",2);
+   y3 = rand("Poisson",2);
+   y4 = rand("Poisson",2);
+   y5 = rand("Poisson",2);
+   y6 = rand("Poisson",2);
+   y7 = rand("Poisson",2);
+   y8 = rand("Poisson",2);
+   y9 = rand("Poisson",2);
+   y10 = rand("Poisson",2);
+   y11 = rand("Poisson",2);
+   y12 = rand("Poisson",2);
+   y13 = rand("Poisson",2);
+   y14 = rand("Poisson",2);
+   y15 = rand("Poisson",2);
+   y16 = rand("Poisson",2);
+   y17 = rand("Poisson",2);
+   y18 = rand("Poisson",2);
+   y19 = rand("Poisson",2);
+   y20 = rand("Poisson",2);
+   est1 = sqrt(mean(of y1-y20));
+   est2 = sqrt(var(of y1-y20));
+   output;
+   end;
+run;
+
+proc means; run;
+
+/* End of Chapter 11 files */
+
+
+/* Chapter 12 files */
+ 
+/* Figure 12.1 */
+
+  ods rtf ;
+data exp;
+      
+   pdf = "lambda = 0.2";
+      do y = 0 to 10 by .01;
+	  p_y = pdf("exponential", y, 1/.2); 
+	  y1 = .; p_y1 = .;
+	  output; end;
+	  y1 = 2; p_y1 = pdf("exponential", y1, 1/.2); output;
+   pdf = "lambda = 0.5";
+      do y = 0 to 10 by .01;
+	  p_y = pdf("exponential", y, 1/.5);
+	  	  y1 = .; p_y1 = .;
+	  output; end;
+	  y1 = 2; p_y1 = pdf("exponential", y1, 1/.5); output;
+   pdf = "lambda = 1.0";
+      do y = 0 to 10 by .01;
+	  p_y = pdf("exponential", y, 1/1);
+	  	  y1 = .; p_y1 = .;
+	  output; end;
+	  y1 = 2; p_y1 = pdf("exponential", y1, 1/1); output;
+   pdf = "lambda = 2.0";
+      do y = 0 to 10 by .01;
+	  p_y = pdf("exponential", y, 1/2);
+	  y1 = .; p_y1 = .;
+	  output; end;
+	  y1 = 2; p_y1 = pdf("exponential", y1, 1/2); output;
+run;
+
+proc sgpanel noautolegend;
+  panelby pdf/ rows = 2 columns = 2 novarname spacing=25;
+  series y = p_y x = y;
+  scatter y = p_y1 x = y1;
+  needle y = p_y1 x = y1;
+  colaxis  offsetmin=.01 values = (0 to 6 by 1) label = "y" offsetmin=0 offsetmax=0;
+  rowaxis values = (0 to .5 by .1)  offsetmin=0 label = "p( y | lambda )";
+run;
+ods rtf close;
+
+ 
+/* Figure 12.2 */
+  ods rtf;
+data exp1;
+   do lambda = 0 to 4 by .01;
+       L = lambda * exp(-lambda*2);
+	   output;
+	   end;
+    y1 = .2; L1 = y1 * exp(-y1*2); output;
+	y1 = .5; L1 = y1 * exp(-y1*2); output;
+		y2 = .5; L2 = y2 * exp(-y2*2); output;
+    y1 = 1; L1 = y1 * exp(-y1*2); output;
+	y1 = 2; L1 = y1 * exp(-y1*2); output;
+
+run;
+
+proc sgplot noautolegend;
+   series y = L x = lambda;
+   scatter y = L1 x = y1;
+   needle y = L2 x = y2;
+   yaxis offsetmin = 0 label = "L( lambda | y=2)" values = (0 .05 .10 .15  .25);
+   xaxis offsetmin = 0 label = "lambda" values = (0 .2 .5 1 2 4);
+   refline .18394 / axis = y label = "0.184" labelpos = min;
+run;
+ods rtf close;
+
+
+ 
+/* Figure 12.3 */
+  ods rtf ;
+data exp1;
+   do lambda = 0 to 4 by .001;
+       L = lambda**10 * exp(-10*lambda*2);
+	   output;
+	   end;
+	      y1 = .2; L1 = y1**10 * exp(-10*y1*2); output;
+	y1 = .5; L1 = y1**10 * exp(-10*y1*2); output; 	
+ y2 = .5; L2 = y2**10 * exp(-10*y2*2); output; 
+    y1 = 1; L1 = y1**10 * exp(-10*y1*2); output;
+	y1 = 2; L1 = y1**10 * exp(-10*y1*2); output;
+
+run;
+
+proc sgplot noautolegend;
+   series y = L x = lambda;
+   scatter y = L1 x = y1 ;
+    needle y = l2 x = y2;
+    yaxis offsetmin = 0.003 label = "L( lambda | ybar = 2 )" ;
+    xaxis offsetmin = 0 label = "lambda" values = (0 .2 .5 1 2 4);
+   refline 4.4335869E-8 / axis = y ;
+run;
+
+ods rtf close;
+
+
+ 
+/* Figure 12.4 */
+  ods rtf ;
+data exp;
+   call streaminit(32345);
+   sum = 0;
+   do i = 1 to 1000;
+      y = 1.5*rand('exponential');
+      sum = sum + y;
+	  if i =1 then yb1 = sum/1;
+	  if i =10 then yb10 = sum/10;
+	  if i =100 then yb100 = sum/100;
+	  if i =1000 then yb1000 = sum/1000;
+   end;
+output;
+run;
+
+data plot;
+   n=1;
+   do l = 0.001 to 2 by .001;
+     lk= l**1    * exp(-1    * l * 2.0512); output; end;
+   n=10;
+   do l = 0.001 to 2 by .001;
+    lk= l**10   * exp(-10   * l *  .9755); output; end;
+   n=100;
+   do l = 0.001 to 2 by .001;
+  lk= l**100  * exp(-100  * l * 1.3964);output; end;
+   n=1000;
+   do l = 0.001 to 2 by .001;
+  l1000l= 1000 *log(l)  -1000 * l * 1.4401;
+  lk= exp(l1000l + 1151.293);    /* likelihood times 10^500 */
+  output;
+end;
+run;
+
+ proc sgpanel noautolegend data=plot;
+   panelby n / rows = 4 spacing = 20 uniscale = column;
+   series y = lk x = l;
+   colaxis offsetmin = 0 label = "Possible lambda" values = (0 .667 1.333 2.0);
+   rowaxis offsetmin = 0 label = "Likelihood";
+   refline .666667 / axis = x;
+run;
+ods rtf close;
+
+
+ 
+/* Figure 12.5 */
+  ods rtf ;
+data pi;
+   do p = 0 to 1 by .001;
+   L = p**392 * (1-p)**610;
+   output;
+   end;
+   p1 = 392/1002;  L1 = p1**392 * (1-p1)**610;
+   output; 
+
+run;
+
+proc sgplot noautolegend;
+   series y = L x = p;
+   scatter y = L1 x = p1;
+   needle y = L1 x = p1;
+   refline L1 / axis = y ;
+  yaxis offsetmin = 0.003 label = "L( pi | 392 ones and 610 zeroes)";
+ xaxis offsetmin = 0 label = "pi" values = (0 .2 .3  .4  .5 .6 .8 1);
+run;
+
+ods rtf close;
+
+ 
+/* Figure 12.6 , 12.7*/
+  ods rtf;
+
+data try;
+   do pi1 = 0.30 to .50 by .001;
+      u = 1-pi1;
+     do pi2 = 0.30 to .50 by .001; 
+	 if pi2 < u then do;
+      LL = 1000 +  392 * log(pi1) + 401 * log(pi2) + 209 *log (1-pi1 - pi2);
+	  L = exp(LL)*10**28;; end; else do; L = 0; end;  /* +1000 to avoid underflow */
+     output;  end; end;
+run; 
+title;
+ /* Create the plot */ 
+proc g3d data=try;
+   plot pi2*pi1=L ;
+run;
+quit;
+
+data anno;
+  text = '+'; 
+  xsys = '2'; ysys = '2'; size = 1.2;
+  input x y text$;
+  cards;
+  .3913 .4006 +
+  .43 .43 x
+;
+
+proc gcontour data=try;
+   plot pi2*pi1=L / nolegend anno = anno;
+run;
+quit;
+
+ods rtf close;
+
+
+ 
+/* Figure 12.8 */
+  ods rtf ;
+data try;
+   do mu = 20 to 32 by .1;
+     do sigma = 2 to 10 by .1;      
+	  L = 
+pdf('normal', 36, mu, sigma) * 
+pdf('normal', 23, mu, sigma) *
+pdf('normal', 22, mu, sigma) *
+pdf('normal', 27, mu, sigma) *
+pdf('normal', 26, mu, sigma) *
+pdf('normal', 24, mu, sigma) *
+pdf('normal', 28, mu, sigma) *
+pdf('normal', 23, mu, sigma) *
+pdf('normal', 30, mu, sigma) *
+pdf('normal', 25, mu, sigma) *
+pdf('normal', 22, mu, sigma) *
+pdf('normal', 26, mu, sigma) *
+pdf('normal', 22, mu, sigma) *
+pdf('normal', 35, mu, sigma) *
+pdf('normal', 24, mu, sigma) *
+pdf('normal', 36, mu, sigma);
+L = L * 10**20;
+
+     output;  end; end;
+run; 
+title;
+ /* Create the plot */ 
+proc g3d;
+   plot mu*sigma=L ;
+run;
+quit;
+
+proc gcontour;
+   plot mu*sigma=L / nolegend;
+run;
+quit;
+
+ods rtf close;
+
+
+ 
+/* Figure 12.11 */
+  ods rtf ;
+data ll;
+   type = "Likelihood Function     ";
+   do lambda = .1 to .9 by .001;
+      L = lambda**10 * exp(-20*lambda);
+      Lm = .5**10 * exp(-20*.5);
+	  output; end;
+	  
+   type = "Log Likelihood Function";
+   do lambda = .1 to .9 by .001;
+      L = 10*log(lambda) -20*lambda;
+	  Lm = 10*log(.5) - 20*.5;
+	  output; end;
+	run ;
+
+	proc sgpanel;
+	  panelby type/ rows = 2 uniscale=column spacing = 20 novarname; 
+	  series y = L x = lambda;
+	  series y = lm x = lambda;
+      rowaxis  offsetmax = .2 label = "L or LL" offsetmin=0;
+	  colaxis values = (0 to 1 by .25);
+	  keylegend "1";
+	  refline .5 / axis=x;
+	run;
+ods rtf close;
+
+ 
+/* Figure 12.12 */  
+ods rtf ;
+data try;
+   do mu = 20 to 32 by .1;
+     do sigma = 2 to 10 by .1; 
+	  L = 
+pdf('normal', 36, mu, sigma) * 
+pdf('normal', 23, mu, sigma) *
+pdf('normal', 22, mu, sigma) *
+pdf('normal', 27, mu, sigma) *
+pdf('normal', 26, mu, sigma) *
+pdf('normal', 24, mu, sigma) *
+pdf('normal', 28, mu, sigma) *
+pdf('normal', 23, mu, sigma) *
+pdf('normal', 30, mu, sigma) *
+pdf('normal', 25, mu, sigma) *
+pdf('normal', 22, mu, sigma) *
+pdf('normal', 26, mu, sigma) *
+pdf('normal', 22, mu, sigma) *
+pdf('normal', 35, mu, sigma) *
+pdf('normal', 24, mu, sigma) *
+pdf('normal', 36, mu, sigma); L = L*10**21;
+     if mu < 26.8 then L = 0; 
+
+     output;  end; end;
+run; 
+title;
+ /* Create the plot */ 
+proc g3d;
+   plot mu*sigma=L ;
+run;
+ods rtf close;
+
+ 
+/* Figure 12.16 */
+  ods rtf ;
+data job;
+   input Success $ Experience @@;
+cards;
+Y 10   Y  3   N  3   N  4   N  6  Y  2  Y 20  Y 12
+N  5   Y 12   Y 15   N  0   Y 16  Y 15  Y 10  N  2
+Y 10   Y  3   N  3   N  4   N  6  N  2  N  8  N  2
+Y 20   Y  0   N  6   N  2   N  2  Y 20  N  2  N  5
+;
+proc freq data=job;
+   tables experience*success/nocol nopct;
+   ods output crosstabfreqs=pcts;
+run;
+proc sgplot data=pcts(where=(success='Y')) noautolegend;
+   scatter y=rowpercent x=experience;
+   series y=rowpercent x=experience;
+   yaxis label = "Estimated Probability (in Percent) of Success";
+   xaxis label = "Years of Experience";
+run;
+ods rtf close;
+
+ 
+/* Figure 12.17 */
+  ods rtf ;
+data l;
+   do x = 0 to 20 by .1;
+   p1 = 1/(1 + exp(-(-1 + .2*x)));
+   p2 = 1/(1 + exp(-(-4 + .4*x)));
+   p3 = 1/(1 + exp(-(3  - .4*x)));
+   output;
+   end;
+run;
+
+proc sgplot noautolegend;
+   series y = p1 x = x;
+   series y = p2 x = x;
+   series y = p3 x = x;
+   yaxis label = "Pr( Success | x )" offsetmin =0 offsetmax =0;
+   xaxis label = "x";
+run;
+ods rtf close;
+  
+ 
+/* Figure 12.20 */
+ods rtf;
+proc logistic data=job;
+   model success(event='Y') = experience;
+   output out=new p=pred;
+run;
+proc sort data=new;
+   by experience; 
+run;
+proc sort data=pcts;
+   by experience;
+run;
+data plot;
+  merge  new pcts;
+  by experience;
+  rowpercent=rowpercent/100;
+run;
+proc sgplot data=plot(where=(success='Y'));
+   scatter y=rowpercent x=experience / legendlabel = "Empirical Probability Estimate" ;
+   pbspline y=pred x=experience /nomarkers legendlabel="Maximum Likelihood Estimate"  ;
+   yaxis label = "Pr( Success | Experience )"; 
+run;
+ods rtf close;
+
+ 
+/* Figure 12.21, 12.22 */
+  ods rtf ;
+data job;
+   input success $ experience @@;
+cards;
+Y 10   Y  3   N  3   N  4   N  6  Y  2  Y 20  Y 12
+N  5   Y 12   Y 15   N  0   Y 16  Y 15  Y 10  N  2
+Y 10   Y  3   N  3   N  4   N  6  N  2  N  8  N  2
+Y 20   Y  0   N  6   N  2   N  2  Y 20  N  2  N  5
+;
+
+
+proc nlp data=job outgrid outest=new; 
+   max logf;
+   parms b0 = -5 to 0 by .1, b1 = 0 to 1 by .01; 
+   
+
+   if success= "Y" then f = exp(b0 + b1 * experience)/(1 + exp(b0 + b1 * experience));
+                  else f =                          1/(1 + exp(b0 + b1 * experience));
+    logf =log(f);        
+run; 
+
+data plot;
+   set new;
+   where _TYPE_ = 'GRIDPNT';
+   Likelihood = exp(_RHS_);
+run;
+title;
+proc g3d data=plot(rename = (b0=beta0 b1=beta1  ));
+   plot beta0*beta1=Likelihood /rotate=75;
+run;
+title1; 
+
+data anno;
+  text = '+'; 
+  xsys = '2'; ysys = '2'; size = 1.2;
+  input x y;
+  cards;
+  -2.5 .5
+  -1.25 0.25
+  -3.75 0.5
+  -2.295858 0.333927
+;
+
+
+proc gcontour data=plot(rename = (b0=beta0 b1=beta1  ));
+   plot beta1*beta0=Likelihood / nolegend anno = anno;
+run;
+quit;
+ods rtf close;
+
+ 
+/* Figure 12.23 */
+  ods rtf;
+data logit;
+   do x = 0 to 20 by 1;
+     type = "-2.5, 0.5";
+	 P1 = 1 - 1/(1+exp(-2.5 + .5*x));
+	 P2 = 1 - 1/(1+exp(-1.25 + .25*x));
+	 P3 = 1 - 1/(1+exp(-3.75 + .5*x));
+	 P4 = 1 - 1/(1+exp(-2.2959 + .333*x));
+	 output; end;
+run;
+
+proc sgplot noautolegend;
+   series y = p1 x = x;
+   series y = p2 x = x;
+   series y = p3 x = x;
+   series y = p4 x = x;
+   xaxis label = "Years Experience";
+   yaxis label = "Probability of Success";
+run;
+ods rtf close;
+
+ 
+/* Figure 12.25 */
+  ods rtf ;
+data exp1;
+      peak = .5**10 * exp(-10*.5*2);
+   do lambda = 0 to 1.2 by .001;
+       L = lambda**10 * exp(-10*lambda*2);
+       n = pdf('normal', lambda, .5, sqrt(1/40))
+            *peak/pdf('normal', .5, .5, sqrt(1/40));
+	   output;
+	   lambda1 = .184; n1 =  pdf('normal', lambda1, .5, sqrt(1/40))
+            *peak/pdf('normal', .5, .5, sqrt(1/40)); output;
+	   lambda1 = .816; n1 =  pdf('normal', lambda1, .5, sqrt(1/40))
+            *peak/pdf('normal', .5, .5, sqrt(1/40)); output;
+
+end;
+
+run;
+
+proc sgplot noautolegend;
+   series y = L x = lambda ;
+   series y = n x = lambda /lineattrs = (pattern = 2);
+   needle y = n1 x = lambda1 /lineattrs = (pattern = 2);
+    yaxis offsetmin = 0 label = "Likelihood" ;
+    xaxis offsetmin = 0 label = "lambda" values = (0 .184 .4 .6 .816 1 1.2);
+run;
+ods rtf close;
+
+
+/* End of Chapter 12 files */
+
+/* Chapter 13 files */
+ 
+/* Figure 13.1, 13.2  */
+  
+ods rtf;
+data beta;
+  do pi = 0 to 1 by .001;
+     p = pi**2 * (1-pi)**8;
+	 output; end;
+	run;
+proc sgplot;
+   series y = p x = pi;
+   xaxis label = "pi";
+   yaxis label = "likelihood function for pi";
+run; 
+ods rtf close;
+
+/* Figure 13.3*/
+
+  ods rtf ;
+data beta;
+  do pi = 0 to 1 by .001;
+     p = pdf('beta', pi,3,9);
+	 output; end;
+  do pi1 = 0 to 0.079 by .001;
+     p1 = pdf('beta', pi1,3,9);
+	 output; end;
+  do pi2 = .470 to 1 by .001;
+     p2 = pdf('beta', pi2,3,9);
+	 output; end;
+	run;
+proc sgplot noautolegend;
+   series y = p x = pi;
+  band x = pi1 upper = p1 lower=0/transparency = .3;
+  band x = pi2 upper = p2 lower=0/transparency = .3;
+   xaxis label = "pi" values = (0 to 1.0 by .2);
+   yaxis label = "posterior pdf for pi" offsetmin=0 values = (0 to 4 by 2);
+run;
+title;
+
+ods rtf close;
+
+/* Figure 13.4 */
+  ods rtf;
+data beta;
+  do pi = 0 to 1 by .001;
+     p = pdf('beta', pi,3,9);
+	 output; end;
+  do pi1 = 0 to 0.056 by .001;
+     p1 = pdf('beta', pi1,3,9);
+	 output; end;
+  do pi2 = .434 to 1 by .001;
+     p2 = pdf('beta', pi2,3,9);
+	 output; end;
+	run;
+proc sgplot noautolegend;
+   series y = p x = pi;
+  band x = pi1 upper = p1 lower=0/transparency = .3;
+  band x = pi2 upper = p2 lower=0/transparency = .3;
+   xaxis label = "pi" values = ( 0 to 1 by .2) ;
+   yaxis label = "posterior pdf for pi" offsetmin =0 values = (0 to 4 by 2);
+   refline .978 /axis=y;
+run;
+title;
+
+ods rtf close;
+
+
+   proc nlp ;
+      parms pi1 = .05, pi2 = .45, h = .8;
+	     min f;
+         C1 = h - pdf('beta', pi1, 3,9);
+         C2 = h - pdf('beta', pi2, 3,9);
+         C3 = .10-  (cdf('beta', pi1, 3,9) + (1- cdf('beta', pi2, 3,9)));  
+         f =  c1**2 + c2**2 + c3**2;
+		run;
+
+	data chk;
+	   pi1 =   0.055977;
+	   pi2 =  0.434394;
+	   p1 = cdf('beta', pi1, 3,9); p2 = 1-cdf('beta', pi2, 3,9); sum = p1 + p2;
+	   h1 = pdf('beta', pi1, 3,9); h2 = pdf('beta', pi2, 3,9);
+	 proc print; run;
+
+
+/* Figure 13.5 */
+  ods rtf;
+data beta;
+   type = "Wide Range";
+do pi = 0 to 1 by .001;
+   p1 = pdf('beta', pi,11250,11250);
+   p2 = pdf('beta', pi,11252,11258);
+   output; 
+end;
+type = "Zoomed In";
+do pi = .49 to .51 by .0001;
+   p1 = pdf('beta', pi,11250,11250);
+   p2 = pdf('beta', pi,11252,11258);
+   output; 
+end;
+   l = quantile('beta', .05, 11252,11258);
+   u = quantile('beta', .95, 11252,11258); output;
+run;
+proc sgpanel noautolegend;
+   panelby type / uniscale=row spacing =10 novarname;
+   series y = p1 x = pi;
+   series y = p2 x = pi;
+   rowaxis label = "Prior and Posterior pdf for pi" offsetmin=0;
+   colaxis label = "Probability of Heads, pi";
+run;
+ods rtf close;
+
+
+/* Figure 13.6, 13.7*/
+  ods rtf ;
+data samples;
+   input h @@;
+cards;
+1 1 0 0 0 0 0 0 0 0
+;
+proc genmod data=samples descending;
+   model h = / dist=binomial;
+   bayes coeffprior=jeffreys   
+   seed = 12342321 outpost=thumb nmc=100000;
+run;
+data newthumb;
+   set thumb;
+   pi = exp(intercept)/(1+exp(intercept));   
+run;
+
+proc univariate data=newthumb;
+   var pi;
+   histogram pi/ endpoints=0 to 1 by .02;
+run;
+ 
+data prior_cointoss;
+   input _type_ $ intercept;
+cards;
+MEAN  0
+VAR   .000178 
+;
+proc genmod data=samples descending;
+   model h = / dist=binomial;
+   bayes coeffprior=normal(input=prior_cointoss) 
+   seed = 12342321 outpost=coin nmc=100000;
+run;
+data newcoin;
+   set coin;
+   pi = exp(intercept)/(1+exp(intercept));
+run;
+
+proc univariate data=newcoin;
+   var pi;
+   histogram pi/ endpoints=0 to 1 by .05;
+   histogram pi/ endpoints=.48 to .52 by .001;
+run;
+ods rtf close;
+  
+
+/* Figure 13.8*/
+ods rtf;
+data job;
+   input Success $ Experience @@;
+   Y = (Success = "Y");
+cards;
+Y 10   Y  3   N  3   N  4   N  6  Y  2  Y 20  Y 12
+N  5   Y 12   Y 15   N  0   Y 16  Y 15  Y 10  N  2
+Y 10   Y  3   N  3   N  4   N  6  N  2  N  8  N  2
+Y 20   Y  0   N  6   N  2   N  2  Y 20  N  2  N  5
+;
+
+proc genmod data=job descending;
+   model Y = experience/ dist=binomial;
+   bayes coeffprior=jeffreys  /* A vague, or non-informative prior */     
+   seed = 12342321 outpost=posterior(rename=(intercept=beta0 experience=beta1));
+run;
+
+proc sgplot; 
+   scatter y = beta1 x = beta0;
+   yaxis values = (0 to 1 by .25);
+run;
+ods rtf close;
+
+
+/* Figure 13.9*/  
+ods rtf;
+data job;
+   input Success $ Experience @@;
+   Y = (Success = "Y");
+cards;
+Y 10   Y  3   N  3   N  4   N  6  Y  2  Y 20  Y 12
+N  5   Y 12   Y 15   N  0   Y 16  Y 15  Y 10  N  2
+Y 10   Y  3   N  3   N  4   N  6  N  2  N  8  N  2
+Y 20   Y  0   N  6   N  2   N  2  Y 20  N  2  N  5
+;
+
+proc genmod data=job descending;
+   model Y = experience/ dist=binomial;
+   bayes coeffprior=jeffreys  /* A vague, or non-informative prior */     
+   seed = 12342321 outpost=posterior(rename=(intercept=beta0 experience=beta1));
+run;
+
+proc sgplot; 
+   scatter y = beta0 x = beta1;
+run;
+
+
+
+data p;  
+   set posterior(where = (iteration<2101));
+        do x = 0 to 20 by 1;
+		   p = 1 - 1/(1+exp(beta0 + beta1*x));
+           output;
+		end;
+run;
+
+
+data p; set p;
+   label p = "Success Probability";
+   label x = "Experience"; run;
+goptions reset=symbol;
+symbol1 i=join c=black value=none r=100;
+proc gplot data=p;
+   plot p*x=iteration/nolegend  ;
+run; quit; title;
+ods rtf close;
+
+
+/* Example 13.9 */
+  data p20;
+   set posterior;
+   p20 = 1 - 1/(1+exp(beta0 + beta1*20));
+run;
+
+proc univariate;
+   var p20; run;
+  ods rtf ; 
+
+
+/* Figure 13.10*/
+data age;
+   input Age @@;
+cards;
+36	23	22	27	26	24	28	23	30	25	22	26	22	35	24	36
+;
+
+proc genmod data=age ;
+   model Age = / dist=normal;
+   bayes     
+   seed = 12342321 outpost=posterior;
+run;
+
+data results;
+   set posterior;
+   mu = intercept; sigma = sqrt(dispersion);
+run;
+
+proc univariate;
+  var mu sigma; run;
+
+proc sgplot; 
+   scatter y =sigma x = mu;
+run; ods rtf close;
+
+
+/* Figure 13.11 */
+  ods rtf; 
+data fin;
+   input Earnings @@;
+cards;
+-12	5	-22	-1	-6	1	-32	-6	-6	-7	-6	-3	-20	-14
+;
+
+proc genmod data=fin;
+   model Earnings = / dist=normal;
+   bayes     
+   seed = 12342321 outpost=posterior;
+run;
+
+data results;
+   set posterior;
+   mu = intercept; sigma = sqrt(dispersion);
+   VaR = mu + 1.6445*sigma;
+run;
+
+proc univariate;
+  var VaR; run;
+
+proc sgplot; 
+   histogram Var;
+   refline -.243 12.57 / axis = x;
+run; 
+ods rtf close;
+
+
+/* Figure 13.12 */
+  ods rtf ;
+/* Forecasting future returns using Bayesian analysis */
+/* The data set below has Dow Jones Index values from April 1, 2010 to March 1, 2011.
+   The returns are modeled as iid N(mu,sigma^2). 
+   A sample from the posterior distribution of (mu,sigma) is taken, and 
+   these parameters are used to construct hypothetical futures. */
+data price;
+   input Dow @@;
+   return = (Dow-lag(Dow))/lag(Dow);
+cards;
+10927.07 10973.55 10969.99 10897.52 10927.07 10997.35 11005.97 11019.42
+11123.11 11144.57 11018.66 11092.05 11117.06 11124.92 11134.29 11204.28
+11205.03 10991.99 11045.27 11167.32 11008.61 11151.83 10926.77 10868.12
+10520.32 10380.43 10785.14 10748.26 10896.91 10782.95 10620.16 10625.83
+10510.95 10444.37 10068.01 10193.39 10066.57 10043.75 9974.45 10258.99
+10136.63 10024.02 10249.54 10255.28 9931.97 9816.49 9939.98 9899.25 
+10172.53 10211.07 10190.89 10404.77 10409.46 10434.17 10450.64 10442.41
+10293.52 10298.44 10152.8 10143.81 10138.52 9870.3 9774.02 9732.53
+9686.48 9743.62 10018.28 10138.99 10198.03 10216.27 10363.02 10366.72
+10359.31 10097.9 10154.43 10229.96 10120.53 10322.3 10424.62 10525.43
+10537.69 10497.88 10467.16 10465.94 10674.38 10636.38 10680.43 10674.98
+10653.56 10698.75 10644.25 10378.83 10319.95 10303.15 10302.01 10405.85
+10415.54 10271.21 10213.62 10174.41 10040.45 10060.06 9985.81 10150.65
+10009.73 10014.72 10269.47 10320.1 10447.93 10340.69 10387.01 10415.24
+10462.77 10544.13 10526.49 10572.73 10594.83 10607.85 10753.62 10761.03
+10739.31 10662.42 10860.26 10812.04 10858.14 10835.28 10788.05 10829.68
+10751.27 10944.72 10967.65 10948.58 11006.48 11010.34 11020.4 11096.08
+11096.92 11062.78 11143.69 10978.62 11107.97 11146.57 11132.56 11164.05
+11169.46 11126.28 11113.95 11118.4 11124.62 11188.72 11215.13 11434.84
+11444.08 11406.84 11346.75 11357.04 11283.1 11192.58 11201.97 11023.5
+11007.88 11181.23 11203.55 11178.58 11036.37 11187.28 11092 11052.49
+11006.02 11255.78 11362.41 11382.09 11362.19 11359.16 11372.48 11370.06
+11410.32 11428.56 11476.54 11457.47 11499.25 11491.91 11478.13 11533.16
+11559.49 11573.49 11555.03 11575.54 11585.38 11569.71 11577.51 11670.75
+11691.18 11722.89 11697.31 11674.76 11637.45 11671.88 11755.44 11731.9
+11787.38 11837.93 11825.29 11822.8 11871.84 11980.52 11977.19 11985.44
+11989.83 11823.7 11891.93 12040.16 12041.97 12062.26 12092.15 12161.63
+12233.15 12239.89 12229.29 12273.26 12268.19 12226.64 12288.17 12318.14
+12391.25 12212.79 12105.78 12068.5 12130.45 12226.34 12058.02 
+;
+/* Generating the sample from the posterior distribution */
+proc genmod data=price;
+   model return = / dist=normal;    /* Since there is no 'x' variable, the model says
+                                       return = mean_return + error; ie, the intercept is the mean */
+   bayes coeffprior=jeffreys 
+   seed = 12342321 nmc=1000 outpost=posterior(rename=(intercept=mu dispersion=sigma2));
+run;
+
+data sig;
+   set posterior;
+   sigma = sqrt(sigma2);
+run;
+
+proc sgplot data=sig;
+   scatter y=sigma x=mu;
+run;
+
+ods rtf close;
+
+/* Figure 13.13*/
+  ods rtf ;
+/* Forecasting future returns using Bayesian analysis */
+/* The data set below has Dow Jones Index values from April 1, 2010 to March 1, 2011.
+   The returns are modeled as iid N(mu,sigma^2). 
+   A sample from the posterior distribution of (mu,sigma) is taken, and 
+   these parameters are used to construct hypothetical futures. */
+data price;
+   input Dow @@;
+   return = (Dow-lag(Dow))/lag(Dow);
+cards;
+10927.07 10973.55 10969.99 10897.52 10927.07 10997.35 11005.97 11019.42
+11123.11 11144.57 11018.66 11092.05 11117.06 11124.92 11134.29 11204.28
+11205.03 10991.99 11045.27 11167.32 11008.61 11151.83 10926.77 10868.12
+10520.32 10380.43 10785.14 10748.26 10896.91 10782.95 10620.16 10625.83
+10510.95 10444.37 10068.01 10193.39 10066.57 10043.75 9974.45 10258.99
+10136.63 10024.02 10249.54 10255.28 9931.97 9816.49 9939.98 9899.25 
+10172.53 10211.07 10190.89 10404.77 10409.46 10434.17 10450.64 10442.41
+10293.52 10298.44 10152.8 10143.81 10138.52 9870.3 9774.02 9732.53
+9686.48 9743.62 10018.28 10138.99 10198.03 10216.27 10363.02 10366.72
+10359.31 10097.9 10154.43 10229.96 10120.53 10322.3 10424.62 10525.43
+10537.69 10497.88 10467.16 10465.94 10674.38 10636.38 10680.43 10674.98
+10653.56 10698.75 10644.25 10378.83 10319.95 10303.15 10302.01 10405.85
+10415.54 10271.21 10213.62 10174.41 10040.45 10060.06 9985.81 10150.65
+10009.73 10014.72 10269.47 10320.1 10447.93 10340.69 10387.01 10415.24
+10462.77 10544.13 10526.49 10572.73 10594.83 10607.85 10753.62 10761.03
+10739.31 10662.42 10860.26 10812.04 10858.14 10835.28 10788.05 10829.68
+10751.27 10944.72 10967.65 10948.58 11006.48 11010.34 11020.4 11096.08
+11096.92 11062.78 11143.69 10978.62 11107.97 11146.57 11132.56 11164.05
+11169.46 11126.28 11113.95 11118.4 11124.62 11188.72 11215.13 11434.84
+11444.08 11406.84 11346.75 11357.04 11283.1 11192.58 11201.97 11023.5
+11007.88 11181.23 11203.55 11178.58 11036.37 11187.28 11092 11052.49
+11006.02 11255.78 11362.41 11382.09 11362.19 11359.16 11372.48 11370.06
+11410.32 11428.56 11476.54 11457.47 11499.25 11491.91 11478.13 11533.16
+11559.49 11573.49 11555.03 11575.54 11585.38 11569.71 11577.51 11670.75
+11691.18 11722.89 11697.31 11674.76 11637.45 11671.88 11755.44 11731.9
+11787.38 11837.93 11825.29 11822.8 11871.84 11980.52 11977.19 11985.44
+11989.83 11823.7 11891.93 12040.16 12041.97 12062.26 12092.15 12161.63
+12233.15 12239.89 12229.29 12273.26 12268.19 12226.64 12288.17 12318.14
+12391.25 12212.79 12105.78 12068.5 12130.45 12226.34 12058.02 
+;
+/* Generating the sample from the posterior distribution */
+proc genmod data=price;
+   model return = / dist=normal;    /* Since there is no 'x' variable, the model says
+                                       return = mean_return + error; ie, the intercept is the mean */
+   bayes coeffprior=jeffreys 
+   seed = 12342321 nmc=100 outpost=posterior(rename=(intercept=mu dispersion=sigma2));
+run;
+title "100 observations from the joint posterior of (mu, sigma)";
+proc sgplot data=posterior;
+   scatter y=sigma2 x=mu;
+run;
+/* 100 potential 30-day future trajectories of the Dow Jones */
+data futures;
+   set posterior;
+        Dow = 12058.02;
+        do day = 1 to 30;
+		   return = rand('normal', mu,sqrt(sigma2));
+           Dow = Dow*(1+return);  
+           output;
+		end;
+run;
+
+run; quit; title;
+/* The actual next 26 days data from March 2 to April 6, 2011,
+   and the actual trajectory is graphed below */
+data actualnext30;
+  input Dowf; dow=.; day= _n_; iteration=0;
+cards;
+12066.8
+12258.2
+12169.88
+12090.03
+12214.38
+12213.09
+11984.61
+12044.4
+11993.16
+11855.42
+11613.3
+11774.59
+11858.52
+12036.53
+12018.63
+12086.02
+12170.56
+12220.59
+12197.88
+12279.01
+12350.61
+12319.73
+12376.72
+12400.03
+12393.90
+12426.75
+12409.49
+12380.05
+12381.11
+12263.58
+;
+
+proc append base =actualnext30  data=futures force;
+run;
+
+proc sgplot data=actualnext30 (where = (iteration<2021)) noautolegend;
+   series y = Dow x = day /group = iteration LINEATTRS= (pattern=1 color=black);
+   series y = Dowf x = day/  LINEATTRS= (pattern=2 thickness = 4 color=black);
+   yaxis label = "Potential Future DJIA";
+   xaxis label = "Future Trading Day";
+run;
+
+ods rtf close;
+
+
+/* Figure 13.14*/
+  ods rtf;
+data treat;
+   input h f @@;
+cards;
+1 67 
+0 31
+;
+proc genmod data=treat descending;
+   freq f; 
+   model h = / dist=binomial;
+   bayes coeffprior=jeffreys   
+   seed = 12342321 outpost=trt nmc=100000;
+run;
+data trt;
+   set trt;
+   pi = exp(intercept)/(1+exp(intercept));   
+run;
+
+proc means; var pi; run;
+data control;
+   input h f @@;
+cards;
+1 66 
+0 35
+;
+proc genmod data=control descending;
+   freq f; 
+   model h = / dist=binomial;
+   bayes coeffprior=jeffreys   
+   seed = 12342021 outpost=ctrl nmc=100000;
+run;
+data ctrl;
+   set ctrl;
+   pi_0 = exp(intercept)/(1+exp(intercept));   
+run;
+
+proc means ; var pi_0; run;
+
+data both;
+   merge trt ctrl;
+run;
+
+data net_prof;
+   set both;
+   if pi > pi_0 then net_prof = 1000*(pi - pi_0) - 10;
+        else net_prof = -10;
+run;
+
+proc sgplot;   
+    histogram net_prof;
+	xaxis label = "Net Profit" values = (-10  20 100 200 300) offsetmin = .02;
+run;
+ 
+ods rtf close;
+
+/* Alternate solution */
+
+ods rtf;
+data trt;
+   call streaminit(12345);
+   do i = 1 to 100000;
+      pi = rand('beta', 68,32);
+	  pi_0 = rand('beta', 67,36);
+   if pi > pi_0 then net_prof = 1000*(pi - pi_0) - 10;
+        else net_prof = -10;
+run;
+
+proc univariate ; var net_prof;
+run;
+proc sgplot;   
+    histogram net_prof;
+	xaxis label = "Net Profit" values = (-10  20 100 200 300) offsetmin = .02;
+run;
+ 
+ods rtf close;
+
+
+/* End of Chapter 13 files */
+
+/* Chapter 14 files */
+ 
+/* Figure 14.1 */
+
+  ods rtf;
+data freq;
+   do p = 0 to 1 by .0001;
+   group = "Frequentist";
+   if abs(p - .4) < .000004 then y = 1; else y = 0;
+   output; end;
+   do p = 0 to 1 by .0001;
+   group = "Bayesian";
+      y = pdf('beta', p, 3,5);
+   output; end;
+run;
+
+proc sgpanel;
+   panelby group / rows = 2 novarname uniscale=column rowheaderpos = both spacing=20;
+   series y = y x = p;
+   colaxis values = (0 to 1 by 1) label = "pi";
+   rowaxis label = "pdf";
+run;
+ods rtf close;
+ 
+/* Figure 14.3 */
+  ods rtf ;
+data ybar;
+   do yb = 20  to 30 by .02;
+      p = pdf('normal', yb, 25, 5/sqrt(20));
+      output;
+   end;
+   y1 = 25.1; x1 = 0; x11 = -.10; output;   yd1 = 25.1; xd1 = 0; output; yd1 = 25.1; xd1 = -.10; output;
+   y1 = 24.2; x1 = 0; x11 = -.15;  output;  yd2 = 24.2; xd2 = 0; output; yd2 = 24.2; xd2 = -.15; output;
+   y1 = 27.7; x1 = 0; x11 = -.20; output;   yd3 = 27.7; xd3 = 0; output; yd3 = 27.7; xd3 = -.20; output;
+   y1 = 23.9; x1 = 0; x11 = -.25; output;   yd4 = 23.9; xd4 = 0; output; yd4 = 23.9; xd4 = -.25; output; 
+   yL = 25 - 2.0*5/sqrt(20); pL = pdf('normal', yL, 25, 5/sqrt(20)); output;
+   yL = 25 - 2.0*5/sqrt(20); pL = -.40; output;
+
+   y1L = 25.1 - 2.0*5/sqrt(20); x1L = -.10; output;
+   y1L = 25.1 + 2.0*5/sqrt(20); x1L = -.10; output;
+
+   y2L = 24.2 - 2.0*5/sqrt(20); x2L = -.15; output;
+   y2L = 24.2 + 2.0*5/sqrt(20); x2L = -.15; output;
+
+   y3L = 27.7 - 2.0*5/sqrt(20); x3L = -.20; output;
+   y3L = 27.7 + 2.0*5/sqrt(20); x3L = -.20; output;
+
+   y4L = 23.9 - 2.0*5/sqrt(20); x4L = -.25; output;
+   y4L = 23.9 + 2.0*5/sqrt(20); x4L = -.25; output;
+
+   yU = 25 + 2.0*5/sqrt(20); pU = pdf('normal', yu, 25, 5/sqrt(20)); output;
+   yu = 25 + 2.0*5/sqrt(20); pU = -.40; output;
+   ym = 25; pm = pdf('normal', ym, 25, 5/sqrt(20)); output;
+   ym = 25; pm = -.4; output;
+run;
+
+proc sgplot noautolegend;
+   refline -.12 / axis = y lineattrs = (color = white) label = "Sample 1" labelloc = inside labelpos =min ;
+   refline -.17 / axis = y lineattrs = (color = white) label = "Sample 2" labelloc = inside labelpos =min ;
+   refline -.22 / axis = y lineattrs = (color = white) label = "Sample 3" labelloc = inside labelpos =min ;
+   refline -.27 / axis = y lineattrs = (color = white) label = "Sample 4" labelloc = inside labelpos =min ;
+   refline -.32 / axis = y lineattrs = (color = white) label = "     ...  " labelloc = inside labelpos =min ;
+
+   series y =  p x = yb;
+   series y = pL x = yL / lineattrs= (pattern=1) ;
+   series y = pU x = yU / lineattrs= (pattern=1) ;
+
+   series y = xd1 x = yd1 / lineattrs= (pattern=2) ;
+   series y = xd2 x = yd2 / lineattrs= (pattern=2) ;
+   series y = xd3 x = yd3 / lineattrs= (pattern=2) ;
+   series y = xd4 x = yd4 / lineattrs= (pattern=2) ;
+
+   series y = x1L x = y1L;
+   series y = x2L x = y2L;
+   series y = x3L x = y3L;
+   series y = x4L x = y4L;
+
+   series y = pm x = ym;
+   scatter y = x1 x = y1;
+   scatter y = x11 x = y1;
+   refline  0 /axis = y ;
+   yaxis  display= none;
+   xaxis values = (20 22.8 25 27.2 30) label = "Sample Average"; 
+run;
+ods rtf close;
+
+
+/* End of Chapter 14 files */
+
+/* Chapter 15 files */
+ 
+/* Table 15.1 */
+
+  data age;
+   input Age @@; group =1;
+cards;
+36	23	22	27	26	24	28	23	30	25	22	26	22	35	24	36
+;
+
+
+proc multtest noprint data=age outsamp = new permutation n = 10;
+   class group;
+   test mean(age);
+run;
+
+
+/* Figure 15.1 */
+  ods rtf ; 
+data age;
+   input Age @@;
+cards;
+36	23	22	27	26	24	28	23	30	25	22	26	22	35	24	36
+;
+
+proc means sum data=age;
+run;
+
+proc surveyselect data = age method = SRS rep = 1000000 
+                         sampsize = 8 seed = 12345 out = list1;
+  id _all_;
+run;
+
+proc sql;
+   create table list2 as select mean(Age) as ybar_1 from list1 group by replicate;
+quit;
+
+data list2;
+   set list2;
+   ybar_2 = (1/8)*(429 - 8*ybar_1); 
+   difference = ybar_2 - ybar_1;
+run;
+
+ods output onewayfreqs = freqs;
+proc freq;
+   tables difference;
+run;
+
+proc sgplot data=freqs;
+  needle y = percent x = difference ;
+    yaXIS values = (0 to 5 by 1);
+	xaxis label = "Difference Between Sample Averages" values = 
+     (-8 -5.125 -4 0 1.375 4  6 8) ;
+  refline 1.375 -5.125 / axis=x  LINEATTRS=(thickness=2 pattern = 2);  
+run; 
+ods rtf close;
+
+
+/* Figure 15.2 */  
+ods rtf ;
+data age;
+   input Age @@;
+cards;
+36	23	22	27	26	24	28	23	30	25	22	26	22	35	24	36
+;
+
+proc means sum data=age;
+run;
+
+proc surveyselect data = age method = SRS rep = 1000000 
+                         sampsize = 8 seed = 12345 out = list1;
+  id _all_;
+run;
+
+proc sql;
+   create table list2 as select mean(Age) as ybar_1 from list1 group by replicate;
+quit;
+
+data list2;
+   set list2;
+   ybar_2 = (1/8)*(429 - 8*ybar_1); 
+   difference = ybar_2 - ybar_1;
+run;
+
+
+ods output onewayfreqs = freqs;
+proc freq data=list2;
+   tables difference;
+run;
+
+
+data freqs;
+   set freqs; 
+   if difference >  1.374 then do;  diff1 = difference ; pct1 = percent; end;
+   if difference < -1.374 then do;  diff2 = difference ; pct2 = percent; end;
+
+run;
+   
+proc sgplot data=freqs noautolegend;
+   needle y = percent x = difference ;
+   band upper =pct1 lower = 0 x = diff1/ transparency = .5;
+   band upper =pct2 lower = 0 x = diff2/ transparency = .5;
+    yaxis values = (0 to 5 by 1);
+	xaxis label = "Difference Between Sample Averages" values = 
+     (-8 -6 -1.375 0 1.375 4  6 8) ;
+   refline 1.375 -1.375 / axis=x  LINEATTRS=(thickness=2 pattern = 2);  
+run;
+ods rtf close;
+
+
+
+/* Figure 15.3 */
+  ods rtf ;
+data age;
+   input Age @@;
+cards;
+36	23	22	27	26	24	28	23	30	25	22	26	22	35	24	36
+;
+
+proc means sum data=age;
+run;
+
+proc surveyselect data = age method = SRS rep = 1000000 
+                         sampsize = 8 seed = 12345 out = list1;
+  id _all_;
+run;
+
+proc sql;
+   create table list2 as select mean(Age) as ybar_1 from list1 group by replicate;
+quit;
+
+data list2;
+   set list2;
+   ybar_2 = (1/8)*(429 - 8*ybar_1); 
+   difference = ybar_2 - ybar_1;
+run;
+
+
+ods output onewayfreqs = freqs;
+proc freq data=list2;
+   tables difference;
+run;
+
+ods output onewayfreqs = freqs;
+proc freq data=list2;
+   tables difference;
+run;
+
+
+data freqs;
+   set freqs; 
+   if difference >  5.124 then do;  diff1 = difference ; pct1 = percent; end;
+   if difference < -5.124 then do;  diff2 = difference ; pct2 = percent; end;
+
+run;
+   
+proc sgplot data=freqs noautolegend;
+   needle y = percent x = difference ;
+   band upper =pct1 lower = 0 x = diff1/ transparency = .5;
+   band upper =pct2 lower = 0 x = diff2/ transparency = .5;
+    yaxis values = (0 to 5 by 1);
+	xaxis label = "Difference Between Sample Averages" values = 
+     (-8 -5.125  -4 0  4 5.125 8) ;
+   refline 5.125 -5.125 / axis=x  LINEATTRS=(thickness=2 pattern = 2);  
+run;
+ods rtf close;
+
+
+/* Figure 15.4 */  
+data dow;
+   set isqs5347.djia1;
+   g = 1;
+run;
+
+proc multtest data=dow bootstrap nocenter n = 1000 noprint outsamp=bnew seed = 12345;
+   class g;
+   test mean(return);
+run;
+
+data bnew1;
+   set bnew;
+   l_ret = lag(return);
+   if l_ret <=0 then yesterday = "Down";
+   else yesterday = "Up";
+   if _sample_ ne lag(_sample_) then delete;
+run;
+
+ods listing close;
+ods output statistics= statistics;
+proc ttest data = bnew1; 
+     by _sample_; 
+    class yesterday;
+	var return;
+run;
+
+data diffs ;
+  set statistics;
+  if class = "Diff (1-2)";
+   keep mean;
+   mean = -mean;
+run;
+
+ods listing ;
+proc univariate data = diffs;
+   var mean;
+   histogram mean;
+run;
+
+data new4;
+gt = mean>= 0.00125661;
+lt = mean <= -0.00125661;
+run;
+  proc means data= new4;
+   var gt lt;
+   run;
+
+ods rtf;
+proc sgplot data =diffs;
+   histogram mean;
+   xaxis values = (-.001 to .0015 by .0005) label = "Null Difference Between Averages";
+   refline 0.00125661 / axis = x label ="Obs Diff" LABELLOC= outSIDE LABELPOS= MIN;
+run;
+ods rtf close;
+
+
+
+/* Figure 15.5 */
+  data cont_age;
+   input age;
+cards;
+22.06
+22.29
+22.89
+23.44
+23.56
+24.32
+24.33
+25.32
+26.33
+26.5
+27.91
+28.25
+30.8
+35.31
+36.31
+36.99
+;
+proc sgplot;
+   histogram age;
+run;
+
+proc univariate normal;
+  qqplot age/normal(mu=est sigma=est);
+run; quit;
+  
+ods rtf;
+data cont_age;
+   input age;
+   q = 27.3 + 5.0 * quantile('normal', (_n_ - .5)/16,0,1); 
+cards;
+22.06
+22.29
+22.89
+23.44
+23.56
+24.32
+24.33
+25.32
+26.33
+26.5
+27.91
+28.25
+30.8
+35.31
+36.31
+36.99
+;
+
+proc sgplot data = cont_age noautolegend;
+   scatter y = age x = q;
+   reg y = age x = q;
+   xaxis label = "Normal Quantile";
+   yaxis label = "Ordered Age Value";
+run;
+
+
+proc corr data=cont_age;  var age q;
+run;
+
+proc sgplot;
+   histogram age;
+run;
+
+
+/* Figure 15.6 */
+data sim_1;
+   call streaminit(52045);
+   do i = 1 to 16;
+	  age = rand('normal', 27.3, 5.0);
+	  output;
+   end;
+run;
+
+proc sort data=sim_1;
+  by age;
+run;
+
+data sim_1;
+  set sim_1;
+  q = 27.3 + 5.0 * quantile('normal', (_n_ - .5)/16,0,1); 
+run;
+
+proc sgplot data = sim_1 noautolegend;
+   scatter y = age x = q;
+   reg y = age x = q;
+   xaxis label = "Normal Quantile";
+   yaxis label = "Ordered Age Value";
+run;
+
+proc corr data = sim_1;
+run;
+
+
+
+/* Figure 15.7 */
+data sim;
+    call streaminit(12345);
+   do sim = 1 to 50000;
+      do i = 1 to 16;
+	     age = rand('normal', 27.3, 5.0);
+	     output;
+      end;
+   end;
+run;
+
+proc sort data = sim out=simout;
+   by sim age;
+run;
+
+data simout;
+   set simout;
+   n = mod(_n_,16);
+   if n = 0 then n=16;
+   q = quantile('normal',(n-.5)/16,0,1);
+run;
+
+ods listing close;
+ods output pearsoncorr=corr;
+proc corr data=simout;
+   by sim;
+   var q age;
+run;
+
+data corr;  set corr;
+   if variable = "q";
+   corr = age;
+   chk = corr <= 0.92862;
+   keep corr chk;
+run;
+
+ods listing;
+
+proc means data = corr;
+   var chk;
+run;
+
+
+proc sgplot data=corr;
+   histogram  corr;
+   xaxis label = "Correlation Coefficient";
+   refline .9286 / axis = x;
+run;
+ods rtf close;
+
+
+/* End of Chapter 15 files */
+
+/* Chapter 16 files */
+
+/* Figure 16.2 */
+data chisq;
+   call streaminit(12345);
+   type = "Histogram";
+   do sim = 1 to 100000;
+      Z1 = rand('normal',0,1)**2;
+      Z2 = rand('normal',0,1)**2; 
+      Z3 = rand('normal',0,1)**2;
+      Z4 = rand('normal',0,1)**2;
+      Z5 = rand('normal',0,1)**2;
+      t = sum(of Z1-Z5);     
+	  output;
+   end;
+run;
+
+proc sgplot;
+   histogram T;
+   xaxis label = "v"; 
+run;
+
+
+/* Figure 16.3 */
+data kernel;
+ do  v = .1 to 30 by .1;
+      kernel = v**(5/2 - 1) * exp(-v/2);
+   output; end;
+run;
+
+
+proc sgplot;
+   series y = kernel x= v;
+run;
+
+
+/* Figure 16.4 */
+data rat;
+   do isim =  1 to 100000;
+      z1 = rand('normal',0,1)**2;z2 = rand('normal',0,1)**2;z3 = rand('normal',0,1)**2;
+      z4 = rand('normal',0,1)**2;z5 = rand('normal',0,1)**2;z6 = rand('normal',0,1)**2;
+      z7 = rand('normal',0,1)**2;z8 = rand('normal',0,1)**2;z9 = rand('normal',0,1)**2;
+      z10 = rand('normal',0,1)**2;z11 = rand('normal',0,1)**2;z12 = rand('normal',0,1)**2;
+      z13 = rand('normal',0,1)**2;z14 = rand('normal',0,1)**2;z15 = rand('normal',0,1)**2;
+      z16 = rand('normal',0,1)**2;z17 = rand('normal',0,1)**2;z18 = rand('normal',0,1)**2;
+      z19 = rand('normal',0,1)**2;
+
+      type = "Panel A: n=2 "; rat = sqrt(z1); output;
+      type = "Panel B: n=5 "; rat = sqrt(mean(of z1-z4)); output;
+      type = "Panel C: n=10"; rat = sqrt(mean(of z1-z9)); output;
+      type = "Panel D: n=20"; rat = sqrt(mean(of z1-z19)); output;
+   end;
+run;
+
+proc sgpanel;
+   panelby type / novarname spacing=10 uniscale=column;
+   histogram rat;
+   colaxis label = "Standard Deviation Ratio";
+run;
+
+
+/* Figure 16.5 */
+data t;
+  do t = -5 to 5 by .01;
+     p1 = pdf('t', t, 1);
+     p2 = pdf('t', t, 2);
+     p10 = pdf('t', t, 10);
+     pinf = pdf('normal', t,0, 1);
+
+output;
+end;
+run;
+
+proc sgplot noautolegend;
+   series y = p1 x =t/ LINEATTRS=(thickness=1 pattern = 2 color=black);  
+   series y = p2 x =t/ LINEATTRS=(thickness=1 pattern = 2 color=black);  
+   series y = p10 x =t/ LINEATTRS=(thickness=1 pattern = 2 color=black);  
+   series y = pinf x =t/  LINEATTRS=(thickness=2 pattern = 1 color=black);
+   yaxis label = "density";
+run;
+
+
+/* Figure 16.6  */
+data t;
+  do t = -4 to 4 by .01;
+     p = pdf('t', t, 9);
+	 if abs(t) < quantile('t', .975, 9) then p1 = 0; else p1 = p -.0001;
+     output;
+ end;
+run; 
+
+proc sgplot data = t noautolegend;
+   series y = p x = t;
+   band upper = p1 lower = 0 x=t;
+   yaxis label = "t density" offsetmin = 0;
+   xaxis values = (-4 -2.262 -1 0 1 2.262 4) offsetmin = 0;
+ run;
+
+
+/* Figure 16.7 */
+data t;
+   do t = -3.5 to 3.5 by .01;
+      pdf = pdf('t',t,14);
+	  if abs(t) < .543 then pdf_f = 0; else pdf_f = pdf;
+	  output;
+   end;
+   t1 = -2.145; pdf1 = pdf('t',t1,14); output;
+   t2 =  2.145; pdf2 = pdf('t',t2,14); output;
+   t3 = -.543; pdf3= pdf('t',t3,14); output;
+   t4 =  .543; pdf4 = pdf('t',t4,14); output;
+run;
+
+proc sgplot noautolegend;
+   series y = pdf  x = t;
+   needle y = pdf1 x = t1;
+   needle y = pdf2 x = t2;
+   needle y = pdf3 x = t3;
+   needle y = pdf4 x = t4;
+   band x = t upper = pdf_f lower=0/transparency = .3;
+   yaxis  label= "T(14) density" offsetmin=0;
+   xaxis label = "t value"  offsetmin=.02 offsetmax=.02 values = (-3.5 -2.145 -.543 .543 2.145 3.5);
+run;
+
+
+/* Figure 16.8 /
+data f;
+   do f = .01 to 4.00 by .01;
+      pdf1 = pdf('f',f, 1, 10);
+      pdf2 = pdf('f',f, 100, 100);
+      pdf4 = pdf('f',f, 4, 100);
+      output;
+   end;
+run;
+
+proc sgplot noautolegend;
+   series y = pdf1 x = f / lineattrs = (color = black pattern = 1); 
+   series y = pdf2 x = f / lineattrs = (color = black pattern = 2); 
+   series y = pdf4 x = f / lineattrs = (color = black pattern = 4); 
+   yaxis label = "F density";
+   xaxis label = "f";
+run;
+
+
+/* End of Chapter 16 files */
+
+/* Chapter 17 files */
+
+
+/* Figure 17.1 */
+data qc;
+   do mu = 302 to 314 by .1;
+      do sigma = 2 to 8 by .1;
+       ll 
+= logpdf('normal', 311, mu, sigma) +
+ logpdf('normal', 304, mu, sigma) +
+ logpdf('normal', 316, mu, sigma) +
+ logpdf('normal', 308, mu, sigma) +
+ logpdf('normal', 312, mu, sigma) +
+ logpdf('normal', 308, mu, sigma) +
+ logpdf('normal', 314, mu, sigma) +
+ logpdf('normal', 307, mu, sigma) +
+ logpdf('normal', 302, mu, sigma) +
+ logpdf('normal', 311, mu, sigma) +
+ logpdf('normal', 308, mu, sigma) +
+ logpdf('normal', 300, mu, sigma) +
+ logpdf('normal', 316, mu, sigma) +
+ logpdf('normal', 304, mu, sigma) +
+ logpdf('normal', 316, mu, sigma) +
+ logpdf('normal', 306, mu, sigma) +
+ logpdf('normal', 314, mu, sigma) +
+ logpdf('normal', 310, mu, sigma) +
+ logpdf('normal', 311, mu, sigma) +
+ logpdf('normal', 309, mu, sigma) +
+ logpdf('normal', 311, mu, sigma) +
+ logpdf('normal', 306, mu, sigma) +
+ logpdf('normal', 311, mu, sigma) +
+ logpdf('normal', 309, mu, sigma) +
+ logpdf('normal', 311, mu, sigma) +
+ logpdf('normal', 305, mu, sigma) +
+ logpdf('normal', 304, mu, sigma) +
+ logpdf('normal', 303, mu, sigma) +
+ logpdf('normal', 307, mu, sigma) +
+ logpdf('normal', 316, mu, sigma) ;
+
+     l = exp(ll)*10**38;  
+     output;
+	 end; end;
+run;
+data anno;
+  xsys = '2'; ysys = '2'; size = 1.5;
+  input x y text$;
+  cards;
+  309 4.344 +
+  310 4.457 x 
+;
+
+
+axis1 order = 306 to 312 by 1;
+axis2 order = 3 to 7 by 1;
+proc gcontour data = qc ;
+   plot sigma*mu=l / href=310 haxis = axis1 vaxis = axis2 anno=anno nolegend;
+run;
+quit;
+
+
+/* Figure 17.2 */
+data chisq;
+   do y = 0.10 to 1.51  by .01;
+   c = 20* log(0.5/y) - 20*(1 - y/0.5);
+   output;
+   end;
+   x1 = .2244; y1 = 0; output;
+   x1 = .2244; y1 = 5; output;   
+   x2 = .9414; y2 = 0; output;
+   x2 = .9414; y2 = 5; output;
+    
+run;
+
+proc sgplot noautolegend;
+   series y = c x = y;
+   series y = y1 x = x1 / lineattrs = (pattern = 2);
+   series y = y2 x = x2 / lineattrs = (pattern = 2);
+   yaxis label = "Chi-Square Statistic" offsetmin = 0;
+   xaxis label = "Sample Average" offsetmax=0 offsetmin=0 values = (0 0.22 0.5 .94 1.5);   
+   refline 5.0 / axis = y;
+run;
+
+
+/* Figure 17.3 */
+data ln;
+   do x = -.4 to .4 by .001;
+      f = log(1+x);
+	  output;
+   end;
+run;
+
+proc sgplot data = ln noautolegend;
+   series y = f x = x /LINEATTRS= (color= black pattern=solid thickness=2);
+   series y = x x = x /LINEATTRS= (color= black pattern=dash thickness=2);   
+     yaxis label = "ln(1+x) or x";
+   xaxis values = (-.4 -.1 0 .1 .4);
+run;
+
+
+
+/* Figure 17.4 */
+ data try;
+   set research.surv;
+   y = mydepv;
+   x1 = years;
+   x2 = income;
+   x3 = gender;
+   x4 = age;
+   if ranuni(12345)<.2;
+run;
+
+proc logistic;
+   model y = x1-x4;
+run;
+
+
+/* Figure 17.5 */
+data mcl;
+   do x = -.4 to .4 by .001;
+   f = log(1+x);
+   lin = x;
+   quad = x - x**2/2;
+   output;
+end;
+run;
+
+proc sgplot data = mcl noautolegend;
+   series y = f x = x /LINEATTRS= (color= black pattern=solid thickness=2);
+   series y = lin x = x /LINEATTRS= (color= black pattern=dash thickness=2);
+   series y = quad x = x /LINEATTRS= (color= black pattern=dot thickness=2);
+   yaxis label = "ln(1+x) and approximations";
+     xaxis values = (-.4 -.1 0 .1 .4);
+run;
+
+
+/* Figure 17.6 */
+data p;
+   l = 2.554;
+   t = 1; p1 = 13/74; p2 = pdf("Poisson", t-1, l); output;
+   t = 2; p1 = 10/74; p2 = pdf("Poisson", t-1, l); output;
+   t = 3; p1 = 16/74; p2 = pdf("Poisson", t-1, l); output;
+   t = 4; p1 = 10/74; p2 = pdf("Poisson", t-1, l); output;
+   t = 5; p1 =  8/74; p2 = pdf("Poisson", t-1, l); output;
+   t = 6; p1 = 17/74; p2 = pdf("Poisson", t-1, l); output;
+   t = 7; p1 = 0; p2 = pdf("Poisson", t-1, l); output;
+   t = 8; p1 = 0; p2 = pdf("Poisson", t-1, l); output;
+   t = 9; p1 = 0; p2 = pdf("Poisson", t-1, l); output;
+   t = 10; p1 = 0; p2 = pdf("Poisson", t-1, l); output;
+run;
+
+proc sgplot data = p noautolegend;
+   needle y = p1 x = t;
+   scatter y= p2 x = t;
+   xaxis values = (1 to 10 by 1) label = "Die Outcome, t";
+   yaxis label = "p(t)";
+run;
+
+
+/* End of Chapter 17 files */
+
+/* Chapter 18 files */
+
+
+/* Figure 18.1 */
+
+data t;
+   do t = 295 to 325 by .1;
+      pdfy = pdf('normal',t,310,4.5);
+      pdfybar = pdf('normal',t,310,4.5/sqrt(10));
+	  output;
+   end;
+   t1 = 310 + 1.96*4.5; pdf1 = pdf('normal',t1,310, 4.5); output;
+   t2 = 310 - 1.96*4.5; pdf2 = pdf('normal',t2,310, 4.5); output;
+   t3 = 310 + 1.96*4.5/sqrt(10); pdf3 = pdf('normal',t3,310, 4.5/sqrt(10)); output;
+   t4 = 310 - 1.96*4.5/sqrt(10); pdf4 = pdf('normal',t4,310, 4.5/sqrt(10)); output;
+run;
+
+proc sgplot data=t noautolegend;
+   series y = pdfy x = t/ lineattrs = (color = black pattern = 2);
+   series y = pdfybar x = t ; 
+   needle y = pdf1 x = t1/ lineattrs = (color = black pattern = 2);
+   needle y = pdf2 x = t2/ lineattrs = (color = black pattern = 2);
+   needle y = pdf3 x = t3 ; 
+   needle y = pdf4 x = t4 ; 
+   yaxis  label= "Density" offsetmin=0;
+   xaxis label = "Width of Chip"  offsetmin=.0 offsetmax=.0 values = (295 301.18 307.21 310 312.79 318.82 325);
+run;
+
+/* Figure 18.2 */
+data p;
+   m = 310; p = 0.050; output;
+   m = 311; p = 0.098; output;
+   m = 312; p = 0.278; output;
+   m = 313; p = 0.568; output;
+   m = 314; p = 0.816; output;
+   m = 315; p = 0.943; output;
+   do m1 = 310 to 315 by .01;
+      p1 = cdf('normal', 307.21, m1, 4.5/sqrt(10)) + (1 - cdf('normal', 312.79, m1, 4.5/sqrt(10)));
+      output; 
+   end;
+run;
+
+proc sgplot data=p noautolegend;
+   scatter y = p x = m;
+   series y = p1 x = m1;
+   yaxis label = "Power" offsetmin = 0 offsetmax =0;
+   xaxis label = "Process Mean";
+run;
+
+
+/* Figure 18.3 */
+data t;
+   do t = 300 to 325 by .01;
+      pdfy0 = pdf('normal',t,310,4.5);
+	  pdfy1 = pdf('normal',t,315,4.5);
+      pdfybar0 = pdf('normal',t,310,4.5/sqrt(10));
+      pdfybar1 = pdf('normal',t,315,4.5/sqrt(10));
+	  if t < 312.79 then pdf_f = 0; else pdf_f = pdfybar1; 
+	  output;
+   end;
+   t3 = 310 + 1.96*4.5/sqrt(10); pdf3 = pdf('normal',t3,310, 4.5/sqrt(10)); output;
+   t4 = 310 - 1.96*4.5/sqrt(10); pdf4 = pdf('normal',t4,310, 4.5/sqrt(10)); output;
+run;
+
+proc sgplot data=t noautolegend;
+   band x = t upper = pdf_f lower=0/transparency = .3;
+   series y = pdfybar0 x = t;  
+   series y = pdfybar1 x = t / lineattrs = (color = black pattern = 2); 
+   needle y = pdf3 x = t3 ; 
+   needle y = pdf4 x = t4 ; 
+   yaxis label= "Density" offsetmin=0;
+   xaxis label = "Width of Chip"  offsetmin=.0 offsetmax=.0 values = (300  307.21 310 312.79 315 320 325);
+run;
+
+
+/* Figure 18.4 */
+data z;
+   do z = -8 to 8 by .01;
+   pz = pdf('normal', z, 0, 1);
+   if (z> -5.47) and (z<-1.55) then pzb = 0; else pzb = pz;
+      output; end;
+   z1 = -5.47;   pz1 = pdf('normal', z1, 0, 1); output;
+   z2 = -1.55;   pz2 = pdf('normal', z2, 0, 1); output;
+run;
+
+proc sgplot data = z noautolegend;
+   band x = z upper = pzb lower = 0 / transparency = .3;
+   series y = pz x = z;
+   needle y = pz1 x = z1;
+   needle y = pz2 x = z2;
+   xaxis values =  (-8 -5.47 -3  -1.55 0 3  8) label = "z statistic";
+   yaxis label = "p(z)" offsetmin=0;
+run;
+
+
+/* Figure 18.5 */
+data p;
+   m0 = 310;
+   do m1 = 305 to 315 by .01;
+      p5  =  cdf('normal',5**.5 *(m0 -m1)/4.5 -1.96 , 0, 1) +
+      (1 - cdf('normal',5**.5 *(m0 -m1)/4.5 +1.96 , 0, 1));    
+      p10 = cdf('normal',10**.5 *(m0 -m1)/4.5 -1.96 , 0, 1) +
+      (1 - cdf('normal',10**.5 *(m0 -m1)/4.5 +1.96 , 0, 1));
+      p20  =  cdf('normal',20**.5 *(m0 -m1)/4.5 -1.96 , 0, 1) +
+      (1 - cdf('normal',20**.5 *(m0 -m1)/4.5 +1.96 , 0, 1));    
+      p40 = cdf('normal',40**.5 *(m0 -m1)/4.5 -1.96 , 0, 1) +
+      (1 - cdf('normal',40**.5 *(m0 -m1)/4.5 +1.96 , 0, 1));
+      output; 
+   end;
+run;
+
+proc sgplot data=p noautolegend;
+   series y = p5 x = m1 / lineattrs = (color = black pattern = 1);
+   series y = p10 x = m1 / lineattrs = (color = black pattern = 1);
+   series y = p20 x = m1 / lineattrs = (color = black pattern = 1);
+   series y = p40 x = m1 / lineattrs = (color = black pattern = 1);
+   yaxis label = "Power" offsetmin = 0 offsetmax=0 values = (0 .05 .25 .5 .8 1);
+   xaxis label = "Process mean";
+   refline .05 / axis = y lineattrs = (color = black pattern = 2);
+run;
+
+
+/* Figure 18.6 */
+data bin;
+call streaminit(12345);
+n = 200; 
+pi1 =.50;
+  do i = 1 to 100000;
+       t  = rand('binomial', pi1, n);
+	   c = rand('binomial', .30, n);
+	   p1 = t/n; p2 = c/n;  p = (p1+p2)/2;
+	   z = (p1 - p2)/sqrt(p*(1-p)*(2/n));
+       power = (abs(z) > 1.96);
+   output;
+end;
+run;
+
+proc means ; 
+   var n pi1 power; 
+run; 
+
+data results;
+   input  pi1 power100 power200;
+   cards;
+.30 .051 .050
+.32 .062 .072
+.35 .118 .187
+.37 .183 .318 
+.40 .317 .559
+.45 .596 .875
+.50 .831 .984
+;
+proc sgplot data=results noautolegend;
+   series y = power100 x = pi1;
+   series y = power200 x = pi1;
+   scatter y = power100 x = pi1;
+   scatter y = power200 x = pi1;
+   xaxis values = (.3 .32 .35 .37 .40 .45 .50) label = "Proportion Cured with New Therapy";
+   yaxis label = "Power" offsetmin=0 values = (0 .05  .2 .5 .8 1);
+   refline .05 / axis = y lineattrs = (color = black pattern = 2);
+run;
+
+
+/* Figure 18.7 */
+data z;
+   do z = -4 to 8 by .01;
+      pzc = pdf('normal', z, 0, 1);
+      pznc = pdf('normal', z, sqrt(10)*5/4.5, 1);
+	  if (z > -1.96) and  (z < 1.96) then pz1 = 0; else pz1 = pznc;
+      output;
+   end;
+run;
+
+proc sgplot data = z noautolegend;
+   band x = z upper = pz1 lower=0/transparency = .3;
+   series y = pznc x = z / lineattrs = (color = black pattern = 2); 
+   series y = pzc x = z;
+   xaxis values = (-4 -1.96 0 1.96 3.51 8) label = "z value";
+   yaxis label = "p(z)" offsetmin =0;
+run;   
+
+
+
+/* Figure 18.8 */
+data t;
+   do t = -5 to 15 by .01;
+      pt0 = pdf('t', t, 9, 10**.5 *(310 - 310)/4.5);
+      pt2 = pdf('t', t, 9, 10**.5 *(312 - 310)/4.5);
+      pt5 = pdf('t', t, 9, 10**.5 *(315 - 310)/4.5);
+	  pt10 = pdf('t', t, 9, 10**.5 *(320 - 310)/4.5);
+	output;
+	ncp0 = 0; pt0_ = pdf('t', ncp0, 9, 10**.5 *(310 - 310)/4.5); output;
+	ncp2 = 1.405456738; pt2_ = pdf('t', ncp2, 9, 10**.5 *(312 - 310)/4.5); output;
+	ncp5 = 3.513641845; pt5_ = pdf('t', ncp5, 9, 10**.5 *(315 - 310)/4.5); output;
+	ncp10 = 7.027283689; pt10_ = pdf('t', ncp10, 9, 10**.5 *(320 - 310)/4.5); output;
+end;
+run;
+
+proc sgplot data=t noautolegend;
+  series y = pt0 x = t;
+  series y = pt2 x = t;
+  series y = pt5 x = t;
+  series y = pt10 x = t;
+  needle y = pt0_ x = ncp0 / lineattrs = (color = black pattern = 2); 
+  needle y = pt2_ x = ncp2 / lineattrs = (color = black pattern = 2); 
+  needle y = pt5_ x = ncp5 /lineattrs = (color = black pattern = 2); 
+  needle y = pt10_ x = ncp10 /lineattrs = (color = black pattern = 2); 
+  xaxis values = (-5 0 1.41 3.51 7.03 15) label = "t";
+  yaxis label = "p(t)" offsetmin =0;
+run;
+
+
+/* Figure 18.9 */
+data t;
+n = 10;
+   do t = -8 to 8 by .01;
+      ptc = pdf('t', t, 9, 0);
+      ptnc = pdf('t', t, 9, sqrt(10)*5/4.5);
+	  if (t > -2.262) and  (t < 2.262) then pt1 = 0; else pt1 = ptnc;
+      output;
+    end;
+run;
+
+proc sgplot data=t noautolegend;
+   band x = t upper = pt1 lower=0/transparency = .3;
+   series y = ptnc x = t;
+   series y = ptc x = t;
+   xaxis values = (-8 -4 -2.26 0 2.26 3.51 8) label = "t value";
+   yaxis label = "p(t)" offsetmin =0;
+run;   
+
+
+/* Figure 18.10 */
+data p;
+    do n = 2 to 200 by 1;
+	   ncp = sqrt(n)/4.5;
+	   t_a = quantile('t', .975, n-1);
+	   power =       cdf('t', -t_a, n-1, ncp)
+                +  (1 - cdf('t',  t_a, n-1, ncp));
+      output;
+end;
+run;
+proc sgplot data = p;
+   series y = power x = n;
+   refline .80 / axis = y;
+   refline 161 / axis = x;
+   xaxis values = (2 10 50 100 161 200);
+   yaxis values = (0 .2 .4 .6 .8 1.0);
+run;
+
+
+/* End of Chapter 18 files */
+
+/* Chapter 19 files */
+
+
+
+/* Table 19.5 */
+/* Program to simulate rejection probability of the two-sample t-test */
+/* This program generates many two-group data sets.  The data in
+   group 1 come from Likert scale distribution and the data in group 2
+   come from a Likert scale distribution. The power of the test
+   is the probability that the null hypothesis of no difference between means 
+   is rejected, assuming unequal means; it is estimated as the proportion of samples 
+   for which the p-value for the two-sample t test is less than alpha when the true means are unequal.
+   The significance level of the test is the probability that the null hypothesis is rejected when the 
+   null hypothesis is true; it is estimated as the proportion of samples for 
+   which the p-value for the two-sample t test is less than alpha when the null is true. */
+%let n_per_group = 100;
+
+/* Likert scale probabilities in group 1 */
+%let p11       = .01;
+%let p12       = .01;
+%let p13       = .01;
+%let p14       = .01;
+%let p15       = .96	;
+
+/* Likert scale probabilities in group 2 */
+%let p21       = .01;
+%let p22       = .01;
+%let p23       = .01;
+%let p24       = .01;
+%let p25       = .96;
+%let alpha       = .05;
+%let n_simulated_datasets  = 10000; 
+/* The following code calculates the means and std devs of the two distributions,
+   and assigns them to macro variables for use later in the title */
+data _null_;
+  mu1  = 1*&p11 + 2*&p12 + 3*&p13 +  4*&p14 +  5*&p15;
+  mu2  = 1*&p21 + 2*&p22 + 3*&p23 +  4*&p24 +  5*&p25; 
+  var1 = 1*&p11 + 4*&p12 + 9*&p13 + 16*&p14 + 25*&p15 -mu1**2;
+  var2 = 1*&p21 + 4*&p22 + 9*&p23 + 16*&p24 + 25*&p25 -mu2**2;
+  std1 = sqrt(var1);   std2 = sqrt(var2);
+  call symput('mu1', mu1)  ;  call symput('mu2', mu2);
+  call symput('sigma1', std1);  call symput('sigma2', std2);
+run;
+data simu;
+   do simu = 1 to &n_simulated_datasets;
+      do group =1 to 2;
+         do i = 1 to &n_per_group;
+         if group=1 then Y = rand('table', &p11 , &p12, &p13, &p14, &p15);
+		    else       	 Y = rand('table', &p21 , &p22, &p23, &p24, &p25);
+			output;
+         end;
+      end;
+	end;
+run;
+ods listing close;  /* Suppresses printing results for all simulated data sets */
+ods output ttests=ttests(where=(method="Pooled"));
+proc ttest data=simu;
+   class group;
+   var Y;
+   by simu;
+run;
+ods listing;
+data power;
+   set ttests;
+   estimated_rejection_probability = (probt <= &alpha);
+run;
+options nodate nonumber;
+title "Estimated rejection probability of the two-sample t test using &n_simulated_datasets simulations ";
+title2 "Likert pdfs - Group 1: &p11 , &p12, &p13, &p14, &p15; Group2: &p21 , &p22, &p23, &p24, &p25 ";
+title3 "The sample size per group is &n_per_group";
+title4 "The means are mu1=&mu1 , mu2=&mu2 ";
+title5 "The std devs are sigma1=&sigma1 , sigma2=&sigma2";
+proc means mean;
+   var estimated_rejection_probability; run;
+title;
+
+
+/* Table 19.6 */
+/* Program to simulate rejection probability of the two-sample tests, both the t test and the Wilcoxon test.
+   This program generates many two-group data sets.  The data in
+   the groups come from a distribution that you specify. The power of the test
+   is the probability that the null hypothesis of no difference between means 
+   is rejected, assuming unequal means; it is estimated as the proportion of samples 
+   for which the p-value for the two-sample t test is less than alpha when the true means are unequal.
+   The significance level of the test is the probability that the null hypothesis is rejected when the 
+   null hypothesis is true; it is estimated as the proportion of samples for 
+   which the p-value for the two-sample t test is less than alpha when the null is true.  
+   This program allows you to assess robustness of the two-sample t test and the 
+   Wilcoxon rank sum test when the distribution is not normal.*/
+
+/* Input parameters:  You only need to modify the following six macro variables. */
+%let dist  = rand('table',.5, .2, .1, .1, .1);
+%let dist1 = rand('table',.27, .19, .13, .16, .25);
+%let n1 = 100;
+%let n2 = 100;
+%let diff       = 0;               /* When diff=0, the null hypothesis is true.  Otherwise the alternative hypothesis is true. */
+%let alpha       = .05;
+%let n_simulated_datasets  = 1000; 
+data simu;
+   do simu = 1 to &n_simulated_datasets;
+      do group =1 to 2; 
+       if group=1 then do;
+         do i = 1 to &n1;
+             Y = &dist;
+         output;
+         end; end;
+          else do;
+         do i = 1 to &n2;
+          Y = &dist1;
+       output;
+         end; end;
+      end;
+   end;
+run;
+
+/* Analyze all the data sets using the two-sample t-test */
+
+ods listing close;       /* Suppresses printing the results for all simulated data sets.*/
+ods output ttests=ttests(where=(method="Pooled"));
+proc ttest data=simu;
+   class group;
+   var Y;
+   by simu;
+run;
+ods listing;
+data power;
+   set ttests;
+   estimated_rejection_probability = (probt <= &alpha);
+run;
+options nodate nonumber;
+title "Estimated rejection probability of the two-sample t test using &n_simulated_datasets simulations ";
+title2 "The distributions are &dist in each group ";
+title3 "The sample sizes are &n1 , &n2";
+title4 "The difference between distributions is &diff ";
+proc means mean;
+   var estimated_rejection_probability; run;
+title;
+ 
+/* Analyze all the data sets using the Wilcoxon two-sample test.  This is a nonparametric test. */
+
+ods listing close;
+ods output wilcoxontest=nonpar(where=(name1="P2_WIL"));    /* Keeps the normal approximation (not the t approximation) */
+proc npar1way data=simu;
+   class group;
+   var Y;
+   by simu;
+run;
+ods listing;
+data power;
+   set nonpar;
+   estimated_rejection_probability = (nvalue1 <= &alpha);
+run; quit;
+proc means mean;
+title "Estimated rejection probability of the two-sample Wilcoxon test using &n_simulated_datasets simulations ";
+title2 "The distributions are &dist in each group ";
+title3 "The sample sizes are &n1 , &n2";
+title4 "The difference between distributions is &diff ";
+  var  estimated_rejection_probability;
+run;  title;
+
+
+/* Table 19.9 */
+proc freq data=isqs5347.liles;
+   tables dayslost;
+   run;
+
+   proc univariate data=isqs5347.liles;
+   var dayslost;
+   run;
+
+
+
+/* Figure 19.1 */
+/* Code for creating the percentile-t confidence intervals.
+   The data set contains information on factory workers' days lost
+   due to back injury.  Most workers lost no days.  */ 
+/*  The data set is here:  http://westfall.ba.ttu.edu/liles.sas7bdat   */
+title "Analysis of Days Lost Due to Back Injury";
+proc univariate data=isqs5347.liles alpha=.10 cibasic;
+   var dayslost;
+   histogram dayslost;
+   qqplot dayslost;
+run;
+/*  Calculate the mean and standard error from the original data */
+proc sql; 
+   select mean(dayslost), stderr(dayslost) 
+      into :meany, :stderry 
+   from isqs5347.liles;  
+quit;
+/* Generate 2000 bootstrap samples */
+%create_bootstrap_samples(indata=isqs5347.liles, 
+  outdata=liles_boot, nboot=100000 );  
+/* Find the t-statistic for each bootstrap sample */
+proc sql;
+    create table tstat as 
+    select (mean(dayslost) - &meany)/stderr(dayslost) 
+       as boott from liles_boot group by sample;  
+quit;
+/* Find the 5th and 95th percentiles of the 2000 bootstrap t statistics */
+title "Summary of bootstrap samples";
+Proc univariate data=tstat(where = (boott > -20)) pctldef=1 noprint;
+   var boott;
+   histogram boott / endpoints = -20 to 5 by .25;
+   output pctlpts = 2.5, 97.5 pctlpre=boot_t_crit_ pctlname=l u out=p;  
+run;
+/*  Construct the bootstrap percentile t confidence interval */
+
+data tstat1;
+   set tstat;
+   pt = pdf('t', boott, 205);
+run;
+
+proc sgplot data = tstat1;
+   density boott / type = normal (mu=0 sigma=1);
+   density boott / type = kernel;
+   refline -8.29 1.37 / axis = x;
+*   xaxis values = (-20 to 10 by 5);
+run;
+
+data p;  set p;
+   lower_boot_cl = &meany - boot_t_crit_u * &stderry ;
+   upper_boot_cl = &meany - boot_t_crit_l * &stderry ;  
+run;  
+proc print; 
+   title "Bootstrap Percentile t confidence interval for mean days lost"; 
+run;
+title;
+
+
+

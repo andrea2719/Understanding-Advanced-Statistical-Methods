@@ -1,0 +1,2593 @@
+## R Codes for figures in Understanding Advanced Statistical Methods, by Westfall and Henning. 
+
+## Suggestions to peter dot westfall at ttu dot edu for improved code greatly appreciated !
+
+## Many thanks to Marlen Roberts for writing many of these codes.
+
+
+## Figure 1.1 
+
+ x <- 0:400
+ y <- x/100
+ plot(x,y, type="l", xlab = "Distance (km)", ylab = "Time (hrs)", xaxs="i", yaxs="i", xlim=c(0,500), ylim=c(0,5))
+
+
+## Figure 1.4
+
+ seq(3.0, 3.2, by=.0005) -> t
+ p <- dnorm(t, mean = 3.1, sd = .03)
+ plot(t,p, type="l", xlab = "Hours taken to drive 310, km, y", ylab = "p(y)")
+ set.seed(14305)
+ y <- rnorm(30, 3.1, .03)
+ z <- rep(0,30) 
+ points(y,z)
+
+
+
+## Figure 1.5 
+
+ y <- 1:3
+ p <- c(.35, .40, .25)
+ plot(y,p, type = "h", lwd = 1, xaxt="n", yaxs = "i", xlim = c(.8, 3.2),  ylim = c(0,.45), ylab = "p(y)", xlab = "Color, y")  
+ axis(1, at = 1:3, lab=c("Red", "Gray", "Green")) 
+
+
+
+## Figure 1.6 
+
+ y <- 1:3
+ p <- c(.5, .2, .3)
+ plot(y,p, type = "h", lwd = 1, xaxt="n", yaxs = "i", xlim = c(.8, 3.2),  ylim = c(0,.55), ylab = "p(y)", xlab = "Color, y")  
+ axis(1, at = 1:3, lab=c("Red", "Gray", "Green")) 
+
+
+## Figure 1.7 
+
+ y <- 1:3
+ p <- c(.2, .4, .4)
+ plot(y,p, type = "h", lwd = 1, xaxt="n", yaxs = "i", xlim = c(.8, 3.2),  ylim = c(0,.45), ylab = "p(y)", xlab = "Color, y")  
+ axis(1, at = 1:3, lab=c("Red", "Gray", "Green")) 
+
+
+## A meager start on the analysis shown in Figure 1.18
+
+P0 = 23.32
+T = 250
+return = rnorm(T,0.001,.03)
+logP = log(P0) + cumsum(log(1+return))
+P = exp(logP)
+plot(P, type="l")
+points(P)
+
+
+## Figure 1.19 ##
+
+
+    S1 = ((54+ 2*rnorm(10000,0,1))< 50)*9
+    S2 = ((58+ 2*rnorm(10000,0,1))< 50)*3
+    S3 = ((56+ 2*rnorm(10000,0,1))< 50)*10
+    S4 = ((57+ 2*rnorm(10000,0,1))< 50)*6
+    S5 = ((43+ 2*rnorm(10000,0,1))< 50)*55
+    S6 = ((49+ 2*rnorm(10000,0,1))< 50)*9
+    S7 = ((42+ 2*rnorm(10000,0,1))< 50)*7
+    S8 = ((40+ 2*rnorm(10000,0,1))< 50)*3
+    S9 = ((46+ 2*rnorm(10000,0,1))< 50)*3
+    S10 = ((48+ 2*rnorm(10000,0,1))< 50)*27
+    S11 = ((54+ 2*rnorm(10000,0,1))< 50)*15
+    S12 = ((43+ 2*rnorm(10000,0,1))< 50)*4
+    S13 = ((59+ 2*rnorm(10000,0,1))< 50)*4
+    S14 = ((45+ 2*rnorm(10000,0,1))< 50)*21
+    S15 = ((54+ 2*rnorm(10000,0,1))< 50)*11
+    S16 = ((49+ 2*rnorm(10000,0,1))< 50)*7
+    S17 = ((56+ 2*rnorm(10000,0,1))< 50)*6
+    S18 = ((45+ 2*rnorm(10000,0,1))< 50)*8
+    S19 = ((41+ 2*rnorm(10000,0,1))< 50)*9
+    S20 = ((48+ 2*rnorm(10000,0,1))< 50)*4
+    S21 = ((41+ 2*rnorm(10000,0,1))< 50)*10
+    S22 = ((34+ 2*rnorm(10000,0,1))< 50)*12
+    S23 = ((47+ 2*rnorm(10000,0,1))< 50)*17
+    S24 = ((44+ 2*rnorm(10000,0,1))< 50)*10
+    S25 = ((52+ 2*rnorm(10000,0,1))< 50)*6
+    S26 = ((50+ 2*rnorm(10000,0,1))< 50)*11
+    S27 = ((52+ 2*rnorm(10000,0,1))< 50)*3
+    S28 = ((54+ 2*rnorm(10000,0,1))< 50)*5
+    S29 = ((48+ 2*rnorm(10000,0,1))< 50)*5
+    S30 = ((50+ 2*rnorm(10000,0,1))< 50)*4
+    S31 = ((44+ 2*rnorm(10000,0,1))< 50)*15
+    S32 = ((44+ 2*rnorm(10000,0,1))< 50)*5
+    S33 = ((41+ 2*rnorm(10000,0,1))< 50)*31
+    S34 = ((46+ 2*rnorm(10000,0,1))< 50)*15
+    S35 = ((53+ 2*rnorm(10000,0,1))< 50)*3
+    S36 = ((50+ 2*rnorm(10000,0,1))< 50)*20
+    S37 = ((47+ 2*rnorm(10000,0,1))< 50)*7
+    S38 = ((46+ 2*rnorm(10000,0,1))< 50)*7
+    S39 = ((48+ 2*rnorm(10000,0,1))< 50)*21
+    S40 = ((33+ 2*rnorm(10000,0,1))< 50)*4
+    S41 = ((53+ 2*rnorm(10000,0,1))< 50)*8
+    S42 = ((52+ 2*rnorm(10000,0,1))< 50)*3
+    S43 = ((51+ 2*rnorm(10000,0,1))< 50)*11
+    S44 = ((58+ 2*rnorm(10000,0,1))< 50)*34
+    S45 = ((61+ 2*rnorm(10000,0,1))< 50)*5
+    S46 = ((49+ 2*rnorm(10000,0,1))< 50)*3
+    S47 = ((51+ 2*rnorm(10000,0,1))< 50)*13
+    S48 = ((46+ 2*rnorm(10000,0,1))< 50)*11
+    S49 = ((42+ 2*rnorm(10000,0,1))< 50)*5
+    S50 = ((48+ 2*rnorm(10000,0,1))< 50)*10
+    S51 = ((60+ 2*rnorm(10000,0,1))< 50)*3
+
+tot   =    cbind(S1, S2, S3, S4, S5, S6, S7, S8, S9, S10,
+ +              S11,S12,S13,S14,S15,S16,S17,S18,S19,S20, 
+ +              S21,S22,S23,S24,S25,S26,S27,S28,S29,S30, 
+ +              S31,S32,S33,S34,S35,S36,S37,S38,S39,S40,
+ +              S41,S42,S43,S44,S45,S46,S47,S48,S49,S50,S51)
+total <- rowSums(tot)
+
+hist(total, xlab = "Electoral Total", main = "", xaxt="n", xlim = c(240,500))
+abline(v=270)
+axis(1, at = seq(240, 500, by=30), lab=seq(240, 500, by=30)) 
+
+
+
+## Figure 2.1 ##
+
+x1 <- seq(0, 10, by = .1)
+discrete1 <- rep(-1,101)
+plot(x1, discrete1, xlim=c(-.5,10.5), ylim=c(-2.2,0.5), yaxt="n", xlab = "Y", ylab="")
+
+x2 <- 0:10
+discrete2 <- rep(-2,11)
+points(x2, discrete2, pch = 22)
+
+continuous <- rep(0,101)
+points(x1, continuous, type="l")
+
+legend(5, .3, legend=c("Continuous", "Nearly continuous", "Discrete"), xjust = .5, yjust = .5, lty = c(1, -1,-1), pch = c(-1, 1, 22), merge=TRUE)
+
+
+## Figure 2.2 ##
+
+kg = 40:130
+prob = pchisq((kg-39+.5)/5, df = 7) - pchisq((kg-39-.5)/5, df = 7) 
+plot(kg,prob, type = "h", lwd = 1, yaxs = "i", xaxs = "i", xlim = c(40, 130),  ylim = c(0,.04), ylab = "p(y)", xlab = "Weight in kg, y") 
+
+x2 = 87:130
+y2 = pchisq((x2-39+.5)/5, df = 7) - pchisq((x2-39-.5)/5, df = 7) 
+x2 = c(86.7-.000001, 86.7,x2)
+y2l = 0
+y2u = pchisq((86.7-39+1/2)/5,df=7) - pchisq((86.7-39-1/2)/5,df=7)
+y2 = c(y2l, y2u,y2)
+
+col1 <- rgb(.2,.2,.2,.5)
+polygon(c(x2,rev(x2)), c(rep(0,length(y2)), rev(y2)), col=col1, border=NA)
+
+
+## Figure 2.3 ##
+
+kg = 85:90
+prob = pchisq((kg-39+.5)/5, df = 7) - pchisq((kg-39-.5)/5, df = 7) 
+plot(kg,prob, type = "h", lwd = 1, yaxs = "i", xlim = c(84.5, 90.5),  ylim = c(0,.02), ylab = "p(y)", xlab = "Weight in kg, y") 
+
+
+## Figure 2.4 ##
+
+kg = 85:90
+kg1 = 0:5 +.5
+prob = pchisq((kg-39+.5)/5, df = 7) - pchisq((kg-39-.5)/5, df = 7) 
+plot(kg1,prob, type = "n", lwd = 1, yaxs = "i", xlim = c(0, 6),  ylim = c(0,.02), ylab = "p(y)", xlab = "Weight in kg, y", xaxt="n") 
+barplot(height =prob,  add=TRUE, density = 0, space = 0)
+axis(1, at=kg1, labels = 85:90)
+
+
+## Figure 2.5 ##
+
+kg = 85.4
+kg = seq(kg, 86.6, 0.1)
+prob = pchisq((kg-39+.05)/5, df = 7) - pchisq((kg-39-.05)/5, df = 7) 
+plot(kg,prob, type = "h", lwd = 1, yaxs = "i", xlim = c(85.4, 86.6),  ylim = c(0,.002), ylab = "p(y)", xlab = "Weight in kg, y",  xaxt="n") 
+axis(1, at=kg, labels = kg)
+
+
+## Figure 2.6 ##
+
+kg = 85.4
+kg = seq(kg, 86.6, 0.1)
+kg1 = 0:12 +.5
+prob = pchisq((kg-39+.05)/5, df = 7) - pchisq((kg-39-.05)/5, df = 7) 
+plot(kg1,prob, type = "n", lwd = 1, yaxs = "i", xlim = c(0, 13),  ylim = c(0,.002), ylab = "not p(y)", xlab = "Weight in kg, y", xaxt="n") 
+barplot(height =prob,  add=TRUE, density = 0, space = 0)
+axis(1, at=kg1, labels = kg)
+
+
+## Figure 2.7 ##
+## Slightly different form from book #
+
+plot.new()
+plot.window(xlim=c(84.5, 90.5), ylim=c(0,.02))
+axis(1)
+axis(2)
+title(xlab="Weight (kg), y", ylab="p(y)")
+box()
+interleave <- function(v1,v2)
+{
+ord1 <- 2*(1:length(v1))-1
+ord2 <- 2*(1:length(v2))
+c(v1,v2)[order(c(ord1,ord2))]
+}
+
+w = seq(84.5, 90.5, by =1)
+prob = pchisq((w-39+1)/5, df=7) - pchisq((w-39)/5, df=7)
+prob1 = pchisq((w-39)/5, df=7) - pchisq((w-39-1)/5, df=7)
+prob2 = interleave(prob1, prob)
+w2 = rep(w, each=2)
+lines(w2,prob2, ylim=c(0,.02) )
+
+
+w = seq(84.5, 90.5, by =.1)
+prb =  pchisq((w-39+.1)/5, df=7)*10 - pchisq((w-39)/5, df=7)*10
+prb1 = pchisq((w-39)/5, df=7)*10 - pchisq((w-39-.1)/5, df=7)*10
+prb2 = interleave(prb1, prb)
+w2 = rep(w, each=2)
+lines(w2,prb2, ylim=c(0,.02))
+
+
+
+## Figure 2.8 ##
+
+kg = seq(40, 130, by=.1)
+prob = dchisq((kg-39)/5, df=7)/5
+plot(kg, prob, type="l", xlab = "Weight (in kg), y", ylab = "p(y)", yaxs="i", ylim = c(0, .04), yaxt="n")
+
+axis(2, at=c(0, .01, .017, .03, .04), labels=c(0, .01, .017, .03, .04))
+
+x1 = c(40,80)
+y1 =  dchisq((80-39)/5, df=7)/5
+y1 = c(y1,y1)
+points(x1,y1, type="l", lty="dotted")
+x2 = c(80,80)
+y2 =  dchisq((80-39)/5, df=7)/5
+y2 = c(0, y2)
+points(x2,y2, type="l", lty="dotted")
+
+
+
+## Figure 2.9 ##
+
+
+kg1 = seq(40, 130, by=.1)
+kg = kg1/1000
+prob = dchisq((kg1-39)/5, df=7)*1000/5
+plot(kg, prob, type="l", xlab = "Weight (in metric tons), y", ylab = "p(y)", yaxs="i", ylim = c(0, 40), yaxt="n")
+
+axis(2, at=c(0, 10, 17, 30, 40), labels=c(0, 10, 17, 30, 40))
+
+x1 = c(.040,.08)
+y1 =  dchisq((80-39)/5, df=7)*1000/5
+y1 = c(y1,y1)
+points(x1,y1, type="l", lty="dotted")
+x2 = c(.080,.080)
+y2 =  dchisq((80-39)/5, df=7)*1000/5
+y2 = c(0, y2)
+points(x2,y2, type="l", lty="dotted")
+
+
+
+## Figure 2.10 ##
+
+kg1 = seq(40, 130, by=.1)
+kg = kg1/1000
+prob = dchisq((kg1-39)/5, df=7)*1000/5
+plot(kg, prob, type="l", xlab = "Weight (in metric tons), y", ylab = "p(y)", yaxs="i", ylim = c(0, 40), yaxt="n")
+
+axis(2, at=c(0, 10, 17, 30, 40), labels=c(0, 10, 17, 30, 40))
+
+x1 = c(.075, .075, .085, .085)
+y1 =  dchisq((80-39)/5, df=7)*1000/5
+y1 = c(0, y1,y1,0)
+points(x1,y1, type="l")
+
+x2 = c(.075, .085)
+y2l = dchisq((75-39)/5, df=7)*1000/5
+y2u = dchisq((85-39)/5, df=7)*1000/5
+y2 = c(y2l, y2u)
+
+col1 <- rgb(.2,.2,.2,.5)
+polygon(c(x2,rev(x2)), c(rep(0,length(y2)), rev(y2)), col=col1, border=NA)
+
+
+
+## Figure 2.11 ##
+
+kg = seq(40,120, by = .1)
+prob = dchisq((kg-39)/5, df = 7)/5
+plot(kg,prob, type = "l", yaxs = "i", xlim = c(40, 120),  ylim = c(0,.04), ylab = "p(y)", xlab = "Weight in kg, y") 
+prob1 = dnorm(kg, 74, 18.71)
+points(kg,prob1, type = "l", lty="dashed") 
+
+
+## Figure 2.13 ##
+
+x = seq(0, 5, by=.01)
+f = 2 + x^2 - exp(.65*x)
+plot(x, f, type="l", xlab = "x", ylab = "f(x)", yaxs="i", xaxs="i", ylim = c(0, 7), xlim=c(0,5))
+abline(a=2.15309674101385, b=0.676852641836075, lty=2)
+x2 = 3.5
+y2 =   2 + x2**2 - exp(.65*x2)
+x2 = c(x2,x2)
+y2 = c(0, y2)
+points(x2, y2, type = "l", lty = 4)
+
+
+## Figure 2.14 ##
+
+x1 = seq(0,5, by=.01)
+d = 2*x1 - .65*exp(.65*x1)
+plot(x1, d, type="l", xlab = "x", ylab = "f'(x)", yaxs="i", xaxs="i", ylim = c(-6, 6), xlim=c(0,5))
+abline(a=0,b=0)
+x2 = c(0, 3.5, 3.5)
+y2 = c(.68, .68, -6)
+points(x2, y2, type="l", lty=2) 
+
+
+## Figure 2.15 ##
+
+x = seq(0, 5, by=.01)
+f = 2 + x^2 - exp(.65*x)
+plot(x, f, type="l", xlab = "x", ylab = "f(x)", yaxs="i", xaxs="i", ylim = c(0, 7), xlim=c(0,5))
+abline(a=2.15309674101385, b=0.676852641836075, lty=2)
+
+x_1 = 3.5 
+x_2 = 2.5 
+y_1 = 2 + x_1^2 - exp(.65*x_1)
+y_2 = 2 + x_2^2 - exp(.65*x_2)
+b = (y_2 - y_1)/(x_2 - x_1)
+a = y_1 - b*x_1
+abline(a=a, b=b, lty=3)
+
+x_3 = c(x_1,x_1)
+y_3 = c(0, y_1)
+points(x_3, y_3, type="l", lty=3)
+
+
+x_4 = c(x_2,x_2)
+y_4 = c(0, y_2)
+points(x_4, y_4, type="l", lty=3)
+
+
+## Figure 2.16 - could be prettied up slightly ##
+
+
+x = seq(2.5, 3.5, by=.001)
+f = 2 + x^2 - exp(.65*x)
+plot(x, f, type="l", xlab = "x", ylab = "f(x)", yaxs="i", ylim = c(3.0, 5.0), xlim=c(2.5,3.5))
+abline(a=2.15309674101385, b=0.676852641836075, lty=2)
+
+x_1 = 3.5 
+x_2 = 2.5 
+y_1 = 2 + x_1^2 - exp(.65*x_1)
+y_2 = 2 + x_2^2 - exp(.65*x_2)
+b = (y_2 - y_1)/(x_2 - x_1)
+a = y_1 - b*x_1
+abline(a=a, b=b, lty=3)
+
+x_3 = c(x_1,x_1)
+y_3 = c(0, y_1)
+points(x_3, y_3, type="l", lty=3)
+
+
+x_4 = c(x_2,x_2)
+y_4 = c(0, y_2)
+points(x_4, y_4, type="l", lty=3)
+
+
+x2 = 3.4
+y_1 = 2 + x_1^2 - exp(.65*x_1)
+y_2 = 2 + x2^2 - exp(.65*x2)
+b = (y_2 - y_1)/(x2 - x_1)
+a = y_1 - b*x_1
+abline(a=a, b=b, lty=3)
+
+x_5 = c(x2,x2)
+y_5 = c(0, y_2)
+points(x_5, y_5, type="l", lty=3)
+
+
+
+## Figure 2.17 ##
+
+x = c(3.2 , 5.6, 1.0 ,1.5)
+y = c(0, 0, 0 , 0)
+plot(x, y, xlim=c(0,6), ylim=c(-1,1), yaxt="n", xlab = "y", ylab="")
+abline(a=0, b=0)
+
+
+
+## Figure 2.18 ##
+
+x = seq(0,6, by=.1)
+f = (3.2- x)^2 + (5.6 -x)^2 +(1.0- x)^2 +(1.5-x)^2
+plot(x, f, type="l", xlab = "x", ylab = "sum of squares, f(x)", yaxs="i", ylim = c(0, 40), xlim=c(1,5))
+
+
+## Figure 2.19 ##
+
+kg = seq(40, 120, by=.1)
+prob = pchisq((kg-39)/5,df=7) 
+plot(kg, prob, type="l", xlab = "Weight (in kg), y", ylab = "P(y), the cdf", yaxs="i", ylim = c(0, 1), xlim=c(40,120))
+
+
+## Figure 2.20 ##
+
+kg = seq(75, 85, by=.1)
+prob = pchisq((kg-39)/5,df=7) 
+plot(kg, prob, type="l", xlab = "Weight (in kg), y", ylab = "P(y), the cdf", yaxs="i", ylim = c(0, 1), xlim=c(75,85), xaxt="n")
+axis(1, at=75:85, labels=75:85)
+
+
+## Figure 2.21 ##
+
+kg = seq(75, 85, by=.1)
+prob = dchisq((kg-39)/5, df=7)/5
+plot(kg, prob, type="l", xlab = "Weight (kg), y", ylab = "p(y)", yaxs="i", ylim = c(0, .04), yaxt="n", xaxt="n")
+
+axis(2, at=seq(0,.04,by=.01), labels=seq(0,.04,by=.01))
+axis(1, at=75:85, labels=75:85)
+
+
+x1 = c(79, 79,80, 80)
+y1 =  dchisq((80-39)/5, df=7)/5
+y1 = c(0, y1,y1,0)
+points(x1,y1, type="l")
+
+
+x2 = c(79, 80)
+y2l = dchisq((79-39)/5, df=7)/5
+y2u = dchisq((80-39)/5, df=7)/5
+y2 = c(y2l, y2u)
+
+col1 <- rgb(.2,.2,.2,.5)
+polygon(c(x2,rev(x2)), c(rep(0,length(y2)), rev(y2)), col=col1, border=NA)
+
+
+## Figure 2.22 ##
+
+ y = seq(0, 100, by = .1)
+ p = .0002*y
+ plot(y, p, type="l", xlab = "y", ylab = "p(y)",  ylim = c(0, .02),  xlim = c(0, 120), xaxt="n")
+ axis(1, at=seq(0,120,by=20), labels=seq(0,120,by=20))
+
+ abline(a=0, b=0)
+ points(c(100,100), c(0,.02), type="l", lty=3)
+ 
+
+## Figure 2.23 ##
+
+ y = seq(0, 10, by = .1)
+ p = .5*exp(-.5*y)
+ plot(y, p, type="l", xlab = "y", ylab = "p(y)",  ylim = c(0, .5), yaxs="i",xaxs="i", xlim = c(0, 10), xaxt="n")
+ axis(1, at=0:10, labels=0:10)
+
+
+## Exercise 2.11A ##
+
+y = 2:12
+p = c(1, 2, 3, 4, 5, 6, 5, 4, 3, 2, 1)
+p = p/36
+plot(y,p, type = "h", lwd = 1, xaxt="n", yaxs = "i", xlim = c(2, 12),  ylim = c(0,.20), ylab = "p(y)", xlab = "y")  
+axis(1, at = 2:12, lab=2:12) 
+
+
+## Exercise 2.11B ##
+
+y1 = exp(1)/2
+y2 = exp(1)
+y3 = 2*exp(1)
+y = c(y1, y2, y3)
+p1 = .48
+p2 = .5
+p3 = .02
+p = c(p1,p2,p3)
+plot(y,p, type = "h", lwd = 1, xaxt="n", yaxs = "i", xlim = c(0, 8.15),  ylim = c(0,.60), ylab = "p(y)", xlab = "y")  
+axis(1, at = seq(0, 8.154845485, by= 1.359140914), lab=c(0, 1.36, 2.72, 4.08, 5.44, 6.88, 8.15)) 
+
+
+## Exercise 2.11C ##
+
+y = seq(0,1,by=.01)
+p = dbeta(y,10,10)
+plot(y, p, type="l", xlab = "y", ylab = "p(y)",  ylim = c(0, 4), yaxs="i",xaxs="i", xlim = c(0, 1), xaxt="n")
+axis(1, at=seq(0,1,by=.2), labels=seq(0,1,by=.2))
+
+
+## Exercise 2.11D ##
+
+y = seq(100,200,by=.1)
+p = dnorm(y,135,10)
+plot(y, p, type="l", xlab = "y", ylab = "p(y)",  ylim = c(0, .04), yaxs="i",xaxs="i", xlim = c(100, 200), xaxt="n")
+axis(1, at=seq(100,200,by=20), labels=seq(100,200,by=20))
+
+
+## Figure 3.1 ##
+
+y1 = seq(  0.0, 100, by=.1)
+y2 = seq(101.1, 110, by=.1)
+prob1 = .0001*y1^2
+prob2 = y2^0
+y = c(y1,y2)
+prob = c(prob1,prob2)
+plot(y,prob, type="l", xaxt="n", xlab="y", yaxt="n", ylab="p = P(y)")
+axis(1, at=c(0, 50, 85.5, 100), labels =c(0, 50, 85.5, 100))
+axis(2, at=c(0, .5, .731, 1), labels =c(0, .5, .731, 1))
+u = c(.731, .382, .101, .596, .899, .885, .958, .014, .407, .863)
+x = u^0 -1
+points(x,u)
+
+
+x0 = c(85.5, 61.8, 31.8, 77.2, 94.8, 94.1, 97.9, 11.8, 63.8, 92.9)
+u = x0^0-1 
+points(x0,u)
+x3 = c(0, 85.5, 85.5)
+y3 = c(.731, .731, 0)
+lines(x3,y3)
+
+
+## Figure 3.2 ##
+
+plot(c(0,1),c(1,1),type="l", xaxt="n", ylim = c(0,1), ylab="Uniform (0,1) pdf", xlab="Uniform(0,1) Random Number")
+axis(1, at=c(0 , .35 ,.5 ,.75, 1), labels = c(0 , .35 , .5 , .75 , 1))
+lines(c(0,0),c(0,1),lty=3)
+lines(c(.35,.35),c(0,1),lty=3)
+lines(c(.75,.75),c(0,1),lty=3)
+lines(c(1,1),c(0,1),lty=3)
+ 
+x4 = c(0.731,0.382, 0.101, 0.596, 0.899, 0.885, 0.958, 0.014, 0.407, 0.863)
+y4 = x4^0 - 1
+points(x4,y4,pch="X")
+lines(c(0,1), c(0,0))
+text(x=.175, y=.5, labels=c("Red")) 
+text(x=.55, y=.5, labels=c("Gray")) 
+text(x=.875, y=.5, labels=c("Green")) 
+
+
+## Figure 4.1 ##
+
+plot.new()
+plot.window(xlim = c(0,10), ylim = c(0,10))
+lines(c(2,2), c(0,6))
+lines(c(3,3), c(0,6))
+lines(c(0,2), c(6,6))
+lines(c(3,9), c(6,6))
+lines(c(0, 9), c(7,7))
+text(x=3.5, y = 5.7, labels = c("Bush"))
+text(x=9.5, y = 6.5, labels = c("Stoplight"))
+arrows(x0 = 3, y0 = 6.5, x1 = 5, y1 = 6.5, length = .1)
+
+
+## Figure 4.2 ##
+
+plot(c(0,2), c(.5,.5), type="l", ylim = c(0,.6), ylab="p(y)", xlab="Time light stays green, y")
+
+
+## Figure 4.3 ##
+
+time = seq(0,5,by=.01)
+p1 = dgamma(time, shape = 1.0 , scale = 1.0)
+p2 = dgamma(time, shape = 1.2 , scale = 1.0)
+p3 = dgamma(time, shape = 1.0 , scale = 0.7)
+p4 = dgamma(time, shape = 1.7 , scale = 1.6)
+
+plot(time, p1 ,type="l", ylim = c(0,1.5), ylab="p(y)", xlab="Time waiting for an answer, y")
+lines(time, p2 ,type="l")
+lines(time, p3 ,type="l")
+lines(time, p4 ,type="l")
+
+points(c(.3,2.3,1.0,0.1,3.9,0.8), c(0,0,0,0,0,0))
+
+
+## Figure 4.4 ##
+
+time = seq(0, 20, by = .01)
+p1 = dnorm(time, 10,2)
+p2 = dnorm(time, 12, 1.4)
+p3 = dnorm(time, 8, .7)
+p4 = dchisq(time, df=10)
+
+plot(time, p1 ,type="l",  ylab="p(y)", ylim = c(0,.6), xlab="Time waiting for an answer, y")
+lines(time, p2 ,type="l")
+lines(time, p3 ,type="l")
+lines(time, p4 ,type="l")
+
+points(c(.3,2.3,1.0,0.1,3.9,0.8), c(0,0,0,0,0,0))
+
+
+## Figure 4.5 ##
+
+plot(c(.3,2.3,1.0,0.1,3.9,0.8), c(0,0,0,0,0,0), ylim = c(0,.8), ylab="Estimated p(y)", xlab="y", xaxt="n") 
+axis(1,at=seq(0,4, by=.5), labels = c("0.0", "0.5","1.0","1.5","2.0","2.5","3.0","3.5","4.0"))
+yvals = c(0,2,2, 1, 1, 0,0, 1,1, 0,0,1,1,0)
+yvals = yvals/3
+lines(c(0,0,.5,.5,1.5,1.5,2,2,2.5,2.5,3.5,3.5,4,4), yvals)
+
+points(c(.3,2.3,1.0,0.1,3.9,0.8), c(0,0,0,0,0,0))
+
+
+## Figure 4.6 ##
+
+Time = 1.2*rexp(1000,rate=1)
+hist(Time, breaks=seq(-.3,12.3,by=.6))
+
+
+## Figure 4.7 ##
+
+Time = 1.2*rexp(1000,rate=1)
+hist(Time)
+
+
+## Figure 4.8 ##
+
+data = read.csv("http://westfall.ba.ttu.edu/ISQS5347/djia1.csv") 
+Return = data$return
+hist(Return,breaks=50,freq=FALSE, density=25)
+points(sort(Return), dnorm(sort(Return),mean(Return),sd(Return)), type="l")
+
+
+## Figure 4.9  ##
+
+qqnorm(Return)
+qqline(Return)
+
+
+## Figure 4.10 ##
+
+y = c(.3,2.3,1.0,0.1,3.9,0.8)
+y1 = sort(y)
+i = 1:6
+p = (i-.5)/6
+q = qnorm(p, mean(y), sd(y))
+plot(q,y1,xlab="Theoretical normal quantile", ylab = "Data quantile", xlim = c(-1,4), ylim=c(-1,4))
+abline(a=0, b=1)
+
+
+## Figure 4.11 ##
+
+set.seed(121211)
+r = rnorm(18834,.00017076, .01121524)
+qqnorm(r, main="")
+qqline(r)
+
+
+## Figure 4.12 ##
+
+set.seed(821261)
+r = rnorm(18834,.00017076, .01121524)
+qqnorm(r, main="")
+qqline(r)
+
+
+## Figure 5.1 - slightly different format ##
+
+colchoice = matrix(c(0.505003331, 0.340112918, 0.204940675, 0.200530233, 0.299968561, 0.401465077, 0.294466436, 0.359918521, 0.393594247), nrow = 3, ncol=3, byrow=TRUE, dimnames = list(c("Red","Gray", "Green"), c(20, 40, 60)))
+barplot(colchoice,beside=TRUE, legend=rownames(colchoice), xlab="Age (years)", ylab="p(y)")
+
+## Figure 5.2 ##
+
+data = read.table("C://Rdata/color_cont.txt")
+age=data$V1
+Red = data$V2
+Gray = data$V3
+Green = data$V4
+plot(age, Red, type="l", ylim = c(0,1), ylab = "p(y|age = x)", xlab = "Age, or x", yaxs="i")
+points(age, Gray, type="l", lty = "dashed")
+points(age, Green, type="l", lty = "dotdash")
+lines(c(20,20), c(0,1))
+lines(c(40,40), c(0,1))
+lines(c(60,60), c(0,1))
+
+
+## Figure 5.3 ##
+
+y = seq(0, 40, by = .1)
+Income100 = dlnorm(y, meanlog = log(.15*100), sdlog = .4)
+Income110 = dlnorm(y, meanlog = log(.15*110), sdlog = .4)
+Income120 = dlnorm(y, meanlog = log(.15*120), sdlog = .4)
+plot(y, Income100, type = "l", ylim =c(0, .08), yaxs="i",ylab="p(y|x)",xlab="Annual housing expense, y (in thousands of dollars)")
+points(y, Income110, type= "l", lty = "dashed")
+points(y, Income120, type= "l", lty = "dotdash")
+legend(33, .055, legend=c("Income 100", "Income 110", "Income 120"), xjust = .5, yjust = .5, lty = c("solid", "dashed","dotdash"))
+
+
+## Figure 5.4
+
+Income        = rnorm(1000, 80, 15)
+House_Expense = exp(rnorm(1000, log(.18*Income), .4))
+par(mfrow=c(2,1))
+hist(House_Expense[Income<=60], freq=FALSE, xlab="House Expense, Given Income <= 60", xlim=c(0,50),ylim = c(0,.15), main="")
+hist(House_Expense[Income>=80], freq=FALSE, xlab="House Expense, Given Income >= 80", xlim=c(0,50), ylim=c(0,.15), main="")
+
+
+
+## Figure 5.5 ##
+
+dow = read.csv("http://westfall.ba.ttu.edu/ISQS5347/djia1.csv")
+n = length(dow$return)
+dow$yest_ret = c(NA, dow$return[1:(n-1)])
+dow$yesterday = ifelse(dow$yest_ret <= 0, "Down", "Up")
+par(mfrow=c(2,1))
+hist(dow$return[dow$yesterday=="Down"],breaks=seq(-.30, .20,.01), freq=FALSE, xlim=c(-.10,.10), xlab="Today's Return, Given Yesterday Was Down", main="")
+hist(dow$return[dow$yesterday=="Up"],breaks=seq(-.30, .20,.01), freq=FALSE, xlim=c(-.10,.10), xlab="Today's Return, Given Yesterday Was Up", main="")
+
+
+## Figure 5.6 ##
+
+dow = read.csv("http://westfall.ba.ttu.edu/ISQS5347/djia1.csv")
+n = length(dow$return)
+dow$yest_ret = c(NA, dow$return[1:(n-1)])
+dow$yesterday1 = ifelse(dow$yest_ret <= -.01, "WayDown", ifelse(dow$yest_ret <.01, NA, "WayUp"))
+par(mfrow=c(2,1))
+hist(dow$return[dow$yesterday1=="WayDown"],breaks=seq(-.30, .20,.01), freq=FALSE, xlim=c(-.10,.10), xlab="Today's Return, Given Yesterday Was Way Down", main="")
+hist(dow$return[dow$yesterday1=="WayUp"],breaks=seq(-.30, .20,.01), freq=FALSE, xlim=c(-.10,.10), xlab="Today's Return, Given Yesterday Was Way Up", main="")
+
+
+##  Figure 5.7, or pretty close to it ##
+
+library(lattice) 
+library(reshape) 
+dataset.frame = read.csv("http://westfall.ba.ttu.edu/ISQS5347/surv1.csv")
+dataset.table = table(dataset.frame)
+dataset.melt = melt(dataset.table,measure.vars=levels(dataset.frame$BarbBush), id.vars=dataset.frame$GeorgeHWBush) 
+barchart(BarbBush~value|GeorgeHWBush,dataset.melt,layout=c(1,5), stack=TRUE, groups=GeorgeHWBush, xlab="Frequency")
+
+
+## Figure 5.7, alternative native approach ##
+
+bush <- read.csv("http://westfall.ba.ttu.edu/ISQS5347/surv1.csv")
+counts <- table(bush)
+Barb.cond <-prop.table(counts, margin=2)
+par(mfrow=c(5,1),mar = rep(2, 4))
+barplot(Barb.cond[,1],ylim=c(0,.6), xlab="Barbara Bush Rating when George=1")
+barplot(Barb.cond[,2],ylim=c(0,.6), xlab="Barbara Bush Rating when George=2")
+barplot(Barb.cond[,3],ylim=c(0,.6), xlab="Barbara Bush Rating when George=3")
+barplot(Barb.cond[,4],ylim=c(0,.6), xlab="Barbara Bush Rating when George=4")
+barplot(Barb.cond[,5],ylim=c(0,.6), xlab="Barbara Bush Rating when George=5") 
+
+
+
+
+## Figure 5.8  ##
+
+
+set.seed(14345)
+Barb = sample(1:5, 33, c(6,5,7,10,5)/33, replace=T)
+GHWB = sample(1:5, 33, c(6,3,7,12,5)/33, replace=T)
+sim.bush = data.frame(Barb, GHWB)
+
+counts <- table(sim.bush)
+Barb.cond <-prop.table(counts, margin=2)
+par(mfrow=c(5,1), mar = rep(2, 4))
+barplot(Barb.cond[,1],ylim=c(0,.6), main="Simulated B. Bush Ratings Distributions")
+text(x=3, y = .55, labels = c("GHWB=1"))
+barplot(Barb.cond[,2],ylim=c(0,.6))
+text(x=3, y = .55, labels = c("GHWB=2"))
+barplot(Barb.cond[,3],ylim=c(0,.6))
+text(x=3, y = .55, labels = c("GHWB=3"))
+barplot(Barb.cond[,4],ylim=c(0,.6))
+text(x=3, y = .55, labels = c("GHWB=4"))
+barplot(Barb.cond[,5],ylim=c(0,.6)) 
+text(x=3, y = .55, labels = c("GHWB=5"))
+
+
+
+## Figure 7.6
+
+plot.new()
+plot.window(xlim = c(0,10), ylim = c(0,10))
+rect(.5,4,2.5,6)
+text(1.5,5,"Population")
+arrows(2.5,5,4,5)
+rect(4,3,6.5,7)
+text(5.25,6,"Randomly")
+text(5.25,5,"select items,")
+text(5.25,4,"measure")
+arrows(6.5,5,7.5,5)
+rect(7.5,4,10,6)
+text(8.75,5.5,"Results of the")
+text(8.75,4.5,"measurements")
+
+
+
+## Figure 7.7
+
+mult.samples = replicate(1000, sample(1:999, 100))
+M = colMeans(mult.samples)
+hist(M, xlim = c(0,1000),ylim=c(0,.016),xaxt="n",freq=FALSE,xlab="Average of 100 randomly selected items", main="")
+axis(1, at   = seq(0,1000,100))
+abline(v=500)
+
+
+## Figure 7.8
+
+Value = c(321.20, 322.00, 322.34)
+Electronics = c(0,1,0)
+Furniture = c(1,0,1)
+plot(Value, Electronics, type="l",  ylab="p(y|Value)")
+points(Value, Furniture, type="l", lty=2) 
+legend(321.45, .94, legend=c("Electronics", "Furniture"), lty=c(1,2))
+
+
+## Figure 7.9
+
+Value = c(321.20, 322.00, 322.34)
+Electronics = c(.34,.33,.323)
+Furniture = c(.66,.67,.677)
+plot(Value, Electronics, type="l", ylim = c(0,1), ylab="p(y|Value)")
+points(Value, Furniture, type="l", lty=2) 
+legend(321.45, .94, legend=c("Electronics", "Furniture"), lty=c(1,2))
+
+## Figure 7.11
+
+ y1 = 1:999
+ y = y1 + rnorm(999, 50,50)
+ mult.samples = replicate(1000, sample(1:999, 100))
+ mult.samples = replicate(1000, sample(y, 100))
+ M = colMeans(mult.samples)
+ hist(M, xlim = c(0,1000),ylim=c(0,.016),xaxt="n",freq=FALSE,xlab="Average of 100 randomly selected items", main="")
+ axis(1, at   = seq(0,1000,100))
+ abline(v=500)
+
+
+## Figure 7.12
+
+n = rbinom(10000, 5000,.10)
+y = rbinom(10000, n, .5)/n
+hist(y, xlim=c(0,1), freq=FALSE, xlab="Proportion in sample who live in apartment", main="")
+abline(v=.4)
+
+
+## Figure 7.13
+
+t = 2:12
+pt = c(1,2,3,4,5,6,5,4,3,2,1)/36
+plot(t,pt,type="h", ylim = c(0,.2), ylab="p(y)", xlab = "Total of two dice, y", yaxs="i")
+
+
+## Figure 7.14
+
+t=7:12
+pt = rep(1/6,6)
+plot(t,pt,type="h", ylim = c(0,.2), ylab="p(y)", xlab = "Total of two dice, y", yaxs="i", xlim = c(2,12))
+
+
+## Figure 7.15
+  
+House = c("Apartment", "House")
+par(mfrow=c(3,1))
+par(mar=c(1,4,1,1))
+barplot(c(60,40), ylab = "%",ylim=c(0,90))
+text(1.2, 70, "Time=1")
+barplot(c(50,50), ylab = "%",ylim=c(0,90))
+text(1.2, 70, "Time=2")
+par(mar=c(4,4,1,1))
+barplot(c(30,70), names.arg=House,ylab = "%",ylim=c(0,90))
+text(1.2, 70, "Time=3")
+
+
+
+## Figure 7.16
+
+nclus = rpois(25,4)
+clus.mean = rnorm(25,70,10) 
+n = sum(nclus)
+y = 1:n
+a=0
+
+for(i in 1:25) {
+     for(j in 1:nclus[i]) 
+     { a = a+1
+       y[a] = clus.mean[i] + rnorm(1,0,1)} }
+ 
+plot(y, xlab="Observation, i", ylab=expression("y"[i]) )
+
+
+
+## Figure 7.17
+
+d = read.csv("http://westfall.ba.ttu.edu/ISQS5347/djia2011.csv") 
+i = 1:length(d$DJI)
+plot(i, d$DJI, xlab = "Trading Day", ylab = "Index", main="2011 Dow Jones")
+points(i, d$DJI, type="l")
+
+
+## Figure 7.18
+
+d = read.csv("http://westfall.ba.ttu.edu/ISQS5347/djia2011.csv") 
+n = length(d$DJI)
+d$yest = c(NA, d$DJI[1:(n-1)])
+plot(d$yest, d$DJI, xlab = "Yesterday's Dow Jones", ylab = "Today's Dow Jones")
+
+
+## Figure 7.19
+
+d = read.csv("http://westfall.ba.ttu.edu/ISQS5347/djia2011.csv") 
+n = length(d$DJI)
+d$yest = c(NA, d$DJI[1:(n-1)])
+yesterday.low = subset(d, yest < 11750)
+yesterday.high =subset(d, yest >= 11750) 
+par(mfrow=c(2,1))
+hist(yesterday.high$DJI, freq=F, xlim = c(10500,13000))
+hist(yesterday.low$DJI, freq=F, xlim = c(10500,13000))
+
+
+
+
+## Figure 7.24 ##
+
+chip = c(311, 304, 316,308, 312, 308, 314, 307, 302, 311, 308, 300, 316, 304, 316, 306, 314, 310, 311, 309, 311, 306, 311, 309, 311, 305, 304, 303, 307, 316)
+t = 1:length(chip)
+plot(t, chip, xlab="Observation number", ylab="Chip width")
+points(t,chip, type="l")
+
+
+
+## Figure 8.3 ##
+
+t = seq(0, 12,.1)
+prob2 = .5*exp(-.5*t)
+plot(t, prob2, type="l", lty="dashed", yaxs="i", xaxs="i", xlab="Waiting Time, y (in minutes)", ylab="p(y)")
+
+x = c(0, 0, 2, 2, 4, 4, 6, 6, 8, 8, 10, 10, 12, 12)
+y = c(0, .5*exp(-.5*1), .5*exp(-.5*1), .5*exp(-.5*3), .5*exp(-.5*3), .5*exp(-.5*5), .5*exp(-.5*5), .5*exp(-.5*7),.5*exp(-.5*7),.5*exp(-.5*9),.5*exp(-.5*9),.5*exp(-.5*11),.5*exp(-.5*11),0 )
+polygon(x,y)
+
+
+## Figure 8.4
+
+dice = floor(6*runif(200000)) + 1
+rave = cumsum(dice)/(1:200000)
+plot(rave, type="l", xlab="n", ylab="Average of first n dice rolls", log="x", ylim=c(1,6))
+abline(h=3.5, lty="dotted")
+
+
+## Figure 8.5
+
+bern = ifelse(runif(200000) <.3, 1,0)
+rave = cumsum(bern)/(1:200000)
+plot(rave, type="l", xlab="n", ylab="Average of first n Bernoulli(0.3)", log="x", ylim=c(0,1))
+abline(h=0.3, lty="dotted")
+
+
+
+## Figure 8.6
+
+norm = rnorm(200000, 70, 15)
+rave = cumsum(norm)/(1:200000)
+plot(rave, type="l", xlab="n", ylab="Average of first n Normal(70, 15^2)", log="x", ylim=c(50,90))
+abline(h=70, lty="dotted")
+
+
+## Figure 8.7
+
+rexp = rexp(200000, 0.5)
+rave = cumsum(rexp)/(1:200000)
+plot(rave, type="l", xlab="n", ylab="Average of first n exp(0.5)", log="x", ylim=c(0,6))
+abline(h=2, lty="dotted")
+
+
+## Figure 8.8
+
+ru = runif(200000,0,2)
+rave = cumsum(ru)/(1:200000)
+plot(rave, type="l", xlab="n", ylab="Average of first n U(0,2)", log="x", ylim=c(0,2))
+abline(h=1, lty="dotted")
+
+
+
+## Figure 8.9
+
+dice = 2 + floor(6*runif(200000)) + 1
+rave = cumsum(dice)/(1:200000)
+plot(rave, type="l", xlab="n", ylab="Average of first n dependent dice", log="x", ylim=c(2,12))
+abline(h=7, lty="dotted")
+
+
+
+## Figure 8.10, 8.11
+
+inf = 2/runif(200000,0,2)
+rave = cumsum(inf)/(1:200000)
+plot(rave, type="l", xlab="n", ylab="Average of first n 2/U(0,2)", log="x")
+
+
+## Figure 8.12
+
+y = seq(40,100,.1)
+p_y = dnorm(y, 70,10)
+ry = rnorm(15, 70,10)
+h = rep(1/15,15)
+plot(y, p_y, type="l", xlab="y", ylab="p(y), p-hat(y)", yaxs="i", ylim=c(0,.10))
+points(ry,h, type="h")
+
+
+
+## Figure 9.1
+
+y = 1:6
+p_y = rep(1/6,6)
+y1 = c(0,1,4,9)
+p_y1 = c(1/6, 1/3,1/3,1/6)
+par (mfrow=c(1,2))
+plot(y, p_y, type="h", xlim = c(0,9), ylim = c(0,.4), yaxs="i", xlab = "Original y", ylab="Probability")
+plot(y1, p_y1, type="h", xlim = c(0,9), ylim = c(0,.4), yaxs="i", xlab = "Transformed y", ylab="Probability")
+
+
+
+## Figure 9.4
+
+x = seq(-1.5, 2.5, .01)
+f_x = exp(x)
+x1 = seq(.8, 2.2, .1)
+l1_x =  exp(1.5) - 1.5*exp(1.5) + exp(1.5)*x1
+x2 = seq(-1.5, .5, .1)
+l2_x = exp(-.5) - (-.5)*exp(-.5) + exp(-.5)*x2
+plot(x, f_x, type="l", ylab="f(x)")
+points(x1, l1_x, type="l", lty="dotted")
+points(x2, l2_x, type="l", lty="dotted")
+points(c(-.5,1.5), c(exp(-.5),exp(1.5)))
+
+
+
+## Figure 9.5
+
+x = seq(0, 2.5, .01)
+f_x = x^.5
+b1 = .5*(.3)^(-.5)
+a1 = .3**.5 - b1*.3
+x1 = seq(0, .6, .1)
+l1_x =  a1 + b1*x1
+
+b2 = .5*(1.5)^(-.5)
+a2 = 1.5^.5 - b2*1.5
+x2 = seq(.7, 2.7, .1)
+l2_x =  a2 + b2*x2
+plot(x, f_x, type="l", ylab="f(x)")
+points(x1, l1_x, type="l", lty="dotted")
+points(x2, l2_x, type="l", lty="dotted")
+points(c(.3,1.5),c(.3^.5, 1.5^.5))
+
+
+## Figure 9.6
+
+x = seq(-3, 3, .01)
+f_x = exp(-x^2/2)
+b1= exp(-.5^2/2)*(.5)
+a1 = exp(-.5^2/2) - b1*(-.5) 
+x1 = seq(-.95,-.05,.01)
+l1_x = a1 + b1*x1 
+b2 = exp(-1.5^2/2)*(-1.5)
+a2 = exp(-1.5^2/2) - b2*(1.5)
+x2 = seq(1.05, 1.95,.01)
+l2_x = a2 + b2*x2
+
+plot(x, f_x, type="l", ylab="f(y)", xlab="y", yaxs="i", xlim = c(-2,2), xaxt="n", ylim = c(0,1.1))
+axis(1, at = c(-2,-1,-.5,0,1,1.5,2)) 
+points(x1, l1_x, type="l", lty="dotted")
+points(x2, l2_x, type="l", lty="dotted")
+points(c(-.5,1.5),c(exp(-.5^2/2), exp(-1.5^2/2)))
+points(c(-1,1),c(exp(-1^2/2), exp(-1^2/2)), type="h")
+points(c(-.5,1.5),c(exp(-.5^2/2), exp(-1.5^2/2)), type="h", lty="dotted")
+
+
+## Figure 9.7
+
+y = seq(1, 6, .01)
+t = (y-3)^2
+y1 = 1:6
+t1 = c(4, 1, 0, 1, 4, 9)
+plot(y, t, type ="l" , xaxt="n", yaxt="n", xlab="y", ylab="f(y)", xlim= c(0,6))
+axis(1, at = c(0,1,2,3,3.5, 4,5,6), labels=c("0", "1", "2", "3", "E(Y)", "4", "5", "6")) 
+axis(2, at=c(0,1,4,9))
+points(y1, t1)
+abline(v=3.5)
+abline(h=.25)
+abline(h=3.167)
+text(5.5, 2.9, "E{f(Y)} = 3.167")
+text(5.5, .55, "f{E(Y)} = 0.25")
+
+
+
+## Figure 9.8
+
+y = seq(1, 6, .01)
+t = log(y)
+y1 = 1:6
+t1 = log(y1)
+plot(y, t, type ="l" , xaxt="n", yaxt="n", xlab="y", ylab="f(y)", xlim= c(0,6))
+axis(1, at = c(0,1,2,3,3.5, 4,5,6), labels=c("0", "1", "2", "3", "E(Y)", "4", "5", "6")) 
+axis(2, at=c(0,.5,1,1.5))
+points(y1, t1)
+abline(v=3.5)
+abline(h=1.253)
+abline(h=1.097)
+text(5.5, 1, "E{f(Y)} = 1.097")
+text(5.5, 1.35, "f{E(Y)} = 1.253")
+
+
+## Figure 9.9
+
+y = seq(-6,5,.001)
+Earnings = 100+50*y
+p_y  = (.8*dnorm(y , .5,1) +.2*dnorm(y, -2, 2))/50
+x1 = 100 
+p_y1 = (.8*dnorm( (x1 -100)/50 , .5,1) +.2*dnorm((x1 - 100)/50 , -2, 2))/50 
+par (mfrow=c(2,1))
+plot(Earnings, p_y, type="l", xlab = "Earnings, Safe Investment", ylab="p(y)", yaxs="i", xlim=c(-1000,1000), ylim = c(0,.008))
+points(x1,p_y1, type="h")
+
+
+Earnings = 100 + 200*y;
+p_y = (.8*dnorm(y , .5,1) +.2*dnorm(y, -2, 2))/200
+x1 = 100 
+p_y1 = (.8*dnorm( (x1 -100)/200 , .5,1) +.2*dnorm((x1 - 100)/200, -2, 2))/200 
+plot(Earnings, p_y, type="l", xlab = "Earnings, Risky Investment", ylab="p(y)", yaxs="i", xlim = c(-1000,1000), ylim=c(0,.002))
+points(x1,p_y1, type="h")
+
+
+
+## Figure 9.10
+
+y = seq(-6,4,.001)
+Earnings = 100+200*y
+p_y  = (.8*dnorm(y , .5,1) +.2*dnorm(y, -2, 2))/200
+x1 = c(100, -222.5, 422.5) 
+p_y1 = (.8*dnorm( (x1 -100)/200 , .5,1) +.2*dnorm((x1 - 100)/200 , -2, 2))/200 
+
+
+plot(Earnings, p_y, type="l", xlab = "Earnings (y)", ylab="p(y)", yaxs="i", xlim=c(-1000,1000), ylim = c(0,.002))
+points(x1,p_y1, type="h", lty="dashed")
+text(-222.5, 0.00005, "E(Y) - 322.5")
+text(100, 0.00005, "E(Y)")
+text(422.5, 0.00005, "E(Y) + 322.5")
+
+
+
+## Figure 9.11
+
+y = seq(0,2,.01)
+p_y = rep(.5, length(y))
+x1 = c(.5,1,1.5)
+y1 = c(.5,.5,.5)
+
+plot(y, p_y, type="l", xlab="Time Until Green, y", ylab = "p(y)", ylim = c(0,.6), yaxs="i")
+points(x1,y1,type="h", lty="dashed")
+
+text(.5, 0.02, "E(Y) - MAD")
+text(1, 0.02, "E(Y)")
+text(1.5, 0.02, "E(Y) + MAD")
+
+
+## Figure 9.12
+
+y = seq(30, 110,.1)
+p_y= dnorm(y, 70,10)
+y1 = c(40,50,60,80,90,100)
+p1 = dnorm(y1,70,10) 
+
+plot(y, p_y, type="l", xlab="y", ylab="p(y)" )
+points(y1, p1, type="h", lty="dashed")
+
+
+
+## Figure 9.13
+
+b = 0:20
+p_y = dbinom(b,20,18/38)
+ye = -200 +20*b
+yi = 20*b
+par(mfrow=c(2,1))
+plot(ye,p_y, type="h", xlim=c(-200,400), xlab="Earnings" , ylab="probability")
+plot(yi,p_y, type="h", xlim=c(-200,400), xlab="Money in pocket", ylab="probability")
+
+
+## Figure 9.14
+
+y = seq(.1, 99.9, .1)
+x = y/100
+p11 = dbeta(x, 16,3)/100
+p21 = dbeta(x, 3, 1.5)/100
+p31 = dbeta(x, 1.5, .8)/100
+
+p12 = dbeta(x, 7,7)/100
+p22 = dbeta(x, 2, 2)/100
+p32 = dbeta(x, .7,.7)/100
+
+p13 = dbeta(x, 3,16)/100
+p23 = dbeta(x, 1.5, 3)/100
+p33 = dbeta(x, .8, 1.5)/100
+ 
+par(mfrow=c(3,3))
+ 
+plot(y,p11, type = "l", xlab = "y", ylab="p(y)")
+plot(y,p12, type = "l", xlab = "y", ylab="p(y)")
+plot(y,p13, type = "l", xlab = "y", ylab="p(y)")
+plot(y,p21, type = "l", xlab = "y", ylab="p(y)")
+plot(y,p22, type = "l", xlab = "y", ylab="p(y)")
+plot(y,p23, type = "l", xlab = "y", ylab="p(y)")
+plot(y,p31, type = "l", xlab = "y", ylab="p(y)")
+plot(y,p32, type = "l", xlab = "y", ylab="p(y)")
+plot(y,p33, type = "l", xlab = "y", ylab="p(y)")
+ 
+
+## Figure 9.15
+
+y = seq(.1, 99.9, .1)
+x = y/100
+KLT0 = ifelse(x< .4, 0, ifelse(x<.5, x-.4, ifelse(x<.6, .6-x,0)))
+KEQ0 = dnorm(y,50,10)
+KGT0 = .8*(1/40)*(abs(y-50)<20) + .2*dt((x-.5)/.1,4.000 )/10
+
+plot(y, KLT0, type="l", yaxs = "i", ylab="density") 
+points(y, KEQ0, type="l", yaxs = "i", lty="dashed")
+points(y, KGT0, type="l", yaxs = "i", lty="dotdash")
+
+
+## Figure 9.16
+
+plot(c(0,25),c(-2,23), type="l", xlab="Tail Behavior", ylab="Kurtosis Range", yaxt="n") 
+axis(2, at=c(-2,0,5, 10, 15, 20, 25))
+col1 <- rgb(.2,.2,.2,.5)
+polygon(c(0,1,25,25,0), c(-2,-2,22,23,-2), col=col1, border=NA)
+
+
+
+## Figure 10.1
+
+Income = rnorm(1500, 80, 15)
+House_Expense = .3*Income + .04*Income*rnorm(1500)
+plot(Income, House_Expense, ylab="House Expense", ylim = c(0,50))
+abline(v=80)
+abline(h=24)
+text(100,45, "Quadrant I")
+text(100,8, "Quadrant II")
+text(60,8, "Quadrant III")
+text(60,45, "Quadrant IV")
+
+
+## Figure 10.2
+ 
+Income = rnorm(1500, 80, 15)
+Time_Cooking = 40-.2*Income + .035*80*rnorm(1500)
+plot(Income, Time_Cooking, ylab = "Time Spent Cooking")
+abline(v=80)
+abline(h=24)
+text(100, 35, "Quadrant I")
+text(100, 13, "Quadrant II")
+text(50, 13, "Quadrant III")
+text(50, 35, "Quadrant IV")
+
+
+## Figure 10.3
+
+die = trunc(6*runif(10000000)+1)
+a = matrix(die, nrow=1000000, ncol=10)
+x = rowSums(a)
+hist(x, freq=FALSE, breaks=seq(9.5,60.5,1), xlim=c(10,60), main="", xlab="Sum")
+points(10:60, dnorm(10:60, mean(x), sd(x)), type="l")
+
+
+## Figure 10.4
+
+y = seq(0, 30, .01)
+p_y1 = dgamma(y, 1,scale=2)
+p_y3 = dgamma( xlab=y, 3,scale=2)
+p_y5 = dgamma(y, 5, scale=2)
+p_y10 = dgamma(y, 10,scale=2)
+plot(y, p_y1, type="l", ylab="p(y)", xlab="Sum, y", yaxs="i", xaxs="i")
+points(y, p_y3, type="l", lty="dashed")
+points(y, p_y5, type="l", lty="dotdash")
+points(y, p_y10, type="l", lty="longdash")
+	
+
+## Figure 10.5
+
+y = matrix(1/runif(20000000), nrow=1000, ncol=20000)
+s = rowSums(y)
+a= qqnorm(s, xlab="Normal Quantiles", ylab="Sum", main="")
+abline(lsfit(a$x,a$y))
+
+
+## Figure 10.6
+
+y = seq(0, 4, .001)	   
+n=1
+p_y1 = dgamma(n*y/2, n,scale=1)*(n/2)
+n = 10
+p_y10 = dgamma(n*y/2, n,scale=1)*(n/2)
+n = 100
+p_y100 = dgamma(n*y/2, n,scale=1)*(n/2)
+n = 1000
+p_y1000 = dgamma(n*y/2, n,1)*(n/2)
+
+par(mfrow=c(4,1), mar=c(4,4,1,1))
+plot(y, p_y1, type="l",xlab="", ylab="p(y)")
+text(3, .3, "n=1") 
+abline(v=2)
+plot(y,p_y10, type="l",xlab="", ylab="p(y)") 
+text(3, .3, "n=10") 
+abline(v=2)
+plot(y,p_y100, type="l", xlab="", ylab="p(y)")
+text(3, 1, "n=100") 
+abline(v=2)
+plot(y,p_y1000, type="l",xlab="Sample Average", ylab="p(y)")
+text(3, 3, "n=1000") 
+abline(v=2)
+
+
+## Figure 10.7
+
+y = 0:10000
+Earnings = -100000 + 20*y
+p_y = dbinom(y, 10000, 18/38)
+plot(Earnings, p_y, ylab = "p(t)", xlab = "Total Earnings, t", xlim = c(-10000, 0), yaxs="i", ylim=c(0,.01))
+
+
+## Figure 11.1
+
+x = matrix(sample(1:6,1000000,replace=TRUE),nrow=200000,ncol=5)
+y = matrix(sample(1:6,1000000,replace=TRUE),nrow=200000,ncol=5)
+xm = rowMeans(x)
+ym = rowMeans(y)
+ratio = 100*(xm/ym-1)
+runave = cumsum(ratio)/1:200000
+plot(runave, type="l", xlab = "n", log="x", ylab="Average of first n estimates")
+abline(h=0)
+
+
+## Figure 11.3
+
+var = c(0,.25,1,2.25,4,6.25)
+p   = c(.1667,.2778,.2222,.1667,.1111,.0556)
+plot(var,p, xaxt="n", ylab="Probability", ylim = c(0,.4), xlab="Plug-in variance estimate")
+axis(1, at = c(0, 1.458, 2.917, 4, 6.25))
+abline(v=1.458, lty=2)
+abline(v=2.917)
+
+
+## Figure 11.4
+
+y = matrix(round(22.5+18*runif(160000)), nrow=10000, ncol=16)
+yvar = apply(y,1,var)
+yvar = yvar*15/16
+hist(yvar, freq=FALSE, ylim = c(0,.08), xlab="Plug-in estimate of variance", main="")
+abline(v=26.92)
+abline(v=mean(yvar), lty=2)
+
+
+## Figure 11.5
+
+y = matrix(round(22.5+18*runif(160000)), nrow=10000, ncol=16)
+ysd = apply(y,1,sd)
+hist(ysd, freq=FALSE, ylim = c(0,.8), xlab="The (n-1) standard deviation estimate", main="")
+abline(v=5.19)
+abline(v=mean(ysd), lty=2)
+
+
+## Figure 11.6
+
+y = rpois(200000,1.4^2)
+y2 = y^2
+y_m = cumsum(y)/1:200000
+y2_m = cumsum(y2)/1:200000
+y_var = y2_m - y_m^2
+y_sd = sqrt(y_var*((1:200000)/(1:200000 - 1)))
+plot(y_sd[2:200000],type="l",log="x", xlab="n", ylab="Estimated standard deviation")
+abline(h=1.4, lty="dashed")
+
+
+## Figure 11.7
+
+y = rnorm(100100, 70,10)
+plot(100001:100100,y[100001:100100], type="l",ylab="Estimate of mu", xlab="n", yaxt="n", ylim=c(40,100))
+axis(2, at=seq(40,100,10), labels=c("40", "50", "60", "mu", "80", "90", "100")) 
+abline(h=70)
+
+
+## Figure 11.8
+
+y = seq(40,100,.1)
+py = dnorm(y,70,10)
+pyb = dnorm(y,71,1)
+par(mfrow=c(2,1))
+plot(y,py,type="l", xlab="Unbiased Estimator", ylab="density", yaxs="i", ylim=c(0,.05))
+abline(v=70)
+plot(y,pyb,type="l", xlab="Biased Estimator", ylab="density", yaxs="i", ylim = c(0, .5))
+abline(v=70)
+
+
+## Example 11.9
+
+u = matrix(runif(1000000), nrow=100000, ncol=10)
+y1 = matrix(rnorm(1000000,70,10), nrow=100000, ncol=10)
+y2 = matrix(rnorm(1000000,70,100), nrow=100000, ncol=10)
+y  = (u<.95)*y1 + (u>=.95)*y2
+ym = rowMeans(y)
+ymed = apply(y,1,median)
+d1  = (ym - 70)^2
+d2 = (ymed - 70)^2
+mean(d1)
+mean(d2)
+
+
+
+## Table 11.3
+
+Nsim = 1000000
+n = 20
+y.all = rpois(n*Nsim,2)
+y.matrix = matrix(y.all, ncol=n)
+
+rootmeans = sqrt(rowMeans(y.matrix))
+
+dev.matrix = y.matrix - rowMeans(y.matrix)
+sdevs = sqrt(rowSums(dev.matrix^2)/(n-1))
+
+variance.rootmeans = var(rootmeans)
+bias.rootmeans = mean(rootmeans) - sqrt(2)
+esd.rootmeans = variance.rootmeans + bias.rootmeans^2
+
+variance.rootmeans
+bias.rootmeans 
+esd.rootmeans 
+
+
+variance.sdevs = var(sdevs)
+bias.sdevs = mean(sdevs) - sqrt(2)
+esd.sdevs = variance.sdevs + bias.sdevs^2
+
+variance.sdevs
+bias.sdevs 
+esd.sdevs 
+
+
+
+## Figure 11.9
+
+set.seed(12345)
+c = rpois(20, 15)
+c[13]=24
+plot(1:20, c, type="l", xlab = "Subgroup Number", ylab = "Number of Defects", ylim = c(0,25), xaxt="n")
+axis(1, at=c(1,5,10,15,20))
+points(1:20, c)
+abline(h=1.7, lty="dashed")
+abline(h=12.2)
+abline(h=22.7, lty="dashed")
+text(1.5,2.7,"LCL=1.7")
+text(1.5,13.2,"Avg=12.2")
+text(1.5,23.7,"UCL=22.7")
+
+
+
+## Figure 12.1
+
+par(mar=c(1,4,1,1))
+plot(y,p_y1,type="l", ylim=c(0,0.5), xlim=c(0,6), ylab=expression(paste("p(y|",lambda,")")), xlab="", xaxt="n", yaxs="i")
+points(2, dexp(2,.2))
+points(c(2,2), c(0,dexp(2,.2)), type="l")
+text(5,.4,expression(paste(lambda,"=0.2")))
+par(mar=c(1,1,1,1))
+plot(y,p_y2,type="l", ylim=c(0,0.5), xlim=c(0,6), xlab="", ylab="", xaxt="n", yaxt="n",yaxs="i")
+points(2, dexp(2,.5))
+points(c(2,2), c(0,dexp(2,.5)), type="l")
+text(5,.4,expression(paste(lambda,"=0.5")))
+par(mar=c(4,4,1,1))
+plot(y,p_y3,type="l", ylim=c(0,0.5), ylab=expression(paste("p(y|",lambda,")")), xlab="y", xlim=c(0,6),yaxs="i")
+points(2, dexp(2,1))
+points(c(2,2), c(0,dexp(2,1)), type="l")
+text(5,.4,expression(paste(lambda,"=1.0")))
+par(mar=c(4,1,1,1))
+plot(y,p_y4,type="l", ylim=c(0,0.5), ylab="", xlab="y", xlim=c(0,6), yaxt="n",yaxs="i")
+points(2, dexp(2,2))
+points(c(2,2), c(0,dexp(2,2)), type="l")
+text(5,.4,expression(paste(lambda,"=2.0")))
+
+
+## Figure 12.2
+
+lambda = seq(0, 4, .01)
+L = lambda * exp(-lambda*2)
+lp = c(.2,.5,1,2)
+llp = lp * exp(-lp*2) 
+
+plot(lambda, L, type="l", ylim = c(0,.25), ylab=expression(paste("L(",lambda," | y=2)")), xlab=expression(lambda),yaxs="i", xaxt="n", xaxs="i")
+axis(1, at=c(0,.2,.5,1,2,4), labels=c("0", ".2", ".5", "1", "2", "4"))
+points(lp, llp)
+points(c(.5,.5), c(0,.5*exp(-.5*2)), type="l")
+abline(h=.5*exp(-.5*2))
+
+
+
+## Figure 12.3
+
+lambda = seq(0, 4, .01)
+L = lambda^10 * exp(-10*lambda*2)
+lp = c(.2,.5,1,2)
+llp = lp^10 * exp(-10*lp*2)
+
+plot(lambda, L, type="l", ylim=c(0,5e-8), ylab=expression(paste("L(",lambda," | ybar=2)")), xlab=expression(lambda),yaxs="i", xaxt="n", xaxs="i")
+axis(1, at=c(0,.2,.5,1,2,4), labels=c("0", ".2", ".5", "1", "2", "4"))
+points(lp, llp)
+points(c(.5,.5), c(0,.5^10*exp(-10*.5*2)), type="l")
+abline(h=.5^10*exp(-10*.5*2))
+
+
+## Figure 12.4
+
+y = rexp(1000,2/3)
+m1 = mean(y[1])
+m2 = mean(y[1:10])
+m3 = mean(y[1:100])
+m4 = mean(y[1:1000])
+l = seq(.001,2,.001)
+lk1 = l^1 * exp(-1 * l*m1)
+lk2 = l^10 * exp(-10 * l*m2)
+lk3 = l^100 * exp(-100 * l*m3)
+llk4 = 1000*log(l) - 1000*l*m4 
+lk4 = exp(llk4 + 1151.293)
+par(mfrow=c(4,1))
+par(mar=c(1,4,1,1))
+plot(l, lk1, type="l",yaxs="i", bty="l", xlim =c(0,2), xaxt="n", ylab=expression(paste( "L(",lambda,")")))
+abline(v=2/3)
+text(1.8, .5*max(lk1), "n=1")
+plot(l, lk2, type="l",yaxs="i", bty="l", xlim =c(0,2), xaxt="n", ylab=expression(paste( "L(",lambda,")")))
+abline(v=2/3)
+text(1.8, .5*max(lk2), "n=10")
+plot(l, lk3, type="l",yaxs="i", bty="l", xlim =c(0,2), xaxt="n", ylab=expression(paste( "L(",lambda,")")))
+abline(v=2/3)
+text(1.8, .5*max(lk3), "n=100")
+par(mar=c(4,4,1,1))
+plot(l, lk4, type="l",yaxs="i", bty="l", xlim =c(0,2), xaxt="n",ylab=expression(paste( "L(",lambda,")e+500")), xlab = expression(lambda))
+axis(1, at=c(0,2/3,4/3,2), labels = c("0", "2/3", "4/3", "2"))
+abline(v=2/3)
+text(1.8, .5*max(lk4), "n=1000")
+
+
+## Figure 12.5
+
+p = seq(0,1,.001)
+L = p^392 * (1-p)^610
+plot(p,L, type="l",yaxs="i",ylim=c(0,6e-292), xlab=expression(pi), ylab=expression(paste("L(",pi,"| 392 ones and 610 zeros)")), xaxt="n")
+axis(1, at=c(0,.2,.3,.4,.5,.6,.8,1.0))
+p1 = 392/1002
+L1 = p1^392 * (1-p1)^610
+points(p1,L1)
+abline(h=L1)
+
+
+
+## Figure 12.6
+
+x = seq(.3,.5,.002)
+y = x
+L <- function(x, y) { ifelse(x+y<1, 
+   exp(1000 +  392 * log(x) + 401 * log(y) + 209 *log(1-x-y))*10^28,  0)}
+z <- outer(x, y, L)
+persp(x, y, z, theta = 20, phi = 20, expand = 0.6, xlab="pi_1", ylab="pi_2", zlab = "L",ticktype="detailed")
+
+
+
+## Figure 12.7
+
+x = seq(.3,.5,.002)
+y = x
+L <- function(x, y) { ifelse(x+y<1, 
+   exp(1000 +  392 * log(x) + 401 * log(y) + 209 *log(1-x-y))*10^28,  0)}
+z <- outer(x, y, L)
+contour(x,y,z, nlevels=6, drawlabels=FALSE, xlab=expression(pi [1]),ylab=expression(pi [2]))
+points(.391,.4,pch=3)
+points(.43,.43,pch=4)
+
+
+
+
+## Figure 12.8
+
+x = seq(20,32,.1)
+y = seq(2,10,.1)
+L <- function(x, y) {dnorm(36,x,y)*dnorm(23,x,y)*dnorm(22,x,y)*dnorm(27,x,y)*dnorm(26,x,y)*dnorm(24,x,y)*dnorm(28,x,y)*dnorm(23,x,y)*dnorm(30,x,y)*dnorm(25,x,y)* dnorm(22,x,y)*dnorm(26,x,y)*dnorm(22,x,y)*dnorm(35,x,y)*dnorm(24,x,y)*dnorm(36,x,y)*1e+20}
+z <- outer(x, y, L)
+persp(x, y, z, theta = 20, phi = 25, expand = 0.6, xlab="mu", ylab="sigma", zlab = "L",ticktype="detailed")
+
+
+
+## Figure 12.11
+
+l = seq(.1,.9,.001) 
+L = l^10 * exp(-20*l)
+LL = log(L)
+par(mfrow=c(2,1))
+par(mar=c(1,4,1,1))
+plot(l,L, type="l", xlim=c(0,1), xaxt="n", main="Likelihood Function")
+points(c(.2,.8), c(max(L),max(L)), type="l", lty=2)
+abline(v=.5)
+par(mar=c(4,4,1,1))
+plot(l,LL, type="l", xlim=c(0,1), xlab=expression(lambda), main="Log Likelihood Function")
+abline(v=.5)
+points(c(.2,.8), c(max(LL),max(LL)), type="l", lty=2)
+
+
+## Figure 12.12
+
+x = seq(20,32,.1)
+y = seq(2,10,.1)
+L <- function(x, y) {ifelse(y>4.79,dnorm(36,x,y)*dnorm(23,x,y)*dnorm(22,x,y)*dnorm(27,x,y)*dnorm(26,x,y)*dnorm(24,x,y)*dnorm(28,x,y)*dnorm(23,x,y)*dnorm(30,x,y)*dnorm(25,x,y)* dnorm(22,x,y)*dnorm(26,x,y)*dnorm(22,x,y)*dnorm(35,x,y)*dnorm(24,x,y)*dnorm(36,x,y)*1e+20,0)}
+z <- outer(x, y, L)
+persp(x, y, z, theta = 20, phi = 25, expand = 0.6, xlab="mu", ylab="sigma", zlab = "L",ticktype="detailed")
+
+
+## Figure 12.13
+
+x = seq(20,32,.1)
+y = seq(2,10,.1)
+L <- function(x, y) {ifelse(x<=26.81,dnorm(36,x,y)*dnorm(23,x,y)*dnorm(22,x,y)*dnorm(27,x,y)*dnorm(26,x,y)*dnorm(24,x,y)*dnorm(28,x,y)*dnorm(23,x,y)*dnorm(30,x,y)*dnorm(25,x,y)* dnorm(22,x,y)*dnorm(26,x,y)*dnorm(22,x,y)*dnorm(35,x,y)*dnorm(24,x,y)*dnorm(36,x,y)*1e+20,0)}
+z <- outer(x, y, L)
+persp(x, y, z, theta = 20, phi = 25, expand = 0.6, xlab="mu", ylab="sigma", zlab = "L",ticktype="detailed")
+
+
+
+## Figure 12.16
+
+scc = read.csv ("http://westfall.ba.ttu.edu/ISQS5347/success.csv")
+scc$bin = ifelse(scc$Success=="Y",1,0)
+attach(scc)
+scag = aggregate(scc, by=list(Experience), mean)
+plot(scag$Experience, scag$bin, type="l", xlab="Years of experience", ylab="Estimated probability of success")
+points(scag$Experience, scag$bin)
+
+
+
+## Figure 12.17
+
+x = seq(0,20,.1)
+p1 = 1/(1 + exp(-(-1 + .2*x)))
+p2 = 1/(1 + exp(-(-4 + .4*x)))
+p3 = 1/(1 + exp(-(3  - .4*x)))
+plot(x,p1,type="l", ylim=c(0,1),ylab="Pr( Success | x )",yaxs="i")
+points(x,p2,type="l",lty=2)
+points(x,p3,type="l",lty=3)
+
+
+## Figure 12.20 
+scc = read.csv ("http://westfall.ba.ttu.edu/ISQS5347/success.csv")
+scc$bin = ifelse(scc$Success=="Y",1,0)
+attach(scc)
+scag = aggregate(scc, by=list(Experience), mean)
+plot(scag$Experience, scag$bin, type="l", xlab="Years of experience", ylab="Estimated probability of success")
+points(scag$Experience, scag$bin)
+
+
+# run a logistic regression model (in this case, generalized linear model with logit link). see ?glm
+g=glm(bin ~ Experience,family=binomial) 
+
+# draws a curve based on prediction from logistic regression model
+curve(predict(g,data.frame(Experience=x),type="resp"),add=TRUE, lty=2)
+legend(15, .25, legend=c("Empirical", "Maximum Likelihood"), xjust = .5, yjust = .5, lty = c("solid", "dashed"))
+
+
+
+## Figure 13.1, 13.1 
+
+pi = seq(0,1,.001)
+p = pi^2 * (1-pi)^8
+plot(pi,p, type="l", xlab = expression(pi), ylab = expression(paste("Likelihood function for  " , pi)), yaxs="i", ylim = c(0,.008)) 
+
+
+##Figure 13.3
+
+pi = seq(0,1,.001)
+d.b = dbeta(pi,3,9)
+
+plot(pi, d.b, type="l", ylim = c(0,4), yaxs="i", xaxs="i", xlab=expression(pi), ylab = expression(paste("Posterior pdf for  " , pi)))
+
+
+pi.l = seq(0,0.079,.001)
+d.bl = dbeta(pi.l, 3,9)
+
+col1 <- rgb(.2,.2,.2,.5)
+polygon(c(pi.l,rev(pi.l)), c(rep(0,length(d.bl)), rev(d.bl)), col=col1, border=NA)
+
+pi.u = seq(0.470,1,.001)
+d.bu = dbeta(pi.u, 3,9)
+polygon(c(pi.u,rev(pi.u)), c(rep(0,length(d.bu)), rev(d.bu)), col=col1, border=NA)
+
+
+## Figure 13.4
+
+pi = seq(0,1,.001)
+d.b = dbeta(pi,3,9)
+
+plot(pi, d.b, type="l", ylim = c(0,4), yaxs="i", xaxs="i", xlab=expression(pi), ylab = expression(paste("Posterior pdf for  " , pi)))
+
+
+
+pi.l = seq(0,0.056,.001)
+d.bl = dbeta(pi.l, 3,9)
+
+col1 <- rgb(.2,.2,.2,.5)
+polygon(c(pi.l,rev(pi.l)), c(rep(0,length(d.bl)), rev(d.bl)), col=col1, border=NA)
+
+
+
+pi.u = seq(0.434,1,.001)
+d.bu = dbeta(pi.u, 3,9)
+polygon(c(pi.u,rev(pi.u)), c(rep(0,length(d.bu)), rev(d.bu)), col=col1, border=NA)
+
+abline(h=.978)
+
+
+## Figure 13.5 
+
+pi = seq(0,1,.001)
+p1 = dbeta(pi, 11250, 11250)
+p2 = dbeta(pi, 11252, 11258)
+
+
+pi.z = seq(.49,.51,.0001)
+p1.z = dbeta(pi.z, 11250, 11250)
+p2.z = dbeta(pi.z, 11252, 11258)
+
+par(mfrow=c(1,2))
+plot(pi, p1, type="l", xlab = expression(pi), ylab = expression(paste("Prior and posterior pdf for  " , pi)), yaxs="i", ylim=c(0,125))
+
+points(pi, p2, type="l", lty=2)
+text(.15,100,"Wide Range")
+
+plot(pi.z, p1.z, type="l", xlab = expression(pi), yaxs="i", ylim=c(0,125), yaxt="n", ylab=" ")
+
+points(pi.z, p2.z, type="l", lty=2)
+text(.494,100,"Zoomed In")
+
+
+## Figure 13.6
+
+h = c(1,1,0,0,0,0,0,0,0,0)
+one = rep(1,length(h))
+
+L = MCMClogit (h ~ one -1, mcmc=100000)
+
+## summary(L)
+## plot(L)
+
+hist(exp(L)/(1+exp(L)), xlab=expression(pi),freq=F, ylab="Estimated Posterior Density", main="")
+
+
+## Figure 13.7 - still looking for a way to do this.  As of 11/2013,
+## MCMClogit does not work with a prior variance specification with 
+## intercept-only models, and bayesglm seems not to give a bona random 
+## sample from the posterior, as far as I can tell.
+## Any help or suggestions would be appreciated.  
+
+## Specifically, here's what I want, but it doesn't work:
+
+## h = c(1,1,0,0,0,0,0,0,0,0)
+## one = rep(1,length(h))
+
+## library(MCMCpack)
+## L = MCMClogit(h ~ one -1, mcmc=100000, b0=0, B0=1/.000178)
+## hist(exp(L)/(1+exp(L)), xlab=expression(pi),freq=F, ylab="Estimated Posterior Density", main="")
+
+
+
+## Figure 13.8
+
+scc = read.csv ("http://westfall.ba.ttu.edu/ISQS5347/success.csv")
+scc$bin = ifelse(scc$Success=="Y",1,0)
+attach(scc)
+
+library(MCMCpack)
+bayes.l = MCMClogit(bin ~ Experience, seed=54321) 
+post.parms = as.matrix(bayes.l)
+plot(post.parms[,1], post.parms[,2], xlab = expression(beta[0]), ylab=expression(beta[1]))
+
+
+
+
+
+## Figure 13.9
+
+
+library(MCMCpack)
+
+scc = read.csv ("http://westfall.ba.ttu.edu/ISQS5347/success.csv")
+scc$bin = ifelse(scc$Success=="Y",1,0)
+attach(scc)
+
+bayes.l = MCMClogit(bin ~ Experience, seed=54321) 
+
+
+post = as.matrix(bayes.l)
+
+post100 = post[1:100,]
+x = seq(0,20,.1)
+one = rep(1,length(x))
+X = rbind(one,x)
+
+
+logits = post100 %*% X
+probs = exp(logits)/(1 + exp(logits))
+plot(x, probs[1,], type="l", ylim=c(0,1), ylab="Estimated Probability", xlab="Years Experience")
+for (i in (2:100))  points(x, probs[i,], type="l")
+
+
+
+## Figure 13.10
+
+Age = c(36, 23, 22, 27, 26, 24, 28, 23, 30, 25, 22, 26, 22, 35, 24, 36)
+one = rep(1,length(Age))
+
+library(MCMCpack)
+bayes.n = MCMCregress(Age ~ one -1, seed=54321) 
+post.parms = as.matrix(bayes.n)
+plot(post.parms[,1], sqrt(post.parms[,2]), xlab = expression(mu), ylab=expression(sigma))
+
+
+## Figure 13.11 - The credible interval for VaR differs somewhat from the book because of (apparently)
+## different default prior specifications on the variance used by PROC GENMOD of SAS
+## and by the MCMCregress funciton in R. These priors result in different 
+## posterior distributions for the standard deviation, in turn affecting the posterior VaR values.
+
+Loss = c(-12, 5, -22, -1, -6, 1, -32, -6, -6, -7, -6, -3, -20, -14)
+one = rep(1,length(Loss))
+
+library(MCMCpack)
+bayes.n = MCMCregress(Loss ~ one -1, seed=54321) 
+post.parms = as.matrix(bayes.n)
+post.mu = post.parms[,1]
+post.sigma = sqrt(post.parms[,2])
+VaR = qnorm(.95, post.mu,post.sigma)
+
+## 90% equal-tailed credible interval:
+l.05 = quantile(VaR, .05)
+u.95 = quantile(VaR, .95)
+hist(VaR, freq=F, breaks=50)
+abline(v=c(l.05,u.95), lty=2)
+
+
+## Figure 13.12
+
+dow = read.csv("http://westfall.ba.ttu.edu/ISQS5347/fig13p2.csv")
+Y = dow[,2]
+one = rep(1,length(Y))
+MD = MCMCregress(Y ~ one -1, mcmc=100000)
+MDp = as.matrix(MD)
+MD1000 = MDp[1:1000,]
+plot(MD1000[,1], sqrt(MD1000[,2]), xlab = expression(mu), ylab=expression(sigma))
+ 
+
+## Figure 13.13
+
+library(MCMCpack)
+dow = read.csv("http://westfall.ba.ttu.edu/ISQS5347/fig13p2.csv")
+f = function(n) {
+Y = dow[,2]
+one = rep(1,length(Y))
+MD = MCMCregress(Y ~ one -1, mcmc=100000)
+MDp = as.matrix(MD)
+df = data.frame(MDp[1:20,])
+x = df$one
+y = df$sigma2
+s = rnorm(30,x[n],sqrt(y[n]))
+return(s)
+}
+n = c(1:20)
+set.seed(12345)
+a = lapply(n,f)
+g = function(x) {
+o = 1+x
+return(o)
+}
+b = sapply(data.frame(a),g)
+dow2 = read.csv("http://westfall.ba.ttu.edu/ISQS5347/djia2011.csv")
+d = dow2[42:71,2]
+par(yaxs="i",xaxs="i")
+plot(d,type="l",xlim=c(0,31),ylim=c(11000,15000),lty=3,lwd=3,xlab="Future trading day",ylab="Potential future DJIA",yaxt="n",family="serif")
+axis(2,at=c(11000,12000,13000,14000,15000),las=TRUE,family="serif")
+d1 = d[1]
+k = function(k) {
+Y = dow[,2]
+one = rep(1,length(Y))
+MD = MCMCregress(Y ~ one -1, mcmc=100000)
+MDp = as.matrix(MD)
+df = data.frame(MDp[1:20,])
+x = df$one
+y = df$sigma2
+s = rnorm(1,x[k],sqrt(y[k]))
+return(s)
+}
+d = lapply(n,k)
+e = sapply(data.frame(d),g)
+e = as.numeric(e)
+f1 = c((d1*e[1]),b[,1])
+f2 = c((d1*e[2]),b[,2])
+f3 = c((d1*e[3]),b[,3])
+f4 = c((d1*e[4]),b[,4])
+f5 = c((d1*e[5]),b[,5])
+f6 = c((d1*e[6]),b[,6])
+f7 = c((d1*e[7]),b[,7])
+f8 = c((d1*e[8]),b[,8])
+f9 = c((d1*e[9]),b[,9])
+f10 = c((d1*e[10]),b[,10])
+f11 = c((d1*e[11]),b[,11])
+f12 = c((d1*e[12]),b[,12])
+f13 = c((d1*e[13]),b[,13])
+f14 = c((d1*e[14]),b[,14])
+f15 = c((d1*e[15]),b[,15])
+f16 = c((d1*e[16]),b[,16])
+f17 = c((d1*e[17]),b[,17])
+f18 = c((d1*e[18]),b[,18])
+f19 = c((d1*e[19]),b[,19])
+f20 = c((d1*e[20]),b[,20])
+u = data.frame(f1,f2,f3,f4,f5,f6,f7,f8,f9,f10,f11,f12,f13,f14,f15,f16,f17,f18,f19,f20)
+p = function(x) {
+l = cumprod(x)
+return(l)
+}
+pu = sapply(u,p)
+linef = function(x) {
+lines(pu[,x])
+}
+invisible(lapply(n,linef))
+
+
+## Figure 13.14
+
+set.seed(12345)
+pi0 = runif(100000)
+pi1 = runif(100000)
+b0 = qbeta(pi0,67,36)
+b1 = qbeta(pi1,68,32)
+c = ifelse(b1>b0,(10*(100*b1-100*b0)-10),-10)
+h = hist(c,breaks=60)
+h$counts=h$counts/sum(h$counts)
+par(yaxs="i",xaxs="i")
+plot(h,xlim=c(-15,300),ylim=c(0,.36),xaxt="n",yaxt="n",xlab="Net profit",ylab="Percent",main="",col="grey",family="serif")
+axis(1,at=c(-10,20,100,200,300),labels=c(-10,20,100,200,300),family="serif")
+axis(2,at=c(0,.1,.2,.3),labels=c(0,10,20,30),las=TRUE,family="serif")
+box()
+
+
+
+
+## Figure 14.3
+
+par(mfrow=c(1,1),mar=c(3,1,1,1),mgp=c(2,1,0),oma=c(0,0,0,0))
+x = seq(20,30,by=.0001)
+y = rep(0,length(x))
+z = dnorm(x,mean=25,sd=25/20)
+s = c(20,22.8,25,27.2,30)
+plot(x,y,type="l",yaxt="n",xaxt="n",ylim=c(-.35,.35),ylab=" ",xlab="Sample average",family="serif")
+axis(side=1,at=s,family="serif")
+lines(x,z,type="l")
+segments(15,0,35,0)
+p1 = dnorm(22.8,25,1.25)
+p2 = dnorm(25,25,1.25)
+p3 = dnorm(27.2,25,1.25)
+segments(22.8,-.35,22.8,p1)
+segments(25,-.35,25,p2)
+segments(27.2,-.35,27.2,p3)
+points(25.1,0)
+points(24.2,0)
+points(27.7,0)
+points(23.9,0)
+points(25.1,-.10)
+points(24.2,-.15)
+points(27.7,-.20)
+points(23.9,-.25)
+segments(25.1,-.10,25.1,0,lty=2)
+segments(24.2,-.15,24.2,0,lty=2)
+segments(27.7,-.20,27.7,0,lty=2)
+segments(23.9,-.25,23.9,0,lty=2)
+s1u = 25.1 + 2.0*5/sqrt(20)
+s1l = 25.1 - 2.0*5/sqrt(20)
+s2u = 24.2 + 2.0*5/sqrt(20)
+s2l = 24.2 - 2.0*5/sqrt(20)
+s3u = 27.7 + 2.0*5/sqrt(20)
+s3l = 27.7 - 2.0*5/sqrt(20)
+s4u = 23.9 + 2.0*5/sqrt(20)
+s4l = 23.9 - 2.0*5/sqrt(20)
+segments(s1u,-.10,s1l,-.10)
+segments(s2u,-.15,s2l,-.15)
+segments(s3u,-.20,s3l,-.20)
+segments(s4u,-.25,s4l,-.25)
+text(20.5,-.10,"Sample 1",family="serif")
+text(20.5,-.15,"Sample 2",family="serif")
+text(20.5,-.20,"Sample 3",family="serif")
+text(20.5,-.25,"Sample 4",family="serif")
+text(20.5,-.30,"...",family="serif")
+
+
+
+## Figure 15.1
+
+age = c(36,23,22,27,26,24,28,23,30,25,22,26,22,35,24,36)
+nsim = 1000000
+sample = replicate(nsim,sample(age,16,replace=FALSE))
+front = sample[1:8,]
+back = sample[9:16,]
+meandiff = colMeans(front)-colMeans(back)
+meantable = prop.table(table(meandiff))
+plot(meantable,lwd=1,xlim=c(-8,8),xaxt="n",yaxt="n",yaxs="i",ylim=c(0,.05),ylab="Percent",xlab="Difference between sample averages",family="serif")
+axis(side=1,at=c(-8,-5.125,-4,0,1.375,4,6,8),lab=c(-8,-5.125,-4,0,1.375,4,6,8),family="serif")
+axis(side=2,at=c(0,.01,.02,.03,.04,.05),lab=c(0,1,2,3,4,5),las=TRUE,family="serif")
+segments(-5.125,0,-5.125,5,lty=2)
+segments(1.375,0,1.375,5,lty=2)
+
+## Figure 15.2
+
+age = c(36,23,22,27,26,24,28,23,30,25,22,26,22,35,24,36)
+nsim = 1000000
+sample = replicate(nsim,sample(age,16,replace=FALSE))
+front = sample[1:8,]
+back = sample[9:16,]
+meandiff = colMeans(front)-colMeans(back)
+meantable = prop.table(table(meandiff))
+plot(meantable,type="h",lwd=1,xlim=c(-8,8),xaxt="n",yaxt="n",yaxs="i",ylim=c(0,.05),ylab="Percent",xlab="Difference between sample averages",family="serif")
+axis(side=1,at=c(-8,-6,-4,-1.375,0,1.375,4,6,8),lab=c(-8,-6,-4,-1.375,0,1.375,4,6,8),family="serif")
+axis(side=2,at=c(0,.01,.02,.03,.04,.05),lab=c(0,1,2,3,4,5),las=TRUE,family="serif")
+x0 = as.numeric(levels(data.frame(meantable)$meandiff))
+x = x0[1:25]
+x1 = x0[36:60]
+y = data.frame(meantable)$Freq[1:25]
+y1 = data.frame(meantable)$Freq[36:60]
+polygon(c(min(x),x,max(x)),c(min(y),y,min(y)),col="gray",border=NA)
+polygon(c(min(x1),x1,max(x1)),c(min(y1),y1,min(y1)),col="gray",border=NA)
+segments(-1.375,0,-1.375,5,lty=2)
+segments(1.375,0,1.375,5,lty=2)
+lines(meantable,lwd=1)
+
+## Figure 15.3
+
+age = c(36,23,22,27,26,24,28,23,30,25,22,26,22,35,24,36)
+nsim = 1000000
+sample = replicate(nsim,sample(age,16,replace=FALSE))
+front = sample[1:8,]
+back = sample[9:16,]
+meandiff = colMeans(front)-colMeans(back)
+meantable = prop.table(table(meandiff))
+plot(meantable,type="h",lwd=1,xlim=c(-8,8),xaxt="n",yaxt="n",yaxs="i",ylim=c(0,.05),ylab="Percent",xlab="Difference between sample averages",family="serif")
+axis(side=1,at=c(-8,-6,-5.125,-4,0,4,5.125,6,8),lab=c(-8,-6,-5.125,-4,0,4,5.125,6,8),family="serif")
+axis(side=2,at=c(0,.01,.02,.03,.04,.05),lab=c(0,1,2,3,4,5),las=TRUE,family="serif")
+x0 = as.numeric(levels(data.frame(meantable)$meandiff))
+x = x0[1:10]
+x1 = x0[51:60]
+y = data.frame(meantable)$Freq[1:10]
+y1 = data.frame(meantable)$Freq[51:60]
+polygon(c(min(x),x,max(x)),c(min(y),y,min(y)),col="gray",border=NA)
+polygon(c(min(x1),x1,max(x1)),c(min(y1),y1,min(y1)),col="gray",border=NA)
+segments(-5.125,0,-5.125,5,lty=2)
+segments(5.125,0,5.125,5,lty=2)
+lines(meantable,lwd=1)
+
+
+## Figure 15.4
+
+dow = read.csv("http://westfall.ba.ttu.edu/ISQS5347/djia1.csv") 
+attach(dow)
+n = length(return)
+return.y = c(NA, return[1:(n-1)])
+dow$return.y = return.y
+
+## Average return when yesterday's return was positive:
+
+m.plus = mean(return[return.y > 0], na.rm=T)
+m.plus
+
+## Negative
+
+m.minus = mean(return[return.y <= 0], na.rm=T)
+m.minus       # Slight error in the book
+
+## The observed difference. Is it explainable by chance alone?
+
+obs.diff = m.plus - m.minus
+
+## To check, let's find the distribution of differences that are *explained* by chance
+## alone.  When the data are iid, any differences based on previous observations
+## are explained by chance alone, because in that case there is no systematic 
+## tendency for current observations to depend on previous observations.
+
+nsim = 10000
+chance.diffs = numeric(nsim)
+
+for (i in 1:nsim) {
+ return.boot = sample(return, n, replace = T)
+ return.boot.y = c(NA, return.boot[1:(n-1)])
+ chance.diffs[i] = mean(return[return.boot.y <= 0], na.rm=T)  -  mean(return[return.boot.y > 0], na.rm=T)
+}
+ 
+hist(chance.diffs, freq=F, xlim = c(-.0010, .0015))
+abline(v = obs.diff, col="red")
+
+## The p-value is the probability of observing a result as extreme as 
+## the observed difference by chance alone:
+
+pval = mean(abs(chance.diffs) >= abs(obs.diff))
+pval     ## It's not really 0 because p-values are never 0. But it is clearly very small!
+
+
+## Figure 15.5
+
+Age = c(36, 23, 22, 27, 26, 24, 28, 23, 30, 25, 22, 26, 22, 35, 24, 36)
+qqnorm(Age, ylim = c(20,40))
+qqline(Age)
+
+
+## Figure 15.6
+
+Age = c(36, 23, 22, 27, 26, 24, 28, 23, 30, 25, 22, 26, 22, 35, 24, 36)
+n = length(Age)
+Age.Normal = rnorm(n, mean(Age), sd(Age))
+qqnorm(Age.Normal)
+qqline(Age.Normal)
+
+
+## Figure 15.7
+
+Age = c(36, 23, 22, 27, 26, 24, 28, 23, 30, 25, 22, 26, 22, 35, 24, 36)
+plt = qqnorm(Age)
+names(plt)
+r.observed = cor(plt$x, plt$y)   # differs slightly from book because of quantile definition
+
+n = length(Age)
+nsim = 50000
+r.chance = numeric(nsim)
+for (i in 1:nsim) {
+   Age.Normal = rnorm(n, mean(Age), sd(Age))
+   plt = qqnorm(Age.Normal, plot.it=FALSE)
+   r.chance[i] = cor(plt$x, plt$y)
+}
+
+hist(r.chance, freq=F, xlim = c(.8,1))
+abline(v = r.observed, col="red")
+p.value = mean(r.chance <= r.observed)
+p.value    # Result differs slightly from book, again because of quantile definition
+
+
+
+## Figure 16.2
+
+f = function(x) {
+x2 = x^2
+v = sum(x2)
+return(v)
+}
+set.seed(12345)
+a = replicate(100000,f(rnorm(5)))
+b = hist(a,breaks=80)
+b$counts<-b$counts/sum(b$counts)
+par(yaxs="i",xaxs="i")
+plot(b,xlim=c(0,33),xaxt="n",ylim=c(0,.08),yaxt="n",ylab="Percent",xlab=expression(italic(v)),main="",col="grey",family="serif")
+axis(1,at=c(0,10,20,30),family="serif")
+axis(2,at=c(0,.02,.04,.06,.08),labels=c(0,2,4,6,8),las=TRUE,family="serif")
+box()
+
+## Figure 16.3
+
+v = seq(0,30,by=.0001)
+kernel = (v^((5/2)-1))*exp((-v)/2)
+plot(v,kernel,xlim=c(0,30),ylim=c(0,1.2),type="l",xaxt="n",yaxt="n",xlab=expression(italic(v)),ylab="Kernel",main="",family="serif")
+axis(1,at=c(0,5,10,15,20,25,30),family="serif")
+axis(2,at=c(0.0,0.2,0.4,0.6,0.8,1.0,1.2),las=TRUE,family="serif")
+
+## Figure 16.4
+
+f = function(x) {
+x2 = x^2
+m = mean(x2)
+x3 = sqrt(m)
+return(x3)
+}
+a = replicate(100000,f(rnorm(1)))
+b = replicate(100000,f(rnorm(4)))
+c = replicate(100000,f(rnorm(9)))
+d = replicate(100000,f(rnorm(19)))
+ha = hist(a,breaks=80)
+hb = hist(b,breaks=50)
+hc = hist(c,breaks=50)
+hd = hist(d,breaks=40)
+ha$counts<-ha$counts/sum(ha$counts)
+hb$counts<-hb$counts/sum(hb$counts)
+hc$counts<-hc$counts/sum(hc$counts)
+hd$counts<-hd$counts/sum(hd$counts)
+par(mfrow=c(2,2),yaxs="i",xaxs="i",mar=c(1,0,1,1),oma=c(5,4,0,0)+0.1)
+plot(ha,xlim=c(0,4),ylim=c(0,.06),xaxt="n",yaxt="n",xlab="",ylab="",main="",col="grey")
+axis(2,at=c(0,.01,.02,.03,.04,.05,.06),labels=c(0,1,2,3,4,5,6),las=TRUE,family="serif")
+title(substitute("Panel A: " * {italic(n)} * " = 2"),font.main=1,cex.main=1,family="serif")
+box()
+plot(hb,xlim=c(0,4),ylim=c(0,.06),xaxt="n",yaxt="n",xlab="",ylab="",main="",col="grey")
+title(substitute("Panel B: " * {italic(n)} * " = 5"),font.main=1,cex.main=1,family="serif")
+box()
+plot(hc,xlim=c(0,4),ylim=c(0,.125),xaxt="n",yaxt="n",xlab="",ylab="",main="",col="grey")
+axis(1,at=c(0,1,2,3,4),family="serif")
+axis(2,at=c(0,.025,.05,.075,.1,.125),labels=c(0.0,2.5,5.0,7.5,10.0,12.5),las=TRUE,family="serif")
+title(substitute("Panel C: " * {italic(n)} * " = 10"),font.main=1,cex.main=1,family="serif")
+box()
+plot(hd,xlim=c(0,4),ylim=c(0,.125),xaxt="n",yaxt="n",xlab="",ylab="",main="",col="grey")
+axis(1,at=c(0,1,2,3,4),family="serif")
+title(substitute("Panel D: " * {italic(n)} * " = 20"),font.main=1,cex.main=1,family="serif")
+box()
+mtext("Percent",2,3,outer=TRUE,family="serif")
+mtext("Standard deviation ratio",side=1,line=2,outer=TRUE,family="serif")
+
+## Figure 16.5
+
+x = seq(-4.5,4.5,.0001)
+norm = dnorm(x)
+df = c(1,5,20)
+par(mfrow=c(1,1),yaxs="i",xaxs="i",mar=c(5,4,0,0)+0.1,oma=c(0,0,3,2))
+plot(x, norm,type="l",lwd=2,xlab=expression(italic(t)),xlim=c(-4.5,4.5),ylim=c(0.0,0.4),yaxt="n",ylab="Density",family="serif")
+axis(2,at=c(0.0,0.1,0.2,0.3,0.4),las=TRUE,family="serif")
+for (i in 1:3){lines(x, dt(x,df[i]), lty=2)}
+
+## Figure 16.6
+
+x = seq(-4.5,4.5,.0001)
+par(mfrow=c(1,1),yaxs="i",xaxs="i")
+plot(x,dt(x,9),type="l",xlim=c(-4,4),ylim=c(0,.4),xaxt="n",yaxt="n",ylab=expression(italic(t)*" density"),xlab=expression(italic(t)),main="",family="serif")
+axis(2,at=c(0.0,0.1,0.2,0.3,0.4),las=TRUE,family="serif")
+axis(1,at=c(-4,-2.262,-1,0,1,2.262,4),labels=c(-4,-2.262,-1,0,1,2.262,4),family="serif")
+x1 = c(-4.5,seq(-4.5,qt(.025,9),.0001),qt(.025,9))
+y1 = c(0,dt(seq(-4.5,qt(.025,9),.0001),9),0)
+x2 = c(qt(.975,9),seq(qt(.975,9),4.5,.01),4.5)
+y2 = c(0,dt(seq(qt(.975,9),4.5,.01),9),0)
+polygon(x1,y1,col="grey",border=NA)
+polygon(x2,y2,col="grey",border=NA)
+lines(x,dt(x,9),type="l")
+box()
+
+## Figure 16.7
+
+x = seq(-3.5,3.5,.0001)
+par(mfrow=c(1,1),yaxs="i",xaxs="i")
+plot(x,dt(x,14),type="l",xlim=c(-3.5,3.5),ylim=c(0,.4),xaxt="n",yaxt="n",ylab=expression(italic(T)*"(14) density"),xlab=expression(italic(t)*" value"),main="",family="serif")
+axis(2,at=c(0.0,0.1,0.2,0.3,0.4),las=TRUE,family="serif")
+axis(1,at=c(-3.5,-2.145,-0.543,0.543,2.145,3.5),labels=c(-3.5,-2.145,-0.543,0.543,2.145,3.5),family="serif")
+x1 = c(-4.5,seq(-4.5,qt(.025,14),.0001),qt(.025,14))
+y1 = c(0,dt(seq(-4.5,qt(.025,14),.0001),14),0)
+x2 = c(qt(.975,14),seq(qt(.975,14),4.5,.0001),4.5)
+y2 = c(0,dt(seq(qt(.975,14),4.5,.0001),14),0)
+x3 = c(qt(.025,14),seq(qt(.025,14),qt(.2978,14),.0001),qt(.2978,14))
+y3 = c(0,dt(seq(qt(.025,14),qt(.2978,14),.0001),14),0)
+x4 = c(qt(.702,14),seq(qt(.702,14),qt(.975,14),.0001),qt(.975,14))
+y4 = c(0,dt(seq(qt(.702,14),qt(.975,14),.0001),14),0)
+polygon(x1,y1,col="grey")
+polygon(x2,y2,col="grey")
+polygon(x3,y3,col="grey")
+polygon(x4,y4,col="grey")
+lines(x,dt(x,14),type="l")
+box()
+
+## Figure 16.8
+
+x = seq(0,4,.0001)
+f1 = df(x,1,10)
+f2 = df(x,100,100)
+f3 = df(x,4,101)
+par(yaxs="i",xaxs="i")
+plot(x,f1,type="l",ylim=c(0,4),xlim=c(0,4),xlab=expression(italic(f)),ylab=expression(italic(F)*" density"),family="serif")
+lines(x,f2,type="l",lty=3)
+lines(x,f3,type="l",lty=2)
+
+
+
+## Figure 17.1
+
+x = c(311,304,316,308,312,308,314,307,302,311,308,300,316,304,316,306,314,310,311,309,311,306,311,309,311,305,304,303,307,316)
+n = length(x)
+np = 500
+sx = sqrt(var(x))
+mu.theta = seq(306,312,len=np)
+sigma.theta = seq(3,7,len=np)
+logLikeFun = function(mu,x) {
+a = -n/2*log(2*pi)-n/2*log(sum((mu-x)^2)/n)-1/(2*sum((mu-x)^2)/n)*sum((mu-x)^2)
+a
+}
+logLikeFunSigma = function(mu,sigma){
+a = -n/2*log(sigma^2)-(sum(x^2)-2*mu*sum(x)+n*mu^2)/(2*sigma^2)
+-a
+}
+par(yaxs="i",xaxs="i")
+ll.joint = outer(mu.theta,sigma.theta,'logLikeFunSigma')
+like.joint = exp(min(ll.joint)-ll.joint)
+contour(mu.theta,sigma.theta,like.joint,xlab=expression(italic(mu)),ylab=expression(italic(sigma)),level=c(.05,.15,.3,.5,.7,.9,.975),drawlabels=FALSE,lwd=1,main="",family="serif")
+abline(v=310)
+points(309,4.344,pch="+")
+points(310,4.457,pch="x",family="serif")
+
+
+## Figure 17.2
+
+y = seq(.1,1.51,.01)
+c = 20*log(.5/y)-20*(1-y/.5)
+par(yaxs="i",xaxs="i")
+plot(y,c,type="l",xlim=c(0,1.5),ylim=c(0,18),xaxt="n",yaxt="n",xlab="Sample average",ylab="Chi-square statistic",family="serif")
+axis(1,at=c(0,.22,.5,.94,1.5),labels=c(0,0.22,0.5,0.94,1.5),family="serif")
+axis(2,at=c(0,5,10,15),las=TRUE,family="serif")
+segments(0,5,1.5,5)
+segments(.2244,0,.2244,5,lty=2)
+segments(.9414,0,.9414,5,lty=2)
+
+## Figure 17.3
+
+x = seq(-.4,.4,.01)
+fx = x
+logfx = log(1+x)
+par(yaxs="i",xaxs="i")
+plot(x,fx,type="l",lty=2,lwd=2,xaxt="n",yaxt="n",xlim=c(-.4,.4),ylim=c(-.5,.4),xlab=expression(italic(x)),ylab=expression("ln(1 + "*italic(x)*") or "*italic(x)),main="",family="serif")
+axis(1,at=c(-.4,-.1,0,.1,.4),labels=c(-0.4,-0.1,0,0.1,0.4),family="serif")
+axis(2,at=c(-.4,-.2,0,.2,.4),labels=c(-0.4,-0.2,0.0,0.2,0.4),las=TRUE,family="serif")
+lines(x,logfx,type="l",lwd=2)
+
+## Figure 17.5
+
+x = seq(-.4,.4,.01)
+fx = x
+logfx = log(1+x)
+fx2 = x-x^2/2
+par(yaxs="i",xaxs="i")
+plot(x,fx,type="l",lty=2,lwd=2,xaxt="n",yaxt="n",xlim=c(-.4,.4),ylim=c(-.5,.4),xlab=expression(italic(x)),ylab=expression("ln(1 + "*italic(x)*") and approximations"),main="",family="serif")
+axis(1,at=c(-.4,-.1,0,.1,.4),labels=c(-0.4,-0.1,0,0.1,0.4),family="serif")
+axis(2,at=c(-.4,-.2,0,.2,.4),labels=c(-0.4,-0.2,0.0,0.2,0.4),las=TRUE,family="serif")
+lines(x,logfx,type="l",lwd=2)
+lines(x,fx2,type="l",lty=3,lwd=2)
+
+## Figure 17.6
+
+x = seq(1,10,1)
+p = c(13/74,10/74,16/74,10/74,8/74,17/74,0,0,0,0)
+lambda = 2.554
+par(yaxs="i",xaxs="i")
+plot(x,p,type="h",xlim=c(.9,10.1),ylim=c(-.005,0.26),xaxt="n",yaxt="n",xlab=expression("Die outcome, "*italic(t)),ylab=expression(italic(p)*"("*italic(t)*")"),family="serif")
+axis(1,at=seq(1,10,1),family="serif")
+axis(2,at=c(0,.05,.1,.15,.2,.25),las=TRUE,family="serif")
+p2 = dpois(x-1,lambda)
+points(x,p2)
+segments(1,0,10,0)
+
+
+
+## Figure 18.1
+
+x = seq(295,325,.001)
+d1 = dnorm(x,310,4.5/sqrt(10))
+d2 = dnorm(x,310,4.5)
+par(xaxs="i",yaxs="i")
+plot(x,d1,type="l",xaxt="n",yaxt="n",xlab="Width of chip",ylab="Density",family="serif")
+axis(1,at=c(295,301.18,307.21,310,312.79,318.82,325),labels=c(295,301.18,307.21,310,312.79,318.82,325),family="serif")
+axis(2,at=c(0,.05,.1,.15,.20,.25),labels=c(0.00,0.05,0.10,0.15,0.20,0.25),las=TRUE,family="serif")
+lines(x,d2,type="l",lty=2)
+segments(301.18,0,301.18,dnorm(301.18,310,4.5),lty=2)
+segments(318.82,0,318.82,dnorm(318.82,310,4.5),lty=2)
+segments(307.21,0,307.21,dnorm(307.21,310,4.5/sqrt(10)))
+segments(312.79,0,312.79,dnorm(312.79,310,4.5/sqrt(10)))
+
+## Figure 18.2
+
+m = seq(310,315,1)
+p = c(.05,.098,.278,.568,.816,.943)
+par(yaxs="i",xaxs="i")
+plot(m,p,xlim=c(309.9,315.1),ylim=c(0,1),xlab="Process mean",ylab="Power",yaxt="n",family="serif")
+axis(2,at=c(0.0,0.2,0.4,0.6,0.8,1.0),las=TRUE,family="serif")
+fx = function(x) {
+pnorm(307.21,x,4.5/sqrt(10))+(1-pnorm(312.79,x,4.5/sqrt(10)))
+}
+m1 = seq(310,315,.001)
+p1 = fx(m1)
+lines(m1,p1,type="l",xlim=c(309.9,315.1),ylim=c(0,1))
+
+## Figure 18.3
+
+x = seq(300,325,.001)
+d1 = dnorm(x,310,4.5/sqrt(10))
+d2 = dnorm(x,315,4.5/sqrt(10))
+par(yaxs="i",xaxs="i")
+plot(x,d2,type="l",lty=2,xlim=c(300,325),ylim=c(0.00,.282),xaxt="n",yaxt="n",xlab="Width of chip",ylab="Density",family="serif")
+axis(1,at=c(300,307.21,310,312.79,315,320,325),labels=c(300,307.21,310,312.79,315,320,325),family="serif")
+axis(2,at=c(0,.05,.10,.15,.20,.25),labels=c(0.00,0.05,0.10,0.15,0.20,0.25),las=TRUE,family="serif")
+xvec = c(312.79,seq(312.79,320,.01),320)
+yvec = c(0,dnorm(seq(312.79,320,.01),315,4.5/sqrt(10)),0)
+polygon(xvec,yvec,col="grey",border=NA)
+lines(x,d1,type="l")
+lines(x,d2,type="l",lty=2)
+segments(312.79,0,312.79,dnorm(312.79,310,4.5/sqrt(10)))
+
+## Figure 18.4
+
+x = seq(-8,8,.001)
+z = dnorm(x,0,1)
+par(yaxs="i",xaxs="i")
+plot(x,z,type="l",xlim=c(-8,8),ylim=c(0,.4),xlab=expression(italic(z)*" statistic"),ylab=expression(italic(p)*"("*italic(z)*")"),yaxt="n",xaxt="n",family="serif")
+axis(1,at=c(-8,-5.47,-3,-1.55,0,3,8),labels=c(-8,-5.47,-3,-1.55,0,3,8),family="serif")
+axis(2,at=c(0.0,0.1,0.2,0.3,0.4),las=TRUE,family="serif")
+xvec = c(-1.55,seq(-1.55,8,.01),8)
+yvec = c(0,dnorm(seq(-1.55,8,.01),0,1),0)
+polygon(xvec,yvec,col="grey")
+
+## Figure 18.5
+
+fx = function(n,x) {
+a = pnorm((n^.5)*(310-m1)/4.5-1.96,0,1)+(1-pnorm((n^.5)*(310-m1)/4.5+1.96,0,1))
+}
+m1 = seq(304,316,.001)
+p5 = fx(5,m1)
+p10 = fx(10,m1)
+p20 = fx(20,m1)
+p40 = fx(40,m1)
+par(yaxs="i",xaxs="i")
+plot(m1,p5,type="l",xlim=c(304.9,315.1),ylim=c(0,1),xlab="Process mean",ylab="Power",yaxt="n",family="serif")
+axis(2,at=c(0.0,.05,0.25,0.5,0.8,1.0),labels=c(0,0.05,0.25,0.5,0.8,1),las=TRUE,family="serif")
+lines(m1,p10)
+lines(m1,p20)
+lines(m1,p40)
+segments(304,.05,316,.05,lty=2)
+
+
+## Figure 18.6
+
+
+f100 = function(x) {
+b1 = rbinom(100,1,x)
+b2 = rbinom(100,1,.3)
+pi1 = mean(b1)
+pi2 = mean(b2)
+n1 = length(b1)
+n2 = length(b2)
+N = n1+n2
+p = ((n1/N)*pi1+(n1/N)*pi2)
+z = (pi1-pi2)/sqrt(p*(1-p)*(1/n1+1/n2))
+test = ifelse(abs(z)>1.96,1,0)
+return(test)
+}
+f200 = function(x) {
+b1 = rbinom(200,1,x)
+b2 = rbinom(200,1,.3)
+pi1 = mean(b1)
+pi2 = mean(b2)
+n1 = length(b1)
+n2 = length(b2)
+N = n1+n2
+p = ((n1/N)*pi1+(n2/N)*pi2)
+z = (pi1-pi2)/sqrt(p*(1-p)*(1/n1+1/n2))
+test = ifelse(abs(z)>1.96,1,0)
+return(test)
+}
+p1 = .3
+p2 = .32
+p3 = .35
+p4 = .37
+p5 = .4
+p6 = .45
+p7 = .5
+set.seed(12345)
+t1 = replicate(10000,f100(p1))
+c1 = replicate(10000,f200(p1))
+t2 = replicate(10000,f100(p2))
+c2 = replicate(10000,f200(p2))
+t3 = replicate(10000,f100(p3))
+c3 = replicate(10000,f200(p3))
+t4 = replicate(10000,f100(p4))
+c4 = replicate(10000,f200(p4))
+t5 = replicate(10000,f100(p5))
+c5 = replicate(10000,f200(p5))
+t6 = replicate(10000,f100(p6))
+c6 = replicate(10000,f200(p6))
+t7 = replicate(10000,f100(p7))
+c7 = replicate(10000,f200(p7))
+t1 = mean(t1)
+c1 = mean(c1)
+t2 = mean(t2)
+c2 = mean(c2)
+t3 = mean(t3)
+c3 = mean(c3)
+t4 = mean(t4)
+c4 = mean(c4)
+t5 = mean(t5)
+c5 = mean(c5)
+t6 = mean(t6)
+c6 = mean(c6)
+t7 = mean(t7)
+c7 = mean(c7)
+x = c(p1,p2,p3,p4,p5,p6,p7)
+y = c(t1,t2,t3,t4,t5,t6,t7)
+y2 = c(c1,c2,c3,c4,c5,c6,c7)
+par(yaxs="i",xaxs="i")
+plot(x,y,xlim=c(0.295,0.505),ylim=c(0,1),xaxt="n",yaxt="n",xlab="Proportion cured with new therapy",ylab="Power",family="serif")
+axis(1,at=c(0.3,0.32,0.35,0.37,0.4,0.45,0.5),labels=c(0.3,0.32,0.35,0.37,0.4,0.45,0.5),family="serif")
+axis(2,at=c(0,0.05,0.2,0.5,0.8,1),labels=c(0,0.05,0.2,0.5,0.8,1),las=TRUE,family="serif")
+lines(x,y)
+points(x,y2)
+lines(x,y2)
+segments(.2,.05,.6,.05,lty=2)
+
+
+
+## Figure 18.7
+
+z = seq(-4,8,.001)
+pzc = dnorm(z)
+pznc = dnorm(z,sqrt(10)*5/4.5,1)
+par(xaxs="i",yaxs="i")
+plot(z,pzc,type="l",xlim=c(-4,8),ylim=c(0,.4),xaxt="n",yaxt="n",xlab=expression(italic(z)*" value"),ylab=expression(italic(p)*"("*italic(z)*")"),family="serif")
+axis(1,at=c(-4,-3,-1.96,0,1.96,3.51,8),labels=c(-4,-3,-1.96,0,1.96,3.51,8),family="serif")
+axis(2,at=c(0.0,0.1,0.2,0.3,0.4),las=TRUE,family="serif")
+xvec = c(1.96,seq(1.96,8,.001),8)
+yvec = c(0,dnorm(seq(1.96,8,.001),sqrt(10)*5/4.5,1),0)
+polygon(xvec,yvec,col="grey",border=NA)
+lines(z,pzc)
+lines(z,pznc,lty=2)
+
+## Figure 18.8
+
+x = seq(-5,15,.001)
+t1 = dt(x,9)
+t2 = dt(x,9,1.41)
+t3 = dt(x,9,3.51)
+t4 = dt(x,9,7.03)
+par(xaxs="i",yaxs="i")
+plot(x,t1,type="l",ylim=c(0,.4),xlim=c(-5,15),xaxt="n",yaxt="n",xlab=expression(italic(t)),ylab=expression(italic(p)*"("*italic(t)*")"),family="serif")
+axis(1,at=c(-5,0,1.41,3.51,7.03,15),labels=c(-5,0,1.41,3.51,7.03,15),family="serif")
+axis(2,at=c(0,.1,.2,.3,.4),labels=c(0.0,0.1,0.2,0.3,0.4),las=TRUE,family="serif")
+lines(x,t2)
+lines(x,t3)
+lines(x,t4)
+segments(0,0,0,dt(0,9),lty=2)
+segments(1.41,0,1.41,dt(1.41,9,1.41),lty=2)
+segments(3.51,0,3.51,dt(3.51,9,3.51),lty=2)
+segments(7.03,0,7.03,dt(7.03,9,7.03),lty=2)
+
+## Figure 18.9
+
+x = seq(-8,8,.001)
+ptc = dt(x,9)
+ptnc = dt(x,9,sqrt(10)*5/4.5)
+par(xaxs="i",yaxs="i")
+plot(x,ptc,type="l",xlim=c(-8,8),ylim=c(0,.4),xaxt="n",yaxt="n",xlab=expression(italic(t)*" value"),ylab=expression(italic(p)*"("*italic(t)*")"),family="serif")
+axis(1,at=c(-8,-4,-2.26,0,2,26,3.51,8),labels=c(-8,-4,-2.26,0,2,26,3.51,8),family="serif")
+axis(2,at=c(0.0,0.1,0.2,0.3,0.4),labels=c(0.0,0.1,0.2,0.3,0.4),las=TRUE,family="serif")
+xvec = c(2.26,seq(2.26,8,.001),8)
+yvec = c(0,dt(seq(2.26,8,.001),9,sqrt(10)*5/4.5),0)
+polygon(xvec,yvec,col="grey",border=NA)
+lines(x,ptc)
+lines(x,ptnc)
+
+## Figure 18.10
+
+n = seq(2,200,1)
+ncp = sqrt(n)/4.5
+tq = qt(.975,n-1)
+pwr = pt(-tq,n-1,ncp)+(1-pt(tq,n-1,ncp))
+plot(n,pwr,type="l",xlim=c(2,200),ylim=c(0,1),xaxt="n",yaxt="n",xlab=expression(italic(n)),ylab="Power",family="serif")
+axis(1,at=c(2,10,50,100,161,200),family="serif")
+axis(2,at=c(0,.2,.4,.6,.8,1),labels=c(0.0,0.2,0.4,0.6,0.8,1.0),las=TRUE,family="serif")
+segments(2,.8,200,.8)
+segments(161,0,161,1)
+
+## Figure 19.1
+
+library(sas7bdat)
+d = read.sas7bdat("http://westfall.ba.ttu.edu/liles.sas7bdat")
+dl = d$dayslost
+muhat = mean(dl)
+std = sqrt(var(dl)/length(dl))
+fs = function(x) {
+s = sample(x,length(x),replace=TRUE)
+}
+set.seed(12345)
+sr = replicate(10000,fs(dl))
+srm = colMeans(sr)
+srv = apply(sr,2,var)
+srstd = sqrt(srv/length(dl))
+tstats = (srm-muhat)/srstd
+h = hist(tstats,breaks=180)
+h$counts<-h$counts/sum(h$counts)
+par(xaxs="i",yaxs="i")
+plot(h,xlim=c(-20,5),ylim=c(0,.1),xaxt="n",yaxt="n",xlab="Boott",ylab="Percent",main="",family="serif",col="grey")
+axis(1,at=c(-20.00,-17.5,-15.00,-12.50,-10.00,-7.50,-5.00,-2.50,0,2.50,5.00),labels=c(-20.00,-17.5,-15.00,-12.50,-10.00,-7.50,-5.00,-2.50,0,2.50,5.00),family="serif")
+axis(2,at=c(0,.02,.04,.06,.08,.1),labels=c(0,2,4,6,8,10),las=TRUE,family="serif")
+box()
